@@ -71,7 +71,8 @@
     + --> Some important new characters appear in the sequel.
         在续篇中出现了一些重要的新人物.
 - **manipulation[mə,nɪpjʊ'leɪʃ(ə)n] --n.操纵; 控制; 篡改**
-    + --> 
+    + --> data manipulation. 数据操作
+    + --> graph manipulation 图形处理
 - **express [ɪk'spres] --vt.表达，表示。 --adj.特快(的)，高速(的)**
 - **relation [rɪ'leɪʃ(ə)n] --n.关系，关联，叙述**
 - **relational [rɪ'leɪʃ(ə)n(ə)l] --adj.相关的, 亲属的**
@@ -109,7 +110,7 @@
 - 1.2 Microsoft SQL Server, MySQL 和 Oracle 
 - 1.3 关系型数据库
     + P4: 关系型数据库就是一个数据集合, 它保存了任意多个表. 在常见的用法中, 术语 "关系
-      (relational)" 用来表示各个表以某种形式彼此相互关联. 然而, 更准确地讲, 关系指的是
+      (relational)" 用来表示各个表 以某种形式彼此相互关联. 然而, 更准确地讲, 关系指的是
       数学关系理论, 并且和一个些逻辑属性相关, 而这些逻辑属性负责管理表之间相关的方式.
     + P5: 在 SQL 术语中, `记录 (record)` 和 `字段 (field)` 实际上就称为 `行 (row)`
       和 `列 (column)`, 这个视觉上的展示是对应的. 因此, 今后我们使用术语 "行" 和 "列" 
@@ -118,20 +119,23 @@
       Customers 表 和 Orders 表. 这两个表看上去如下:  
     + |CustomerID|FirstName|LastName|
       |:---|:---|:---|
-      |1|Bob|Davis|  
-      |2|Natalie|Lopez|  
-      |3|Connie|King| 
+      |1|Bob|Davis|
+      |2|Natalie|Lopez|
+      |3|Connie|King|
     + |OrderID|CustomerID|OrderAmount|
       |:---|:---|:---|
-      |1|1|50.00|  
-      |2|1|60.00|  
-      |3|2|33.50|  
-      |4|3|20.00|  
+      |1|1|50.00|
+      |2|1|60.00|
+      |3|2|33.50|
+      |4|3|20.00|
 - 1.4 主键和外键
     + 请留意上面每个表的第 1 列: 即 Customers 表中的 CustomersID 和 Orders 表中的 
       OrderID. 这些列通常称为 `主键(primary key)`
     + 在表之间使用共同的列, 这是关系型数据库中的一项基本的设计要素. 如上: Orders 表中的 
       Customers 列, 指向了 Customers 表中对应的一行.  
+    + 除了可以指向 Customers 表, 还可以吧 Orders 表中的 CustomersID 列指定为
+      `外键 (foreign key)`. 我会在第 18 章中详细介绍外键. 在这里只需要知道: 定义外键是为
+      了要确保这一列有一个有效的值. 
 - 1.5 数据类型
 - 1.6 空值
     + P7: 许多数据库在显示带有控制的数据时, 使用大写的单词 NULL 来表示. 数据库的主键不能
