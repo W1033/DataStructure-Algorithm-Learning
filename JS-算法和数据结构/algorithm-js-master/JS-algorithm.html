@@ -61,14 +61,13 @@
 
 
 
-    // - 斐波那契数列
+    // - 求斐波那契数列的和
     // - 1st method
     (function() {
         function fibonacci1(n) {
             if (n === 1 || n === 2) return 1;
-            console.log("n: ", n);
             // - Q: 为什么这里的两个 fibonacci1(n-1) + fibonacci1(n-2) 可以一直执行?
-            //   A: 因为 return 返回一个调用的闭包，闭包执行的原则是 n 只要不等于...?
+            //   A: 因为循环调用
             return fibonacci1(n - 1) + fibonacci1(n - 2)
         }
         console.log("fibonacci1(10)", fibonacci1(10));  // 輸出？
