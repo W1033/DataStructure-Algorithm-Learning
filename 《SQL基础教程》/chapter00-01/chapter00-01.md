@@ -69,12 +69,41 @@
 
 ## 第 1 章 -- 数据库和 SQL
 - 1.1 数据库是什么
+    + A: 数据库是将大量数据保存起来, 通过计算机加工而成的可以进行高效访问的数据集合. 用来
+      管理数据库的系统称为 "数据库管理系统 (`DBMS`: Database Management System)". 
+      通过使用 DBMS, 多个用户便可安全, 简单地操作大量数据. 数据库有很多种类, 本书介绍如何
+      使用专门的 SQL 语言来操作关系数据库.关系数据库通过 "关系数据库管理系统 (`RDBMS`: 
+      Relational Database Management System)" 来进行管理.  
     + 1.1.1 我们身边的数据库
     + 1.1.2 为什么 DBMS 那么重要
     + 1.1.3 DBMS 的种类
+        - DBMS 主要通过数据的保存格式 (数据库的种类) 来进行分类, 现阶段主要有一下 5 种.
+        - (1) 层次数据库 (Hierarchical Database, HDB) 
+        - (2) 关系型数据库 (Relational Database, RDB)
+            + 关系数据库采用 <span style="color: green"> 由行和列组成的二维表管理数据
+              </span>. 同时, 它还使用专门的 `SQL` (Structured Query Language 
+              结构化查询语言) 对数据进行操作.
+            + 这种类型的 DBMS 称为关系数据库管理系统 `RDBMS`. 比较具有代表性的 RDBMS 有
+              如下 5 种:
+                - Oracle Database
+                - SQL Server
+                - DB2
+                - PostgreSQL
+                - MySQL  
+        - (3) 面向对象数据库 (Object Oriented Database, OODB)
+        - (4) XML 数据库 (XML Database, XMLDB)
+        - (5) 键值存储系统 (Key-Value Store, KVS)
 - 1.2 数据库的结构
     + 1.2.1 RDBMS 的常见系统结构
+        - 客户端/服务器类型 (C/S 类型)
     + 1.2.2 表的结构
+        - 关系数据库由行和列组成的二维表来管理数据. 用来管理数据的 `二维表` 在关系数据库
+          中简称为 `表`. 
+        - <img src="../images/1-5.png" style="width: 60%;">  
+        - 根据 SQL 语句的内容返回的数据同样必须是二维表的形式. 这也是关系数据库的特征之一.
+        - 表的 `列 (column 垂直方向)` 称为 `字段 (filed)`
+        - 表的 `行 (row 水平方向)` 称为 `记录 (record)`. 
+        - `关系数据库必须一行为单位进行数据读写.`  
 - 1.3 SQL 概要
     + 1.3.1 标准 SQL
         - SQL 是用来操作关系数据库的语言. 它原来是为了**提高数据库查询效率**而开发的语言, 
@@ -82,7 +111,23 @@
           通过 SQL 来完成了.
         - 国际标准化组织 (ISO) 为 SQL 制定了相应的标准, 以此为基准的 SQL 称为 `标准SQL`  
     + 1.3.2 SQL 语句及其种类
-        - 笔记: 后补
+        - SQL 用 `关键字`, `表名`, `列名` 等组合而成的一条语句 (SQL 语句) 来比描述操作
+          的内容. 关键字是指那些含义或使用方法已实现定义好的英语单词, 存在包含 "对标进行
+          查询" 或者 "参考这个表" 等各种意义的关键字. 根据对 RDBMS 赋予的指令种类的不同,
+          SQL 语句可以分为以下 3 类.
+            + (1) `DDL` (Data Definition Language, 数据定义) 用来 "创建" 或 "删除"
+              存储数据用的数据库以及数据库中的表等对象. DDL 包含以下几种指令:
+                - <span style="color: green">CREATE</span> : 创建数据库和表等对象 
+                - <span style="color: green">DROP</span> : 删除数据库和表等对象
+                - <span style="color: green">ALTER</span> : 修改数据库和表等对象的结构
+            + (2) `DML` (Data Manipulation Language, 数据操纵语言) 用来 "查询" 或
+              "变更" 表中的记录. DML 包含以下几种指令.
+                - <span style="color: green">SELECT</span> : 查询表中的数据
+                - <span style="color: green">INSERT</span> : 向表中插入新数据
+                - <span style="color: green">UPDATE</span> : 更新表中的数据
+                - <span style="color: green">DELETE</span> : 删除表中的数据
+            + (3) `DCL` (Data Control Language, 数据控制语言) 用来确认或者取消对数据
+              库中的数据进行的变更. 除此之外, 还可以对 RDBMS 的用户
     + 1.3.3 SQL 的基本书写规范
         - 本书 SQL 书写规范
             - (1) 关键字大写 (Tip: sql 语法上来讲, 关键字不区分大小写)

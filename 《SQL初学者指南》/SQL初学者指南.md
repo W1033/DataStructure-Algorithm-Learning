@@ -1,5 +1,5 @@
 # The language of SQL -- 第 2 版
-> SQL (Structured Query Language) 是用于和关系数据库交互的主要语言.
+> SQL (Structured Query Language. 结构化查询语言) 是用于和关系数据库交互的主要语言.
 
 > 目录 (Table of Content)
 - 第 1 章 -- 关系型数据库和 SQL

@@ -18,14 +18,11 @@
 - 安装
     + `brew install postgresql`
 - 查看安装版本
-    
     + `pg_ctl -V` 或 `pg_ctl --version`
 - 启动 postgresql 服务
-    
     + `brew services start postgresql`
 - 创建数据库和用户
     + (1) 创建数据库名为 `mydb`, 可以使用下面的命令
-        
         - `createdb mydb`
     + (2) 创建用户 `wang`, 并输入密码
         - `createuser wang -P`
@@ -36,18 +33,16 @@
           ```
 - 用 psql 连接数据库
     + 使用 `psql` 连接 `mydb` 数据库
-        
         - `psql mydb`
     + 屏幕提示:
         - ```
             psql (1.5)
-        Type "help" for help.
+            Type "help" for help.
     
             mydb=#
           ```
 - 数据库访问权限配置
     + 用 psql 连接数据库后, 执行下面的 SQL 授权语句, 把 mydb 的所有权限给用户 wang
-        
         - `GRANT ALL PRIVILEGES ON DATABASE mydb TO wang;`
     + 常用的授权语句有:
         - ```
