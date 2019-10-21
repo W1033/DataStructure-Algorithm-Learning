@@ -6,7 +6,7 @@
 - 第 0 章 -- 绪论--搭建 SQL 的学习环境
     + 0.1 PostgreSQL 的安装和连接设置
         - 0.1.1: 安装步骤
-        - 0.1.2: 修改设置文件 
+        - 0.1.2: 修改设置文件
     - 0.2 通过 PostgreSQL 执行 SQL 语句    
 - 第 1 章 -- 数据库和 SQL
     + 1.1 数据库是什么
@@ -43,6 +43,7 @@
 - 0.1 PostgreSQL 的安装和连接设置
     + 0.1.1 安装步骤
     + 0.1.2 修改设置文件 
+        + 安装和设置笔记见: `READMED.MD` 文件
 - 0.2 通过 PostgreSQL 执行 SQL 语句 
     + > psql: 是 PostgreSQL 数据库的命令行交互工具
     + > pgAdmin: 是 PostgreSQL 数据库的图形化管理工具
@@ -136,6 +137,7 @@
 - 1.4 表的创建
     + 1.4.1 表的内容的创建
     + 1.4.2 数据库的创建 (CREATE DATABASE 语句) 
+      
         - `CREATE DATABASE shop`
     + 1.4.3 表的创建 (CREATE TABLE 语句)
         - ```sql
@@ -158,12 +160,12 @@
     + 1.5.2 表定义的更新 (ALTER TABLE 语句)
         - 变更表定义的 `ALTER TABLE 语句` 
         - (1) 首先是添加列时使用的语法: 
-            + 语法 1-4 添加列的 ALTER TABLE 语句
+            + 语法 1-4 添加列的 ALTER TABLE 语句   
                 - `ALTER TABLE <表名> ADD COLUMN <列的定义>;`
             + 代码清单 1-4 添加一列可以存储 100 位的可变长字符串的 product_name_pinyin 列
             + **DB2, PostgreSQL, MySQL**
                 - > `ALTER TABLE Product ADD COLUMN product_name_pinyin VARCHAR(100);`
-            + **Oracle**
+            + **Oracle**  
                 - > `ALTER TABLE Product ADD (product_name_pinyin VARCHAR(100));`
             + **SQL Server**
                 - > `ALTER TABLE Product ADD product_name_pinyin VARCHAR(100);`  
@@ -176,12 +178,11 @@
                 - `ALTER TABLE Product DROP COLUMN product_name_pinyin;`
             + **Oracle**
                 - `ALTER TABLE Product DROP (product_name_pinyin);`             
-    + 1.5.3 向 Product 表中插入数据
++ 1.5.3 向 Product 表中插入数据
         - 代码清单 1-6 向 Product 表中插入数据的 SQL 语句
         - **SQL Server, PostgreSQL**
             + ```sql
                 -- DML 插入数据
-
               ```
     + 专栏: 变更表名
         - 代码清单 1-A 变更表名
