@@ -66,7 +66,8 @@
         - 创建学习用的数据库: `CREATE DATABASE shop` (Tip:数据库的名称只能使用小写字母)
         - 结束 sql: 输入 `\q` (quit) 即可.
         - 连接上面创建的数据库(登录): 在当前 `C:\PostgreSQL\10\bin` 后面 输入 
-          `psql.exe -U postgres -d shop`  (-d shop 是指定 "数据库 shop" 的意思)
+          `psql.exe -U postgres -d shop`  (-d shop 是指定 "数据库 shop" 的意思. 
+          -d 应该是 direct(指向) 的缩写.)
 
 ## 第 1 章 -- 数据库和 SQL
 - 1.1 数据库是什么
@@ -138,7 +139,7 @@
     + 1.4.1 表的内容的创建
     + 1.4.2 数据库的创建 (CREATE DATABASE 语句) 
       
-        - `CREATE DATABASE shop`
+        - `CREATE DATABASE shop;`
     + 1.4.3 表的创建 (CREATE TABLE 语句)
         - ```sql
             # 代码清单 1-2 创建 Product 表的 CREATE TABLE 语句
@@ -163,26 +164,35 @@
             + 语法 1-4 添加列的 ALTER TABLE 语句   
                 - `ALTER TABLE <表名> ADD COLUMN <列的定义>;`
             + 代码清单 1-4 添加一列可以存储 100 位的可变长字符串的 product_name_pinyin 列
-            + **DB2, PostgreSQL, MySQL**
-                - > `ALTER TABLE Product ADD COLUMN product_name_pinyin VARCHAR(100);`
-            + **Oracle**  
-                - > `ALTER TABLE Product ADD (product_name_pinyin VARCHAR(100));`
-            + **SQL Server**
-                - > `ALTER TABLE Product ADD product_name_pinyin VARCHAR(100);`  
+                - **DB2, PostgreSQL, MySQL**
+                    + > `ALTER TABLE Product ADD COLUMN product_name_pinyin VARCHAR(100);`
+                - **Oracle**  
+                    + > `ALTER TABLE Product ADD (product_name_pinyin VARCHAR(100));`
+                - **SQL Server**
+                    + > `ALTER TABLE Product ADD product_name_pinyin VARCHAR(100);`  
         - (2) 反之, 删除表中某列使用的语法如下所示:
             + 语法 1-5 删除列的 ALTER TABLE 语句
                 - `ALTER TABLE <表名> DROP COLUMN <列名>;`  
                 - 特定的 SQL : `Oracle` 中不用写 COLUMN...... 详细见 P39 
             + 代码清单 1-5 删除 product_name_pinyin 列
-            + **SQL Server, DB2, PostgreSQL, MySQL**  
-                - `ALTER TABLE Product DROP COLUMN product_name_pinyin;`
-            + **Oracle**
-                - `ALTER TABLE Product DROP (product_name_pinyin);`             
+                -  **SQL Server, DB2, PostgreSQL, MySQL**  
+                    + `ALTER TABLE Product DROP COLUMN product_name_pinyin;`
+                -  **Oracle**
+                    + `ALTER TABLE Product DROP (product_name_pinyin);`             
 + 1.5.3 向 Product 表中插入数据
-        - 代码清单 1-6 向 Product 表中插入数据的 SQL 语句
-        - **SQL Server, PostgreSQL**
-            + ```sql
-                -- DML 插入数据
+    - 代码清单 1-6 向 Product 表中插入数据的 SQL 语句
+        + **SQL Server, PostgreSQL**
+            - ```sql
+                BEGIN TRANSACTION;
+                INSERT INTO Product VALUES ('0001', 'T恤', '衣服', 1000, 500, '2009-09-20');
+                INSERT INTO Product VALUES ('0002', '打孔器', '办公用品', 500, 320, '2009-09-11');
+                INSERT INTO Product VALUES ('0003', '运动T恤', '衣服', 4000, 2800, NULL);
+                INSERT INTO Product VALUES ('0004', '菜刀', '厨房用具', 3000, 2800, '2009-09-20');
+                INSERT INTO Product VALUES ('0005', '高压锅', '厨房用具', 6800, 5000, '2009-01-15');
+                INSERT INTO Product VALUES ('0006', '叉子', '厨房用具', 500, NULL, '2009-09-20');
+                INSERT INTO Product VALUES ('0007', '擦菜板', '厨房用具', 860, 790, '2008-04-28');
+                INSERT INTO Product VALUES ('0008', '圆珠笔', '办公用品', 100, NULL, '2009-11-11'); 
+                COMMIT;
               ```
     + 专栏: 变更表名
         - 代码清单 1-A 变更表名

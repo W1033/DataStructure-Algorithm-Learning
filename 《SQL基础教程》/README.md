@@ -54,7 +54,7 @@
         - 路径可以自定义, 本机在 `/Users/WANG/` 下新建了一个名为 "postgreSQL" 
           的文件夹, 所有要安装的文件都在此文件夹下. 
         - 设置密码和上面 windows 一样为 `111111` 
-        - Local (设置地区): `zh-CN_UTF-8` (此处和 windows 不一样, windows 下如果
+        - Local (设置地区): `zh_CN.UTF-8` (此处和 windows 不一样, windows 下如果
           选择 zh_CN 后运行就会报错, 哎......)
     + (3) 启动: 
         - 打开 `/Users/WANG/postgreSQL/bin` 文件夹后点击一下名为`psql` 的可执行
@@ -69,7 +69,7 @@
       安装会报错; 打开 Finder --> 应用程序 --> 点击上部的查看列表为 `List(三)` 形式 --> 
       找到名为 `PostgreSQL...` 的文件夹后, 点击删除. 方可重新安装.      
 - 使用: 
-    + 上面安装的步骤 (3) 中在 iTerm 中输入 
+    + (1) 上面安装的步骤 (3) 中在 iTerm 中输入 
       `/Users/WANG/postgreSQL/bin/psql -U postgres` 时, 会让输入安装时设置的密码, 
       输入密码后, 提示: 
       ```sql
@@ -79,4 +79,32 @@
         postgres=#
       ```
       即代表可以正常创建和使用 postgreSQL 创建表了,
+    + (2) 在 iTerm 的 `postgres=#` 后接着输入: `create database shop;` (`;` 勿遗漏)
+        - 代表创建数据库 (Tip: 和 <SQL 基础教程> 中 windows 下创建数据库是一样的), 
+          下面出现 "CREATE DATABASE" 代表创建成功.
+        - 接着在 `postgres=#` 后输入 `\q` (quit) 退出 postgres 默认数据库.
+        - 然后输入 `/Users/WANG/postgreSQL/bin/psql -U postgres -d shop` 代表
+          切换到创建的 "shop" 数据库中. 
+        - 接下来创建表 (table) 可以在 pgAdmin 可视化界面中创建. 打开路径 
+          `/Users/WANG/postgreSQL` 点击 `pgAdmin4.app` 图标, 在浏览器中就会打开 
+          pgAdmin 的可视界面, 此时可以看到在 Mac 的顶部图标栏, 也可以看到 pgAdmin 的
+          大象图标, Configure/Restart 都是在图标上右键即可.
+        - 回到浏览器中的 pgAdmin 可视界面中, `Databases (2)` 中就已经有我们创建的
+          名为 `shop` 的数据库了, 在 shop 上右键点击 `CREATE Script` 在右侧打开的
+          编辑界面中,即可编辑创建名为 Product 的表了, 创建语法在 `chapter00-01.md`
+          中, 不同平台的 SQL 执行代码都是相同的. (Tip: 编辑窗口里的代码为默认提示代码,
+          删除即可.)
+        - 写完创建 Product 表的代码后, 点击 `类似于雷电的图标 (Execute/Refresh )`
+          执行提示创建成功即可. 
+        - 查看 Product 表在: 点击 `shop` --> `Schemas` --> `Tables(1)` --> 
+          `product` --> `Columns(6)` 点击右侧的 Properties 即可看到 
+        - 向表中插入数据, 在 pgAdmin 中的方式和创建 Product 表的方式一样. 代码见: 
+          chapter00-01 --> 下的 `1-6.sql` (Tip: 看到当前窗口下部的 "Message" 下
+          提示 COMMIT 就代表提交了.)
+        - 然后在再次在 `shop` 上右键点击 `CREATE Script`, 打开的窗口中输入 
+          ```sql
+            select *
+            from Product;
+          ```
+          执行雷电图标执行按钮, 就可以在下部的 `Data Output` 中看到查询结果.
 
