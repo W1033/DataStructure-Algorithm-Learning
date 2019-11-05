@@ -49,7 +49,7 @@
     + > pgAdmin: 是 PostgreSQL 数据库的图形化管理工具
     + PostgreSQL 提供了一个可以通过命令行来执行 SQL 语句的工具 "psql".psql 会把 
       SQL 语句发送给 PostgreSQL
-    + 最基本的通过 psql 来执行 SQL 语句的命令:
+    + 最基本的通过 psql 来执行 SQL 语句的命令 (Windows):
         - 打开 postgresql 的安装目录进入到 `C:\PostgreSQL\10\bin` 然后在当前文件夹下
           按住 `shift` 单击鼠标右键打开 "在此处打开命令窗口(w)" 然后在当前运行窗口中输入
           `psql.exe -U postgres` 输入密码就会进入到 PostgreSQL 默认创建的 名为
@@ -117,18 +117,18 @@
           的内容. 关键字是指那些含义或使用方法已实现定义好的英语单词, 存在包含 "对标进行
           查询" 或者 "参考这个表" 等各种意义的关键字. 根据对 RDBMS 赋予的指令种类的不同,
           SQL 语句可以分为以下 3 类.
-            + (1) `DDL` (Data Definition Language, 数据定义) 用来 "创建" 或 "删除"
+            + (1) **`DDL`** (Data Definition Language, 数据定义) 用来 "创建" 或 "删除"
               存储数据用的数据库以及数据库中的表等对象. DDL 包含以下几种指令:
                 - <span style="color: green">CREATE</span> : 创建数据库和表等对象 
                 - <span style="color: green">DROP</span> : 删除数据库和表等对象
                 - <span style="color: green">ALTER</span> : 修改数据库和表等对象的结构
-            + (2) `DML` (Data Manipulation Language, 数据操纵语言) 用来 "查询" 或
+            + (2) **`DML`** (Data Manipulation Language, 数据操纵语言) 用来 "查询" 或
               "变更" 表中的记录. DML 包含以下几种指令.
                 - <span style="color: green">SELECT</span> : 查询表中的数据
                 - <span style="color: green">INSERT</span> : 向表中插入新数据
                 - <span style="color: green">UPDATE</span> : 更新表中的数据
                 - <span style="color: green">DELETE</span> : 删除表中的数据
-            + (3) `DCL` (Data Control Language, 数据控制语言) 用来确认或者取消对数据
+            + (3) **`DCL`** (Data Control Language, 数据控制语言) 用来确认或者取消对数据
               库中的数据进行的变更. 除此之外, 还可以对 RDBMS 的用户
     + 1.3.3 SQL 的基本书写规范
         - 本书 SQL 书写规范
@@ -157,18 +157,23 @@
     + 1.4.6 约束的设置
 - 1.5 表的删除和更新
     + 1.5.1 表的删除 (DROP TABLE 语句)
+      
         - 删除 Product 表: `DROP TABLE Product;`
     + 1.5.2 表定义的更新 (ALTER TABLE 语句)
         - 变更表定义的 `ALTER TABLE 语句` 
         - (1) 首先是添加列时使用的语法: 
             + 语法 1-4 添加列的 ALTER TABLE 语句   
+              
                 - `ALTER TABLE <表名> ADD COLUMN <列的定义>;`
             + 代码清单 1-4 添加一列可以存储 100 位的可变长字符串的 product_name_pinyin 列
                 - **DB2, PostgreSQL, MySQL**
+                  
                     + > `ALTER TABLE Product ADD COLUMN product_name_pinyin VARCHAR(100);`
                 - **Oracle**  
+                  
                     + > `ALTER TABLE Product ADD (product_name_pinyin VARCHAR(100));`
                 - **SQL Server**
+                  
                     + > `ALTER TABLE Product ADD product_name_pinyin VARCHAR(100);`  
         - (2) 反之, 删除表中某列使用的语法如下所示:
             + 语法 1-5 删除列的 ALTER TABLE 语句
