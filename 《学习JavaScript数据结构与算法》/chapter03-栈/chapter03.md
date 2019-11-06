@@ -8,6 +8,19 @@
 - 3.4 小结
 
 
+## 生词 (New Words)
+- **binary ['baɪnərɪ] --adj.二进制的，二元的**
+- **octal ['ɒkt(ə)l] --adj.八进制的**
+- **decimal ['desɪm(ə)l] --adj.十进位的，小数的， n.小数**
+- **hexadecimal [ˌheksə'desɪm(ə)l] --adj.十六进制的**
+- **remainder [rɪ'meɪndə] --n.剩余; 余数; 其余**
+    + --> The remainder of the group stayed at the hotel.
+        该团其余的人留在旅馆
+    + --> He spent the remainder of his life in the country.
+        他在乡间度过了余生.
+
+
+
 ## 本章内容 (Content)
 - 有 2 种数据结构类似于数组, 但在添加和删除元素时更为可控. 它们就是 `栈` 和 `队列`.
 #### 3.1 栈数据结构 
@@ -19,6 +32,8 @@
 - 3.1.6 清空和打印栈元素
 #### 3.2 ECMAScript 6 和 Stack 类
 - 用 ES6 语法声明 Stack 类
+    * ES6 的类是基于原型的. 虽然基于原型的类比基于函数的类更节省内存, 也更适合创建多个实例,
+      却不能够声明私有属性(变量)或方法.
     + (1) 用 ES6 的限定作用域 Symbol 实现类
     + (2) 用 ES6 的 WeakMap 实现类
         - 有一种数据类型可以确保属性是私有的, 这就是 WeakMap.我们会在第 8 章深入探讨 Map
@@ -39,12 +54,6 @@
                     const count = _count.get(this);
                     items[count] = element;
                     _count.set(this, count + 1);
-
-                    // WeakMap {Stack => Array(1)}
-                    console.log(_items);
-                    console.log("------");
-                    // WeakMap {Stack => Array(1)}
-                    console.log(_count);
                 }
                 pop() {
                     if(this.isEmpty()) {
@@ -98,4 +107,31 @@
               构造函数的实例) 为键, 把代表栈的数组存入 items.
             + {3}: 从 WeakMap 中取出值, 即以 this 为键 (行 {2} 设置的) 从 items 中取值.
 #### 3.3 用栈解决问题
+- **从 10 进制 到 2 进制**
+    + 进制转换的详细笔记见: `Mathematics-learning/《程序员的数学》/进制转换.md`
+    + 基本的 10 进制转 2 进制算法描述:
+      ```javascript
+        // - decimal number 十进制的
+        function divideBy2 (decNum) {
+            // - remainder stack 余数栈
+            let remStack = new Stack();
+            let rem;
+            let binaryString = "";
+
+            while(decNum > 0) {     // (1)
+                rem = Math.floor(decNum % 2);   // (2)
+                remStack.push(rem); // (3)
+                decNum = Math.floor(decNum / 2);    // (4)
+            }
+
+            while(!remStack.isEmpty()) {    // (5)
+                binaryString += remStack.pop().toString();
+            }
+            return binaryString;
+        }
+        console.log(divideBy2(233));    // 11101001
+        console.log(divideBy2(10));     // 1010
+        console.log(divideBy2(1000));   // 1111101000
+      ```
+
 #### 3.4 小结
