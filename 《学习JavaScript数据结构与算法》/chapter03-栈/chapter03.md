@@ -154,7 +154,7 @@
             let rem;
             let baseString = "";
             let digits = "0123456789ABCDEF";
-            while (dicNum > 0) {
+            while (decNum > 0) {
                 rem = Math.floor(decNum % base);
                 remStack.push(rem);
                 decNum = Math.floor(decNum / base);
