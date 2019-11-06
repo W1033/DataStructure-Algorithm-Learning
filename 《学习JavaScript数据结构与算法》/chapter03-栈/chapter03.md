@@ -23,6 +23,20 @@
 
 ## 本章内容 (Content)
 - 有 2 种数据结构类似于数组, 但在添加和删除元素时更为可控. 它们就是 `栈` 和 `队列`.
+- 栈是一种遵循 `后进先出(Last-in-First-out) LIFO` 原则的有序集合. 新添加的或待删除的
+  元素都保存在栈的同一端, 称为栈顶, 另一端就叫栈底. 在栈里, 新元素都靠近栈顶, 旧元素都
+  接近栈底. 
+  + 此处添加一个示例来说明 栈顶 和 栈底:
+  + `pop()`方法: 可以删除数组末尾的元素:
+    ```javascript
+        let numbers = [1,2,3,4,5,9];
+        numbers.pop();
+        console.log(numbers);   // [1,2,3,4,5]
+        numbers.push(12);
+        // - 根据上面定义 "新元素都靠近栈顶" 可以看出在数组中, 右边是栈顶, 左边是栈底.
+        console.log(numbers);   // [1, 2, 3, 4, 5, 12]
+    ```
+
 #### 3.1 栈数据结构 
 - 3.1.1 创建栈
 - 3.1.2 向栈添加元素
@@ -46,8 +60,8 @@
             const _count = new WeakMap();
             class Stack {
                 constructor() {
-                    _count.set(this, 0);
                     _items.set(this, []);
+                    _count.set(this, 0);
                 }
                 push(element) {
                     const items = _items.get(this);
@@ -133,5 +147,22 @@
         console.log(divideBy2(10));     // 1010
         console.log(divideBy2(1000));   // 1111101000
       ```
-
+    + **进制转换算法**
+      ```javascript
+        function baseConverter (decNum, base) {
+            let remStack = new Stack();
+            let rem;
+            let baseString = "";
+            let digits = "0123456789ABCDEF";
+            while (dicNum > 0) {
+                rem = Math.floor(decNum % base);
+                remStack.push(rem);
+                decNum = Math.floor(decNum / base);
+            }
+            while (!remStack.isEmpty()) {
+                baseString += digits[remStack.pop()];
+            }
+            return baseString;
+        }
+      ```
 #### 3.4 小结

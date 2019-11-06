@@ -65,7 +65,8 @@
                     return objString;
                 }
             }
-
+            
+            console.log("------");
             
             // - decimal number 十进制的
             function divideBy2 (decNum) {
@@ -88,6 +89,28 @@
             console.log(divideBy2(233));    // 11101001
             console.log(divideBy2(10));     // 1010
             console.log(divideBy2(1000));   // 1111101000
+
+            
+            console.log("------");
+
+            // - 进制转换算法
+            function baseConverter (decNum, base) {
+                let remStack = new Stack();
+                let rem;
+                let baseString = "";
+                let digits = "0123456789ABCDEF";
+                while (dicNum > 0) {
+                    rem = Math.floor(decNum % base);
+                    remStack.push(rem);
+                    decNum = Math.floor(decNum / base);
+                }
+                while (!remStack.isEmpty()) {
+                    baseString += digits[remStack.pop()];
+                }
+                return baseString;
+            }
+
+
         })();
     </script>
 </body>
