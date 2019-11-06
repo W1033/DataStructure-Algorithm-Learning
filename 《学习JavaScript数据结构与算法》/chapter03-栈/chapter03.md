@@ -18,7 +18,9 @@
         该团其余的人留在旅馆
     + --> He spent the remainder of his life in the country.
         他在乡间度过了余生.
-
+- **peek [piːk] --n.偷看; 瞥(很快的看一眼)= glance = peep. --vi.窥视; 偷看**
+    + steal a peek(n). 偷看
+    + Now close your eyes, but don't peek. 现在闭上眼睛, 不要偷看哦.
 
 
 ## 本章内容 (Content)
@@ -63,12 +65,14 @@
                     _items.set(this, []);
                     _count.set(this, 0);
                 }
+                // - push 向栈添加元素
                 push(element) {
                     const items = _items.get(this);
                     const count = _count.get(this);
                     items[count] = element;
                     _count.set(this, count + 1);
                 }
+                // - pop 从栈移除元素
                 pop() {
                     if(this.isEmpty()) {
                         return undefined;
@@ -81,6 +85,7 @@
                     delete items[count];
                     return result;
                 }
+                // - peek 查看栈顶元素
                 peek() {
                     if (this.isEmpty()) {
                         return undefined;
@@ -89,16 +94,20 @@
                     const count = _count.get(this);
                     return items[count - 1];
                 }
+                // - isEmpty 检查栈是否为空
                 isEmpty() {
                     return _count.get(this) === 0;
                 }
+                // - size 返回栈里的元素个数. 这个方法和数组的 length 属性很类似.
                 size() {
                     return _count.get(this);
                 }
+                // - clear 清空和打印栈元素
                 clear() {
                     _count.set(this, 0);
                     _items.set(this, 0);
                 }
+                // - toString 打印栈的内容
                 toString() {
                     if (this.isEmpty()) {
                         return '';
