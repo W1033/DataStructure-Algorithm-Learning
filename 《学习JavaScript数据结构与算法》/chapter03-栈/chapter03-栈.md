@@ -28,16 +28,10 @@
 - 栈是一种遵循 `后进先出(Last-in-First-out) LIFO` 原则的有序集合. 新添加的或待删除的
   元素都保存在栈的同一端, 称为栈顶, 另一端就叫栈底. 在栈里, 新元素都靠近栈顶, 旧元素都
   接近栈底. 
-  + 此处添加一个示例来说明 栈顶 和 栈底:
-  + `pop()`方法: 可以删除数组末尾的元素:
-    ```javascript
-        let numbers = [1,2,3,4,5,9];
-        numbers.pop();
-        console.log(numbers);   // [1,2,3,4,5]
-        numbers.push(12);
-        // - 根据上面定义 "新元素都靠近栈顶" 可以看出在数组中, 右边是栈顶, 左边是栈底.
-        console.log(numbers);   // [1, 2, 3, 4, 5, 12]
-    ```
+    + 此处说明 `栈顶` 和 `栈底`:
+        - 从下面 Stack 类内 push() 方法的提示可以看出: 如果一个数组 `arr = [1, 2, 3]`
+          那么, 数组左侧为栈底右侧为栈顶. 
+    
 
 #### 3.1 栈数据结构 
 - 3.1.1 创建栈
@@ -57,7 +51,6 @@
           数据类型.
         - 如果用 WeakMap 来存储 items 属性 (数组版本), Stack 类就是这样的: 
           ```javascript
-            // - 默认 items = [];
             const _items = new WeakMap();
             const _count = new WeakMap();
             class Stack {
@@ -65,14 +58,18 @@
                     _items.set(this, []);
                     _count.set(this, 0);
                 }
-                // - push 向栈添加元素
+                // - push 向栈添加元素: 该方法只添加元素到栈顶, 也就是栈的末(mo)尾.
                 push(element) {
+                    // - 最原始的向栈添加元素的写法是: items= [] (为一个空数组)
+                    // this.item.push(element);
+
                     const items = _items.get(this);
                     const count = _count.get(this);
                     items[count] = element;
                     _count.set(this, count + 1);
                 }
-                // - pop 从栈移除元素
+                // - pop 从栈移除元素.(Tip；从数组 `pop()`方法删除数组末尾的元素, 的
+                //   定义可以, pop 移除元素是从栈顶移除, 也即是 "后进先出")
                 pop() {
                     if(this.isEmpty()) {
                         return undefined;
