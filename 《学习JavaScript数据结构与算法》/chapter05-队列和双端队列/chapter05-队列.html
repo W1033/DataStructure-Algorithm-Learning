@@ -1,0 +1,81 @@
+<!doctype html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport"
+          content="width=device-width, user-scalable=no, initial-scale=1.0, maximum-scale=1.0, minimum-scale=1.0">
+    <meta http-equiv="X-UA-Compatible" content="ie=edge">
+    <title>chapter04-队列</title>
+</head>
+<body>
+    <script>
+        (function() {
+            // - Queue 类和上一张的 Stack 类非常相似, 只是添加和移除元素的原则不同.
+            class Queue {
+                constructor() {
+                    this.count = 0;     // - 作为 items 对象的索引
+                    this.lowestCount = 0;   // - 最低数量(Tip:作用类似于 arr[0] 总取第一项)
+                    this.items = {};    // - items 用于保存队列中的项 (key:value 结构)
+                }
+                enqueue(element) {
+                    // - 当前构造函数的 count 属性作为 key(键), element 作为 value(值),
+                    //   保存到 items 对象属性中.
+                    this.items[this.count] = element;
+                    this.count++;
+                }
+                dequeue() {
+                    if (this.isEmpty()) {
+                        return undefined;
+                    }
+                    // - 取到数组的第一项
+                    const result = this.items[this.lowestCount];
+                    delete this.items[this.lowestCount];
+                    this.lowestCount++;
+                    return result;
+                }
+                // - Note: 此处 peek() 查看队列的第一项(即对象中的第一项), 而第三章 Stack 类
+                //   的 peek() 方法是查看栈顶项(即数组的末尾项).
+                peek() {
+                    if (this.isEmpty) {
+                        return undefined;
+                    }
+                    // - 返回对象中的第一项
+                    return this.items[this.lowestCount];
+                }
+                isEmpty() {
+                    return this.size() === 0;
+                }
+                clear() {
+                    this.items = {};
+                    this.count = 0;
+                    this.lowestCount = 0;
+                }
+                size() {
+                    return this.count - this.lowestCount;
+                }
+                toString() {
+                    if (this.isEmpty()) {
+                        return "";
+                    }
+                    // - 模板插值太强了, 可以自动拼接
+                    let objString = `${this.items[this.lowestCount]}`;
+                    for (let i = this.lowestCount + 1; i < this.count; i++) {
+                        console.log("before ojbString: ", `${objString}`);
+                        objString = `${objString}, ${this.items[i]}`;
+                        console.log("After ojbString: ", `${objString}`);
+                    }
+                    return objString;
+                }
+            }
+
+            const queue = new Queue();
+            console.log(queue.isEmpty());
+            queue.enqueue("John");
+            queue.enqueue("Jack");
+            queue.enqueue("Lynch");
+            queue.enqueue("Dannel");
+            console.log(queue.toString());  // John, Jack, Lynch, Dannel
+        })();
+    </script>
+</body>
+</html>

@@ -1,5 +1,6 @@
-# 第 3 章: 栈 (Stack)
+# 第 4章: 栈 (Stack)
 
+> Tip: 此章的目录和笔记来自第 2 版, 但源码来自第 3 版.
 
 ## 本章目录 (Catalog)
 - 3.1 栈数据结构 
@@ -30,17 +31,76 @@
   接近栈底. 
     + 此处说明 `栈顶` 和 `栈底`:
         - 从下面 Stack 类内 push() 方法的提示可以看出: 如果一个数组 `arr = [1, 2, 3]`
-          那么, 数组左侧为栈底右侧为栈顶. 
-    
+          那么, 数组左侧为栈底右侧为栈顶.    
 
-#### 3.1 栈数据结构 
-- 3.1.1 创建栈
+### 3.1 栈数据结构 
+- 3.1.1 创建栈 (Stack)
 - 3.1.2 向栈添加元素
 - 3.1.3 从栈移除元素
 - 3.1.4 查看栈顶元素
 - 3.1.5 检查栈是否为空
 - 3.1.6 清空和打印栈元素
-#### 3.2 ECMAScript 6 和 Stack 类
+- 下面给出 Stack 队列的实现方法:
+  ```javascript
+    export default class Stack {
+        constructor() {
+            this.count = 0;
+            this.items = {};
+        }
+        // - push 向栈添加元素: 该方法只添加元素到栈顶, 也就是栈的末(mo)尾.
+        push(element) {
+            this.items[this.count] = element;
+            this.count++;
+        }
+        // - pop 从栈顶移除元素.(Tip；从数组 `pop()`方法删除数组末尾的元素的
+        //   定义可以, pop 移除元素是从栈顶移除, 也即是 "后进先出")
+        pop() {
+            if (this.isEmpty()) {
+                return undefined;
+            }
+            this.count--;
+            const result = this.items[this.count];
+            delete this.items[this.count];
+            return result;
+        }
+        peek() {
+            if (this.isEmpty()) {
+                return undefined;
+            }
+            // - Note: 此处是查看栈顶, 即对象的末尾项. 
+            console.log(this.items[this.count - 1]);
+            return this.items[this.count - 1];
+        }
+        isEmpty() {
+            return this.count === 0;
+        }
+        size() {
+            return this.count;
+        }
+        clear() {
+            this.items = {};
+            this.count = 0;
+        }
+        toString() {
+            if (this.isEmpty()) {
+                return "";
+            }
+            let objString = `${this.items[0]}`;
+            for (let i = 1; i < this.count; i++) {
+                objString = `${objString}, ${this.items[i]}`;
+            }
+            return objString;
+        }
+        
+        let stack = new Stack();
+        stack.push(4);
+        stack.push("我是第二项");
+        stack.push("2426");
+        stack.peek();   // "2426"
+        console.log(stack.items);   // {0: 4, 1: "我是第二项", 2: "2426"}
+    }
+  ```
+### 3.2 ECMAScript 6 和 Stack 类
 - 用 ES6 语法声明 Stack 类
     * ES6 的类是基于原型的. 虽然基于原型的类比基于函数的类更节省内存, 也更适合创建多个实例,
       却不能够声明私有属性(变量)或方法.
@@ -58,11 +118,9 @@
                     _items.set(this, []);
                     _count.set(this, 0);
                 }
-                // - push 向栈添加元素: 该方法只添加元素到栈顶, 也就是栈的末(mo)尾.
                 push(element) {
                     // - 最原始的向栈添加元素的写法是: items= [] (为一个空数组)
                     // this.item.push(element);
-
                     const items = _items.get(this);
                     const count = _count.get(this);
                     items[count] = element;
@@ -126,7 +184,7 @@
             + {2}: 在 constructor 中, 以 this (Stack类自己的引用. Tip:即 Stack 
               构造函数的实例) 为键, 把代表栈的数组存入 items.
             + {3}: 从 WeakMap 中取出值, 即以 this 为键 (行 {2} 设置的) 从 items 中取值.
-#### 3.3 用栈解决问题
+### 3.3 用栈解决问题
 - **从 10 进制 到 2 进制**
     + 进制转换的详细笔记见: `Mathematics-learning/《程序员的数学》/进制转换.md`
     + 基本的 10 进制转 2 进制算法描述:
@@ -171,4 +229,4 @@
             return baseString;
         }
       ```
-#### 3.4 小结
+### 3.4 小结
