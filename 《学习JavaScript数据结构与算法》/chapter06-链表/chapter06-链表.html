@@ -17,62 +17,64 @@
                 this.next = next;
             }
         }
-        // class LinkedList {
-        //     constructor(equalsFn = defaultEquals) {
-        //         this.equalsFn = equalsFn;
-        //         this.count = 0;
-        //         this.head = undefined;
-        //     }
-        //     push(element) {
-        //         const node = new Node(element); // {1}
-        //         let current;    // {2}
-        //         if (this.head == null) {    // {3}
-        //             // catches null && undefined
-        //             // - 让 head 指向 node 元素
-        //             this.head = node;
-        //             console.log("node:");
-        //             console.log(node);
-        //             console.log("------");
-        //         } else {
-        //             current = this.head;
-        //             while (current.next != null) {
-        //                 current = current.next;
-        //             }
-        //             current.next = node;
-        //         }
-        //         this.count++;
-        //     }
 
-        //     // - P99
-        //     removeAt(index) {
-        //         // - 检查越界值
-        //         if (index >= 0 && index < this.count) {
-        //             let current = this.head;
+        // - 第 6 章刚开始时候, 写的比较独立未封装时的 push() / removeAt() 方法.
+        (function() {
+            /*class LinkedList {
+                constructor(equalsFn = defaultEquals) {
+                    this.equalsFn = equalsFn;
+                    this.count = 0;
+                    this.head = undefined;
+                }
+                push(element) {
+                    const node = new Node(element); // {1}
+                    let current;    // {2}
+                    if (this.head == null) {    // {3}
+                        // catches null && undefined
+                        // - 让 head 指向 node 元素
+                        this.head = node;
+                        console.log("node:");
+                        console.log(node);
+                        console.log("------");
+                    } else {
+                        current = this.head;
+                        while (current.next != null) {
+                            current = current.next;
+                        }
+                        current.next = node;
+                    }
+                    this.count++;
+                }
 
-        //             // - 移除第一项
-        //             if (index === 0) {
-        //                 this.head = current.next;
-        //             } else {
-        //                 let previous;
-        //                 for (let i = 0; i < index; i++) {
-        //                     previous = current;
-        //                     current = current.next;
-        //                 }
-        //                 // - 将 previous 与 current 的下一项链接起来; 跳过 current,
-        //                 //   从而移除它
-        //                 previous.next = current.next;
-        //             }
-        //             this.count--;
-        //             return current.element;
-        //         }
-        //         return undefined;
-        //     }
-        // }
+                // - P99
+                removeAt(index) {
+                    // - 检查越界值
+                    if (index >= 0 && index < this.count) {
+                        let current = this.head;
+
+                        // - 移除第一项
+                        if (index === 0) {
+                            this.head = current.next;
+                        } else {
+                            let previous;
+                            for (let i = 0; i < index; i++) {
+                                previous = current;
+                                current = current.next;
+                            }
+                            // - 将 previous 与 current 的下一项链接起来; 跳过 current,
+                            //   从而移除它
+                            previous.next = current.next;
+                        }
+                        this.count--;
+                        return current.element;
+                    }
+                    return undefined;
+                }
+            }*/
+        })();
 
 
-
-
-
+        // - 链表 (Linked list) 书上完整源码
         class LinkedList {
             constructor(equalsFn = defaultEquals) {
                 this.equalsFn = equalsFn;
@@ -87,7 +89,6 @@
                     // catches null && undefined
                     // - 把要添加的 node (节点实例) 赋值给 head.
                     this.head = node;
-                    console.log(this.head);
                 } else {
                     // - Note: 当第 2 次调用 push() 方法时 this.head 已经是一个
                     //   Node 构造函数的实例, 输出为:
@@ -97,6 +98,7 @@
                         current = current.next;
                     }
                     current.next = node;
+                    console.log("current: ", current);
                 }
                 this.count++;
             }
@@ -113,11 +115,14 @@
             insert(element, index) {
                 if (index >= 0 && index <= this.count) {
                     const node = new Node(element);
+                    // - 第 1 种场景是需要在链表的起点添加一个元素, 也就是第一个位置.
                     if (index === 0) {
-                        const current = this.head;
-                        node.next = current;
+                        node.next = this.head;
                         this.head = node;
-                    } else {
+                    }
+                    // - 第 2 种场景在链表中间或尾部添加一个元素.
+                    else {
+                        // - (index-1) 表示需要添加新节点位置的前一个位置.
                         const previous = this.getElementAt(index - 1);
                         node.next = previous.next;
                         previous.next = node;
@@ -135,6 +140,9 @@
                     } else {
                         const previous = this.getElementAt(index - 1);
                         current = previous.next;
+                        // - 把当前的下一项(current.next), 赋值给上一项的下一项
+                        //   (previous.next) 也即是赋值给当前项(current), 那么当前项
+                        //   就被替覆盖了.
                         previous.next = current.next;
                     }
                     this.count--;
@@ -184,6 +192,161 @@
         // console.log("list:");
         // console.log(list);
         // console.log(list.toString());
+
+        console.log(Object.prototype.__proto__);    // null
+        console.log(Function.prototype);
+        console.log(Function.__proto__);
+
+
+        // - 双向链表 (Doubly linked list) 书上完整源码
+        (function() {
+
+            // import { defaultEquals } from '../util';
+            // import LinkedList from './linked-list';
+            // import { DoublyNode } from './models/linked-list-models';
+
+            class DoublyNode extends Node {
+                constructor(element, next, prev) {
+                    super(element, next);
+                    this.prev = prev;
+                }
+            }
+
+            class DoublyLinkedList extends LinkedList {
+                constructor(equalsFn = defaultEquals) {
+                    super(equalsFn);
+                    this.tail = undefined;
+                }
+
+                push(element) {
+                    const node = new DoublyNode(element);
+                    if (this.head == null) {
+                        this.head = node;
+                        this.tail = node; // N
+                    } else {
+                        // attach to the tail node // NEW
+                        this.tail.next = node;
+                        node.prev = this.tail;
+                        this.tail = node;
+                    }
+                    this.count++;
+                }
+
+                insert(element, index) {
+                    if (index >= 0 && index <= this.count) {
+                        const node = new DoublyNode(element);
+                        let current = this.head;
+                        if (index === 0) {
+                            if (this.head == null) { // NEW
+                                this.head = node;
+                                this.tail = node; // NEW
+                            } else {
+                                node.next = this.head;
+                                this.head.prev = node; // NEW
+                                this.head = node;
+                            }
+                        } else if (index === this.count) { // last item NEW
+                            current = this.tail;
+                            current.next = node;
+                            node.prev = current;
+                            this.tail = node;
+                        } else {
+                            const previous = this.getElementAt(index - 1);
+                            current = previous.next;
+                            node.next = current;
+                            previous.next = node;
+                            current.prev = node; // NEW
+                            node.prev = previous; // NEW
+                        }
+                        this.count++;
+                        return true;
+                    }
+                    return false;
+                }
+
+                removeAt(index) {
+                    if (index >= 0 && index < this.count) {
+                        let current = this.head;
+                        if (index === 0) {
+                            this.head = this.head.next;
+                            // if there is only one item, then we update tail as well //NEW
+                            if (this.count === 1) {
+                                // {2}
+                                this.tail = undefined;
+                            } else {
+                                this.head.prev = undefined;
+                            }
+                        } else if (index === this.count - 1) {
+                            // last item //NEW
+                            current = this.tail;
+                            this.tail = current.prev;
+                            this.tail.next = undefined;
+                        } else {
+                            current = this.getElementAt(index);
+                            const previous = current.prev;
+                            // link previous with current's next - skip it to remove
+                            previous.next = current.next;
+                            current.next.prev = previous; // NEW
+                        }
+                        this.count--;
+                        return current.element;
+                    }
+                    return undefined;
+                }
+
+                indexOf(element) {
+                    let current = this.head;
+                    let index = 0;
+                    while (current != null) {
+                        if (this.equalsFn(element, current.element)) {
+                            return index;
+                        }
+                        index++;
+                        current = current.next;
+                    }
+                    return -1;
+                }
+
+                getHead() {
+                    return this.head;
+                }
+
+                getTail() {
+                    return this.tail;
+                }
+
+                clear() {
+                    super.clear();
+                    this.tail = undefined;
+                }
+
+                toString() {
+                    if (this.head == null) {
+                        return '';
+                    }
+                    let objString = `${this.head.element}`;
+                    let current = this.head.next;
+                    while (current != null) {
+                        objString = `${objString},${current.element}`;
+                        current = current.next;
+                    }
+                    return objString;
+                }
+
+                inverseToString() {
+                    if (this.tail == null) {
+                        return '';
+                    }
+                    let objString = `${this.tail.element}`;
+                    let previous = this.tail.prev;
+                    while (previous != null) {
+                        objString = `${objString},${previous.element}`;
+                        previous = previous.prev;
+                    }
+                    return objString;
+                }
+            }
+        })();
     </script>
 </body>
 </html>
