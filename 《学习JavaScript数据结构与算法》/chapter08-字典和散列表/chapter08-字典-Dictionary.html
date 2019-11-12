@@ -41,7 +41,19 @@
                 if (key != null && value != null) {
                     const tableKey = this.toStrFn(key);
                     this.table[tableKey] = new ValuePair(key, value);
-                    console.log(this.table[tableKey].toString());
+
+                    // Output:
+                    // ValuePair {key: "Gandalf", value: "gandalf@email.com"}
+                    // ValuePair {key: "John", value: "johnsnow@email.com"}
+                    // ValuePair {key: "Tyrion", value: "tyrion@email.com"}
+                    // console.log(this.table[tableKey]);
+
+                    // Output:
+                    // Gandalf: ValuePair {key: "Gandalf", value: "gandalf@email.com"},
+                    // John: ValuePair {key: "John", value: "johnsnow@email.com"},
+                    // Tyrion: ValuePair {key: "Tyrion", value: "tyrion@email.com"}
+                    console.log(this.table);
+
                     return true;
                 }
                 return false;
@@ -113,10 +125,11 @@
 
         const dictionary = new Dictionary();
         dictionary.set('Gandalf', 'gandalf@email.com');
+        console.log(dictionary.get('Gandalf'));
         dictionary.set('John', 'johnsnow@email.com');
         dictionary.set('Tyrion', 'tyrion@email.com');
 
-        console.log(dictionary);
+        // console.log(dictionary);
     </script>
 </body>
 </html>
