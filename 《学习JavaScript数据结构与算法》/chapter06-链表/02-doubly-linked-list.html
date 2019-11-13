@@ -46,7 +46,7 @@
             this.count++;
         }
 
-        // - insert(): 插入值到双向链表中
+        // - insert(element, index): 插入值到双向链表中
         insert(element, index) {
             if (index >= 0 && index <= this.count) {
                 const node = new Node(element);
@@ -107,6 +107,82 @@
             }
             return undefined;
         }
+
+        // - remove(element): 从链表中移除一个元素
+        remove(element){
+            const index = this.indexOf(element);
+            return this.removeAt(index);
+        }
+
+        // - indexOf(element): 返回元素在链表中的索引. 如果链表中没有该元素则返回 -1.
+        indexOf(element) {
+            let current = this.head;
+            for (let i = 0; i < this.size() && current != null; i++) {
+                if (this.equalsFn(element, current.element)) {
+                    return i;
+                }
+                current = current.next;
+            }
+            return -1;
+        }
+
+        // - removeAt(index): 从任意位置移除元素
+        removeAt(index) {
+            if (index >=0 && index < this.count) {
+                let current = this.head;
+                // - 移除第一项
+                if (index === 0 ) {
+                    this.head = current.next;
+                    // - if there is only one item, then we update tail as well
+                    // - 如果链表中就一项值, 直接移除 (更新 tail)
+                    if (this.count === 1) {
+                        this.tail = undefined;
+                    }
+                    // - 如果链表内有值, 那么移除第一项
+                    else {
+                        this.head.prev = undefined;
+                    }
+                }
+                // - 移除链表最后一项
+                else if (index === this.count -1) {
+                    // last item
+                    current = this.tail;
+                    this.tail = current.prev;
+                    this.tail.next = undefined;
+                }
+                // - 移除特定项
+                else {
+                    current = this.getElementAt(index);
+                    const previous = current.prev;
+                    // link previous with current's next - skip it to remove
+                    previous.next = current.next;
+                    current.next.prev = previous;
+                }
+            }
+        }
+
+        isEmpty() {return this.size() === 0;}
+
+        size() {return this.count;}
+
+        getHead() {return this.head;}
+
+        clear() {
+            this.head = undefined;
+            this.count = 0;
+        }
+
+        toString() {
+            if (this.head == null) { return "";}
+            let objString = `${this.head.element}`;
+            let current = this.head.next;
+            for (let i = 1; i < this.size() && current != null; i++) {
+                objString = `${objString}, ${current.element}`;
+                current = current.next;
+            }
+            return objString;
+        }
+
     }
 
     const list = new DoublyLinkedList();
