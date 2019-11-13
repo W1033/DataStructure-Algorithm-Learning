@@ -1,0 +1,117 @@
+<script>
+    function defaultEquals(a, b) {
+        return a === b;
+    }
+    class Node {
+        constructor(element, next, prev) {
+            this.element = element;
+            this.next = next;
+            this.prev = prev;
+        }
+    }
+    class DoublyLinkedList {
+        constructor(equalsFn = defaultEquals) {
+            this.equalsFn = equalsFn;
+            this.count = 0;
+            this.head = undefined;
+            // - tail 保存对链表最后一个元素的引用
+            this.tail = undefined;
+        }
+
+        push(element) {
+            const node = new Node(element);  // ①
+            // - 如果要推入的元素是第一项. (即: 链表为空)
+            if (this.head == null) {
+                this.head = node;
+                // - Tip: this.head/this.tail 都指向当前 node 节点
+                this.tail = node;
+                console.log(node);
+            }
+            // - 如果要推入的元素不是第一项
+            else {
+                // - 经过当前函数内的步骤 ①, 此时 node 已经是第 2 次调用传入的值
+                //   (Node {element: 4, next: undefined, prev: undefined}),
+                //   this.tail 保存的是上一次执行调用后链表中最后一个值得引用.
+                //   后续执行同理.
+                this.tail.next = node;
+                // - 把 this.tail 赋值给当前传入节点(node) 的 prev 属性
+                node.prev = this.tail;
+                // - 再次把当前节点(node) 赋值给 this.tail (this.tail 始终保存
+                //   最后一项).  [Note: 没有利用迭代就实现了添加值, 而单项链表却需要
+                //   while 遍历.]
+                this.tail = node;
+                console.log(node);
+            }
+            // - 推入值之后不要忘记把 count + 1;
+            this.count++;
+        }
+
+        // - insert(): 插入值到双向链表中
+        insert(element, index) {
+            if (index >= 0 && index <= this.count) {
+                const node = new Node(element);
+                let current = this.head;
+                if (index === 0) {
+                    // - this.head 为 null, 即链表内为空值, 和 push() 中判断类似.
+                    if (this.head === null) {
+                        this.head = node;
+                        this.tail = node;
+                    }
+                    // - else 当前双向链表内的值不为空, 但要把项插入到第一项.
+                    else {
+                        // - 把第一项(this.head) 赋值给当前要插入的节点(node)的下一项
+                        node.next = this.head;
+                        // - 把待插入节点(node) 赋值给已经放置到第2项的(this.head)
+                        //   的 prev 属性
+                        this.head.prev = node;
+                        // - 最后把当前插入的节点, 赋值给链表的第一项(this.head)
+                        this.head = node;
+                    }
+                }
+                // - 把节点插入到双向链表的最后一项
+                else if (index === this.count) {
+                    // - 把最后一项(this.tail) 赋值给 current 自定义变量.
+                    current = this.tail;
+                    // - 把待插入的节点(node) 赋值给 current.next 属性
+                    current.next = node;
+                    // - 把 current 赋值给待插入节点的 prev 属性
+                    node.prev = current;
+                    // - 最后把插入的 node 节点赋值成最后一项
+                    this.tail = node;
+                }
+                // - 把节点(项)插入到指定的位置
+                else {
+                    // - 返回待插入元素(node) 的上一个元素
+                    const previous = this.getElementAt(index -1);
+                    current = previous.next;
+                    node.next = current;
+                    previous.next = node;
+                    current.prev = node;
+                    node.prev = previous;
+                }
+                this.count++;
+                return true;
+            }
+            return false;
+        }
+
+        // - getElementAt(index): 返回链表中特定位置的元素. 如果链表中不存在这样的
+        //   元素, 则返回 undefined.
+        getElementAt(index) {
+            if (index >= 0 && index <= this.count) {
+                let node = this.head;
+                for (let i = 0; i < index && node != null; i++) {
+                    node = node.next;
+                }
+                return node;
+            }
+            return undefined;
+        }
+    }
+
+    const list = new DoublyLinkedList();
+    list.push(2);
+    list.push(4);
+    list.push(6);
+    list.push(9);
+</script>
