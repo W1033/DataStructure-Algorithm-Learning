@@ -45,6 +45,12 @@
 
 ### 10.6 自平衡书
 - 10.6.1 `Adelson-Velskii-Landi` 树 (AVL 树)
+    + Wiki: 在计算机科学中, `AVL树` 是最早被发明的自平衡二叉查找树. 在 AVL 树中, 
+      `任一节点对应的 2 棵子树的最大高度差为 1`, 因此它也被称为 高度平衡树. 查找, 插入
+      和删除在平均和最坏情况下的时间复杂度都是 $O(\log{n})$. 增加和删除元素的操作则可能
+      需要借由一次或多次树旋转, 以实现树的重新平衡. AVL 树得名与它的发明者 
+      G.M.Adelson-Velsky 和 Evgenii Landis, 他们在 1962 年的论文 
+     《An algorithm for the organization of information》中公开了这一数据结构.
 - 10.6.2 红黑树
 
 ### 10.7 小结
