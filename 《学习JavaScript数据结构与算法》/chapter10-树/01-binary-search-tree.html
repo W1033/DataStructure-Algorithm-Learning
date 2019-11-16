@@ -80,8 +80,10 @@
         // - postOrderTraverse(): 通过后序遍历方式遍历所有节点.
 
         // - min(): 返回树中最小的 值/键
-        min() {return this.minNode(this.root);}
-        minNode(node) {
+        min() {
+            return BinarySearchTree.minNode(this.root);
+        }
+        static minNode(node) {
             let current = node;
             while (current != null && current.left != null) {
                 current = current.left;
@@ -89,8 +91,8 @@
             return current;
         }
         // - max(): 返回树中最大的 值/键
-        max() {return this.maxNode(this.root);}
-        maxNode(node) {
+        max() {return BinarySearchTree.maxNode(this.root);}
+        static maxNode(node) {
             let current = node;
             while (current != null && current.right != null) {
                 current = current.right;
@@ -157,7 +159,7 @@
                 return node;    // {17}
             }
             // - (3)
-            const aux = this.minNode(node.right);   // {18}
+            const aux = BinarySearchTree.minNode(node.right);   // {18}
             node.key = aux.key; // {19}
             node.right = this.removeNode(node.right, aux.key);  // {20}
             return node;    // {21}
