@@ -32,8 +32,8 @@
     };
 
     class BinarySearchTree {
-        constructor(compare = defaultCompare) {
-            this.compareFn = compare;
+        constructor(compareFn = defaultCompare) {
+            this.compareFn = compareFn;
             this.root = undefined;
         }
 

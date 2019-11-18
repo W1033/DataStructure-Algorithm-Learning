@@ -1,12 +1,189 @@
 <script>
-    // - F:\Github-Clone\DataStructure-Algorithm-Learning\《学习JavaScript数据结构与算法》\javascript-datastructures-algorithms-master\src\ts\data-structures\red-black-tree.ts
-    C
+    const Compare = {
+        LESS_THAN: -1,
+        BIGGER_THAN: 1,
+        EQUALS: 0
+    };
+
+    function defaultCompare(a, b) {
+        if (a === b) {
+            return Compare.EQUALS;
+        }
+        return a < b ? Compare.LESS_THAN : Compare.BIGGER_THAN;
+    }
+
+    // - src\ts\data-structures\red-black-tree.ts
+    const Colors = {
+        RED: 0,
+        BLACK: 1,
+    };
     class RedBlackNode {
         constructor(key) {
             this.key = key;
             this.left = undefined;
             this.right = undefined;
-            this.color = Colors.RED;
+            this.color = Colors.RED;    // {6}
+            this.parent = null;     // {7}
+        }
+        isRed() {
+            return this.color === Colors.RED;
+        }
+    }
+    class RedBlackTree {
+        constructor(compareFn = defaultCompare) {
+            this.compareFn = compareFn;
+            this.root = null;
+        }
+
+        // - insert(key): 向树中插入一个新的键
+        insert(key) {
+            // - special case: first key
+            if (this.root == null) {
+                this.root = new RedBlackNode(key);
+                this.root.color = Colors.BLACK;
+            }
+            else {
+                const newNode = this.insertNode(this.root, key);
+                RedBlackTree.fixTreeProperties(newNode);
+            }
+        }
+        insertNode(node, key) {
+            if (this.compareFn(key, node.key) === Compare.LESS_THAN) {
+                if (node.left == null) {
+                    node.left = new RedBlackNode(key);
+                    // - {8}/{10}: 保存指向被插入节点父节点的引用
+                    node.left.parent = node;    // {8}
+                    // - {9}{10}: 返回节点的引用, 这样我们就可以在后面验证树的属性
+                    return node.left;   // {9}
+                }
+                else {
+                    return this.insertNode(node.left, key);
+                }
+            }
+            else if (node.right == null) {
+                node.right = new RedBlackNode(key);
+                node.right.parent = node;   // {10}
+                return node.right;  // {11}
+            }
+            else {
+                return this.insertNode(node.right, key);
+            }
+        }
+
+        fixTreeProperties(node) {
+            while(node && node.parent && node.parent.color === Colors.RED // {1}
+                && node.color !== Colors.BLACK) {   // {2}
+                let parent = node.parent;   // {3}
+                const grandParent = parent.parent;  // {4}
+
+                // - 情形 A: 父节点是左侧子节点
+                if (grandParent && grandParent.left === parent) {   // {5}
+                    const uncle = grandParent.right;    // {6}
+                    // - 情形 1A: 叔节点也是红色 -- 只需要重新填色
+                    if (uncle && uncle.isRed()) {  // {7}
+                        grandParent.color = Colors.RED;
+                        parent.color = Colors.BLACK;
+                        uncle.color = Colors.BLACK;
+                        node = grandParent; // {8}
+                    }
+                    else {
+                        // - 情形 2A: 节点是右侧子节点 -- 左旋转
+                        if (node === parent.right) {
+                            this.rotationRR(parent);
+                            node = parent;
+                            parent = node.parent;
+                        }
+
+                        // - 情形 3A: 节点是左侧子节点 -- 右旋转
+                        this.rotationLL(grandParent);
+                        // - swap color 交换颜色
+                        parent.color = Colors.BLACK;
+                        grandParent.color = Colors.RED;
+                        node = parent;
+                    }
+                }
+                else {
+                    // - 情形 B: 父节点是右侧子节点
+                    const uncle = grandParent.left; // {9}
+
+                    // - 情形 1B: 叔节点也是红色 -- 只需要重新填色
+                    if (uncle && uncle.isRed()) {  // {10}
+                        grandParent.color = Colors.RED;
+                        parent.color = Colors.BLACK;
+                        uncle.color = Colors.BLACK;
+                        node = grandParent;
+                    }
+                    else {
+                        // - 情形 2B: 节点是左侧子节点 -- 右旋转
+                        if (node === parent.left) {
+                            this.rotationLL(parent);
+                            node = parent;
+                            parent = node.parent;
+                        }
+
+                        // - 情形 3B: 节点是右侧子节点 -- 左旋转
+                        this.rotationRR(grandParent);
+                        // - swap color
+                        parent.color = Colors.BLACK;
+                        grandParent.color = Colors.RED;
+                        node = parent;
+                    }
+                }
+            }
+            this.root.color = Colors.BLACK; // {11}
+        }
+
+        // - 红黑树 "右旋" (Left left case: rotate right)
+        // - Note: 请参考同级目录 images 下的 `red-black.png`, 实际上红黑树的旋转
+        //   和 AVL 树是一样的, 只是红黑树不会形成 AVL 树中的 LR 和 RL 的旋转情形,
+        //   原因可能是红黑树在旋转之前已经经过多步操作了.
+        rotationLL(node) {
+            const tmp = node.left;
+            node.left = tmp.right;
+            if (tmp.right && tmp.right.key) {
+                tmp.right.parent = node;
+            }
+            tmp.parent = node.parent;
+            if (!node.parent) {
+                this.root = tmp;
+            }
+            else {
+                if (node === node.parent.left) {
+                    node.parent.left = tmp;
+                }
+                else {
+                    node.parent.right = tmp;
+                }
+                tmp.right = node;
+                node.parent = tmp;
+            }
+        }
+
+        // - 红黑树左旋 (Right right case: rotate left)
+        rotationRR(node) {
+            const tmp = node.right;
+            node.right = tmp.left;
+            if (tmp.left && tmp.left.key) {
+                tmp.left.parent = node;
+            }
+            tmp.parent = node.parent;
+            if (!node.parent) {
+                this.root = tmp;
+            }
+            else {
+                if (node === node.parent.left) {
+                    node.parent.left = tmp;
+                }
+                else {
+                    node.parent.right = tmp;
+                }
+            }
+            tmp.left = node;
+            node.parent = tmp;
+        }
+
+        getRoot() {
+            return this.root;
         }
     }
 </script>
