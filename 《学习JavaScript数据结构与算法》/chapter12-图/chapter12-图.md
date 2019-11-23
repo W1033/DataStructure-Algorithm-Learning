@@ -35,7 +35,7 @@
 - **adjacent [ə'dʒeɪs(ə)nt] --adj.相邻的, 邻边的** 
     + adjacent list 相邻列表
 - **adjacency [ə'dʒeɪsənsɪ] --n.邻接, 邻近**
-- ***matrix ['meɪtrɪks] --n.矩阵，模型**
+- **matrix ['meɪtrɪks] --n.矩阵，模型**
     + augmented matrix 增广矩阵
     + correlation matrix 相关矩阵
     + determinant of a matrix 矩阵的行列式
