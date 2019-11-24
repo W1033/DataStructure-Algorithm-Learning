@@ -27,7 +27,6 @@
             this.toStrFn = toStrFn;
             this.table = {};
         }
-
         set(key, value) {
             if (key != null && value != null) {
                 const tableKey = this.toStrFn(key);
@@ -40,25 +39,28 @@
                 // console.log(this.table[tableKey]);
 
                 // Output:
-                // Gandalf: ValuePair {key: "Gandalf", value: "gandalf@email.com"},
-                // John: ValuePair {key: "John", value: "johnsnow@email.com"},
-                // Tyrion: ValuePair {key: "Tyrion", value: "tyrion@email.com"}
+                // A: ValuePair {key: "A", value: Array(0)}
+                // B: ValuePair {key: "B", value: Array(0)}
+                // C: ValuePair {key: "C", value: Array(0)}
+                // D: ValuePair {key: "D", value: Array(0)}
+                // E: ValuePair {key: "E", value: Array(0)}
+                // F: ValuePair {key: "F", value: Array(0)}
+                // G: ValuePair {key: "G", value: Array(0)}
+                // H: ValuePair {key: "H", value: Array(0)}
+                // I: ValuePair {key: "I", value: Array(0)}
                 // console.log(this.table);
 
                 return true;
             }
             return false;
         }
-
         get(key) {
             const valuePair = this.table[this.toStrFn(key)];
             return valuePair == null ? undefined : valuePair.value;
         }
-
         hasKey(key) {
             return this.table[this.toStrFn(key)] != null;
         }
-
         remove(key) {
             if (this.hasKey(key)) {
                 delete this.table[this.toStrFn(key)];
@@ -66,19 +68,15 @@
             }
             return false;
         }
-
         values() {
             return this.keyValues().map(valuePair => valuePair.value);
         }
-
         keys() {
             return this.keyValues().map(valuePair => valuePair.key);
         }
-
         keyValues() {
             return Object.values(this.table);
         }
-
         forEach(callbackFn) {
             const valuePairs = this.keyValues();
             for (let i = 0; i < valuePairs.length; i++) {
@@ -88,19 +86,15 @@
                 }
             }
         }
-
         isEmpty() {
             return this.size() === 0;
         }
-
         size() {
             return Object.keys(this.table).length;
         }
-
         clear() {
             this.table = {};
         }
-
         toString() {
             if (this.isEmpty()) {
                 return '';
@@ -116,6 +110,7 @@
 
     // - Graph 类
     class Graph {
+        // - isDirected 表示图是否是有向, 默认情况下图是无向的.
         constructor(isDirected = false) {
             this.isDirected = isDirected;
             // - 我们使用一个数组来存储图中所有顶点的名字;
@@ -130,9 +125,10 @@
             if (!this.vertices.includes(v)) {
                 this.vertices.push(v);
                 this.adjList.set(v, []);
+                // console.log("this.adjList: ", this.adjList);
             }
         }
-        // - 添加边 edge/adjacent
+        // - 添加边 edge/adjacent 顶点之间的边.
         addEdge(a, b) {
             if (!this.adjList.get(a)) {
                 this.addVertex(a);
@@ -141,8 +137,10 @@
                 this.addVertex(b);
             }
             this.adjList.get(a).push(b);
+            console.log("this.adjList.get(a)", this.adjList.get(a));
             if (this.isDirected !== true) {
                 this.adjList.get(b).push(a);
+                console.log("this.adjList.get(b):", this.adjList.get(b))
             }
         }
         // - 取得顶点
