@@ -188,11 +188,11 @@
       |of|根据传入的参数创建一个新数组|
       |values|返回包含数组中所有值的 @@iterator|
     1. 使用 for...of 循环迭代
-      ```javascript
-        for (const n of numbers) {
-            console.log( n % 2 === 0 ? "even": "odd");
-        }
-      ```  
+        + ```javascript
+            for (const n of numbers) {
+                console.log( n % 2 === 0 ? "even": "odd");
+            }
+          ```  
     2. 使用 `@@iterator` 对象
         + ES2015 为 Array 类增加了一个 `@@iterator` 属性, 需要通过 
           `Symbol.iterator` 来访问。代码如下。
