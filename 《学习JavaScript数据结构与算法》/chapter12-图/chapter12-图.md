@@ -55,7 +55,9 @@
     + Depth-First-Search. 深度优先查找   
 - **Μ(μ): Mu [mjuː] --n.希腊字母的第12个字母**     
 - **N(ν): Nu [nu:] --n.希腊字母的第13个字母**
-
+- **predecessor ['priːdɪsesə] --n.前任, 前辈**
+    + Predecessor Task: 前导任务; 先行任务
+    + my predecessor: 我的前任
 
 
 ## 本章内容 (Contents)
@@ -185,8 +187,103 @@
         - (c) 将 $u$ 所有未被访问过的邻点 (白色) 入队列.
         - (d) 标注 $u$ 为已被探索的 (黑色).
 - 让我们来实现广度优先搜索算法:
-    + 代码见: ``        
+    + 代码见: `12.4.1-breadth-first-search.html`  
+- **(1). 使用 BFS (breadth-first search) 寻找最短路径**
+    + 到目前位置, 我们只展示了 BFS 算法的工作原理. 我们可以用该算法做更多事情, 而不是
+      输出被访问顶点的顺序. 例如, 考虑如何来解决下面这个问题
+    + 给定一个图 G 和 源顶点 $v$, 找出每个顶点 $u$ 和 $v$ 之间最短路径的距离 (以边的
+      数量计.)          
+    + 对于跟定顶点 $v$, 广度优先算法会访问所有与其距离为 1 的顶点, 接着是距离为 2 的
+      顶点, 以此类推. 所以, 可以用广度优先算法来解决这个问题. 我们可以修改
+      breadthFirstSearch 方法以返回给我们一些信息:
+        - 从 $v$ 到 $u$ 的距离 distances[u];
+        - 前溯点 predecessors[u], 用来推导出从 $v$ 到其他每个顶点 $u$ 的最短路径.
+    + 让我门来看看改进过的广度优先方法的实现: ``
+        - 代码见: `12.4.1-breadth-first-search.html` 内的 `BFS` 函数
+- **(2). 深入学习最短路径算法**
+    + 本章中的图不是加权图. 如果要计算加权图中的最短路径 (例如, 城市 A 和城市 B 之间的
+      最短路径 -- GPS 和 Google Maps 中用到的算法), 广度优先搜索未必合适.
+    + 举几个例子: 
+        - `Dijkstra(迪杰斯特拉) 算法` 解决了单源最短路径问题.
+            + [单源最短路径 - Dijkstra算法](https://cloud.tencent.com/developer/article/1413026)
+        - `Bellman-Ford 算法` 解决了边权值为负的单源最短路径问题.
+        - `A* 搜索算法` 解决了求仅一对顶点间的最短路径问题, 用经验法则来加入搜索过程.
+        - `Floyd-Warshall(弗洛依德)算法` 解决了求所有顶点对之间的最短路径这一问题.
+    + 我们会在本章后面学习 Dijkstra 算法 和 Floyd-Warshall 算法.  
 #### 12.4.2 深度优先搜索
+- 深度优先搜索算法: 将`会从第一个指定的顶点开始遍历图, 沿着路径直到这条路径最后一个顶点`
+  `被访问了, 接着原路回退并探索下一条路径`. 换句话说, 它是先深度后广度地访问顶点, 如下
+  图所示:  
+  <img src="./chapter12-images/depth-first-search.png" style="width: 50%">
+- 深入优先算法不需要一个源顶点. 在深度优先搜索算法中, 若图中顶点 $v$ 未访问, 则访问该
+  顶点 $v$.
+    + 要访问顶点 $v$, 照如下步骤做:
+        - (1) 标注 $v$ 为被发现的 (灰色);
+        - (2) 标注 $v$ 的所有未访问 (白色) 的邻点 w, 访问顶点 w;
+        - (3) 标注 $v$ 为已探索的 (黑色)
+- 如你所见, 深度优先搜索的步骤是**递归 (recursive)**的, 这意味着深度优先搜索算法使用 
+  **栈** 来存储函数调用 (由递归调用所创建的栈).
+- 让我们来实现一下深度优先算法: 
+    + 见: `12.4.2-depth-first-search.html` 内 depthFirstSearch.
+    + ```javascript
+        // - depthFirstSearch 函数接收一个 Graph 类实例和回调函数作为参数({1}).在
+        //   初始化每个顶点的颜色后, 对于图实例中每一个未被访问过的顶点 ({2} {3}),
+        //   我们调用私有的递归函数 depthFirstSearchVisit, 传递的参数为要访问的顶点 u,
+        //   颜色数组以及回到函数({4}).
+        // - 当访问顶点 u 时, 我们标注其为被发现的(灰色 -- {5}), 如果有 callback 函数
+        //   的话({6}), 则执行该函数输出已访问过的顶点. 接下来的异步是取得包含顶点 u 所有
+        //   邻点的列表({7}). 对于顶点 u 的每一个未被访问(颜色为白色 -- {10} 和 {8})的
+        //   邻点 w ({9}), 我们将调用 depthFirstSearchVisit 函数, 传递 w 和其他参数
+        //   ({11} -- 添加顶点 w 入栈, 这样接下来就能访问它). 最后, 在该顶点和邻点按深度
+        //   访问后, 我们回退, 意思是该顶点已被完全探索, 并将其标注为黑色({12})
+        const depthFirstSearch = (graph, callback) => { // {1}
+            const vertices = graph.getVertices();
+            const adjList = graph.getAdjList();
+            const color = initializeColor(vertices);
+
+            for (let i = 0; i < vertices.length; i++) { // {2}
+                if (color[vertices[i]] === Colors.WHITE) {  // {3}
+                    depthFirstSearchVisit(vertices[i], color, adjList,
+                        callback);  // {4}
+                }
+            }
+        };
+
+        function depthFirstSearchVisit(u, color, adjList, callback) {
+            color[u] = Colors.GREY; // {5}
+            if (callback) { // {6}
+                callback(u)
+            }
+            // console.log('Discovered ' + u);
+            const neighbors = adjList.get(u);   // {7}
+            for (let i = 0; i < neighbors.length; i++) {    // {8}
+                const w = neighbors[i]; // {9}
+                if (color[w] === Colors.WHITE) {    // {10}
+                    depthFirstSearchVisit(w, color, adjList, callback); // {11}
+                }
+            }
+            color[u] = Colors.BLACK;    // {12}
+            // console.log('explored ' + u);
+        }
+      ```
+    + 这个示例和本节上面的示例图是一致的. 下面这个示意图展示了该算法每一步的执行过程.  
+      <img src="./chapter12-images/depth-first-search-graph.png" 
+        style="width:92%"> 
+    + 在我们示例所用的图中, 行 {4} 只会被执行一次, 因为所有其他的顶点都有路径到第一个
+      调用 depthFirstSearchVisit 函数的顶点 (顶点 A). 如果顶点 B 第一个调用函数,
+      则行 {4} 将会为其他顶点在执行一次 (比如顶点 A).
+- **(1). 探索深度优先算法**
+    + 到目前为止，我们只是展示了深度优先搜索算法的工作原理。我们可以用该算法做更多的事
+      情，而不只是输出被访问顶点的顺序。
+    + 对于给定的图 G, 我们希望深度优先搜索算法遍历图 G 的所有节点, 构建 "森林" (有根
+      的一个集合)以及一组源顶点 (根), 并输出 2 个数组: 发现时间 和 完成探索时间. 我们
+      可以修改 depthFirstSearch 函数来返回一些信息: 
+        - a. 顶点 u 的发现时间 d[u];    
+        - b. 当顶点 u 被标注为黑色时, u 的完成探索时间 f[u];
+        - c. 顶点 u 的前溯点 p[u].
+    + 让我们来看看改进了的 DFS 方法的实现.
+        -见: `12.4.2-depth-first-search.html` 内 DFS.         
+- **(2). 拓扑排序 -- 使用深度优先搜索**      
 
 ### 12.5 最短路径算法
 #### 12.5.1 Dijkstra 算法

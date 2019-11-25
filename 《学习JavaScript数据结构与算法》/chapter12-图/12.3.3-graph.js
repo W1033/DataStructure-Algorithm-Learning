@@ -119,10 +119,8 @@ class Graph {
             this.addVertex(b);
         }
         this.adjList.get(a).push(b);
-        console.log("this.adjList.get(a)", this.adjList.get(a));
         if (this.isDirected !== true) {
             this.adjList.get(b).push(a);
-            console.log("this.adjList.get(b):", this.adjList.get(b));
         }
     }
     // - 取得顶点

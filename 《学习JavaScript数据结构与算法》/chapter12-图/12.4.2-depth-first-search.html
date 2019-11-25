@@ -1,0 +1,153 @@
+<!doctype html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport"
+          content="width=device-width, user-scalable=no, initial-scale=1.0,
+            maximum-scale=1.0, minimum-scale=1.0">
+    <meta http-equiv="X-UA-Compatible" content="ie=edge">
+    <title>Document</title>
+</head>
+<body>
+    <script src="12.3.3-graph.js"></script>
+    <script>
+        const Colors = {
+            WHITE: 0,
+            GREY: 1,
+            BLACK: 2
+        };
+        // - initializeColor 函数来将 color 数组初始化为白色
+        const initializeColor = (vertices) => {
+            const color = {};
+            for (let i = 0; i < vertices.length; i++) {
+                color[vertices[i]] = Colors.WHITE;
+            }
+            return color;
+        };
+
+        // - depthFirstSearch 函数接收一个 Graph 类实例和回调函数作为参数({1}).在
+        //   初始化每个顶点的颜色后, 对于图实例中每一个未被访问过的顶点 ({2} {3}),
+        //   我们调用私有的递归函数 depthFirstSearchVisit, 传递的参数为要访问的顶点 u,
+        //   颜色数组以及回到函数({4}).
+        // - 当访问顶点 u 时, 我们标注其为被发现的(灰色 -- {5}), 如果有 callback 函数
+        //   的话({6}), 则执行该函数输出已访问过的顶点. 接下来的异步是取得包含顶点 u 所有
+        //   邻点的列表({7}). 对于顶点 u 的每一个未被访问(颜色为白色 -- {10} 和 {8})的
+        //   邻点 w ({9}), 我们将调用 depthFirstSearchVisit 函数, 传递 w 和其他参数
+        //   ({11} -- 添加顶点 w 入栈, 这样接下来就能访问它). 最后, 在该顶点和邻点按深度
+        //   访问后, 我们回退, 意思是该顶点已被完全探索, 并将其标注为黑色({12})
+        const depthFirstSearch = (graph, callback) => { // {1}
+            const vertices = graph.getVertices();
+            const adjList = graph.getAdjList();
+            const color = initializeColor(vertices);
+
+            for (let i = 0; i < vertices.length; i++) { // {2}
+                if (color[vertices[i]] === Colors.WHITE) {  // {3}
+                    depthFirstSearchVisit(vertices[i], color, adjList,
+                        callback);  // {4}
+                }
+            }
+        };
+
+        function depthFirstSearchVisit(u, color, adjList, callback) {
+            color[u] = Colors.GREY; // {5}
+            if (callback) { // {6}
+                callback(u)
+            }
+            // console.log('Discovered ' + u);
+            const neighbors = adjList.get(u);   // {7}
+            for (let i = 0; i < neighbors.length; i++) {    // {8}
+                const w = neighbors[i]; // {9}
+                if (color[w] === Colors.WHITE) {    // {10}
+                    depthFirstSearchVisit(w, color, adjList, callback); // {11}
+                }
+            }
+            color[u] = Colors.BLACK;    // {12}
+            // console.log('explored ' + u);
+        }
+
+        // - 让我们执行以下代码来测试以下 depthFirstSearch 方法
+        const printVertex = (value) => {
+            console.log('Visited vertex: ' + value)
+        };
+        const graph = new Graph();
+        const myVertices = ["A", "B", "C", "D", "E", "F", "G", "H", "I",];
+        for (let i = 0; i < myVertices.length; i++) {
+            graph.addVertex(myVertices[i]);
+        }
+        graph.addEdge("A", "B");
+        graph.addEdge("A", "C");
+        graph.addEdge("A", "D");
+        graph.addEdge("C", "D");
+        graph.addEdge("C", "G");
+        graph.addEdge("D", "G");
+        graph.addEdge("D", "H");
+        graph.addEdge("B", "E");
+        graph.addEdge("B", "F");
+        graph.addEdge("E", "I");
+
+        //  Visited vertex: A
+        //  Visited vertex: B
+        //  Visited vertex: E
+        //  Visited vertex: I
+        //  Visited vertex: F
+        //  Visited vertex: C
+        //  Visited vertex: D
+        //  Visited vertex: G
+        //  Visited vertex: H
+        depthFirstSearch(graph, printVertex);
+
+
+        // - P228 - 改进后的 DFS 方法的实现:
+        // - 我们需要声明一个变量来追踪发现时间和完成探索时间({1}).
+        // - Note(P229): 我们声明一个 time 对象，包含 count 属性，这跟 JavaScript
+        //   中的方法按值或按引用传递参数有关。在一些语言中，按值或按引用传递参数是有区别
+        //   的。原始数据类型是按值传递的，也就是说值的作用域只存在于函数的执行过程中。
+        //   如果修改了值，只会在函数的作用域内生效。如果参数以引用形式（对象）传递，并
+        //   修改了对象中的任意属性，将会影响对象的原始值。对象以引用形式传递是因为只有
+        //   内存的引用被传给了函数或方法。在这个例子中，我们希望次数统计在这个算法执行
+        //   过程中是全局使用的，所以需要将参数以对象传递，而不是原始值。
+        function DFS(graph) {
+            const vertices = graph.getVertices();
+            const adjList = graph.getAdjList();
+            const color = initializeColor(vertices);
+            // - discovery
+            const d = {};
+            // - finished
+            const f = {};
+            // - predecessors
+            const p = {};
+            const time = { count: 0 };  // {1}
+            for (let i = 0; i < vertices.length; i++) { // {2}
+                f[vertices[i]] = 0;
+                d[vertices[i]] = 0;
+                p[vertices[i]] = null;
+            }
+            for (let i = 0; i < vertices.length; i++) {
+                if (color[vertices[i]] === Colors.WHITE) {
+                    DFSVisit(vertices[i], color, d, f, p, time, adjList);
+                }
+            }
+            return {    // {3}
+                discovery: d,
+                finished: f,
+                predecessors: p
+            }
+        }
+
+        function DFSVisit(u, color, d, f, p, time, adjList) {
+            color[u] = Colors.GREY;
+            d[u] = ++time.count; // {4}
+            const neighbors = adjList.get(u);
+            for (let i = 0; i < neighbors.length; i++) {
+                const w = neighbors[i];
+                if (color[w] === Colors.WHITE) {
+                    p[w] = u;   // {5}
+                    DFSVisit(w, color, d, f, p, time, adjList);
+                }
+            }
+            color[u] = Colors.BLACK;
+            f[u] = ++time.count;    // {6}
+        }
+    </script>
+</body>
+</html>
