@@ -176,7 +176,7 @@
 #### 12.4.1 广度优先搜索
 - 广度优先搜索算法会从指定的第一个顶点开始遍历图, 先访问其所有的邻点(相邻顶点), 就像一个访问
   图的一层. 换句话说, 就是先宽后深地访问顶点, 如下图所示:  
-  <img src="./chapter12-images/breadth-first-search-.png" 
+  <img src="./chapter12-images/breadth-first-search.png" 
         style="width: 50%">
 - 以下是从顶点 $v$ 开始的广度优先搜索算法所遵循的步骤:
     + 创建一个队列 Q
