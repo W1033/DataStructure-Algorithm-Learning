@@ -58,6 +58,10 @@
 - **predecessor ['priːdɪsesə] --n.前任, 前辈**
     + Predecessor Task: 前导任务; 先行任务
     + my predecessor: 我的前任
+- **topological [tɔpə'lɔdʒikəl] --adj.拓扑的, 拓扑学的**
+- **acyclic [eɪ'saɪklɪk] --adj.非循环的; 非周期的**
+    + Directed Acyclic Graph. 有向无环图 
+
 
 
 ## 本章内容 (Contents)
@@ -75,7 +79,7 @@
         - 线性表中我们把数据元素叫元素, 树中将数据元素叫节点, 在图中数据元素, 我们则
           称之为顶点 (Vertex).
 - 下图表示一个图:  
-  <img src="./chapter12-images/graph01.png" style="width:60%;">
+  <img src="./chapter12-images/graph01.png" style="width:50%;">
     + 在着手实现算法之前, 让我们先了解一下图的一些术语.
     + `由一条边连接在一起的两个顶点称为`**`相邻顶点`**. 比如，A 和 B 是相邻的，
       A 和 D 是相邻的，A 和 C 是相邻的，A 和 E 不是相邻的
@@ -90,12 +94,12 @@
       则该图是 **`连通的`**. 
 #### 12.1.1 有向图和无向图
 - 图可以是无向的（边没有方向）或是有向的（有向图）。如下图所示，有向图的边有一个方向.  
-  <img src="./chapter12-images/directed-graph.png" style="width:60%;">
+  <img src="./chapter12-images/directed-graph.png" style="width:50%;">
 - 如果图中每 2 个顶点间在双向上都存在路径, 则该图是 **`强连通的`**. 例如, C 和 D 是
   强连通的, 而 A 和 B 不是强连通的.
 - 图还可以是**未加权的**(目前为止我们看到的图都是未加权的) 或是 **加权的**. 如下图所示,
   加权图的边被赋予了权值.  
-  <img src="./chapter12-images/weighted-graph.png" style="width:60%;">
+  <img src="./chapter12-images/weighted-graph.png" style="width:50%;">
 - 我们可以使用图来解决计算机科学世界中的很多问题，比如搜索图中的一个特定顶点或搜索一条特定边
   , 寻找图中的一条路径（从一个顶点到另一个顶点），寻找两个顶点之间的最短路径，以及环检测。
 
@@ -205,7 +209,6 @@
       最短路径 -- GPS 和 Google Maps 中用到的算法), 广度优先搜索未必合适.
     + 举几个例子: 
         - `Dijkstra(迪杰斯特拉) 算法` 解决了单源最短路径问题.
-            + [单源最短路径 - Dijkstra算法](https://cloud.tencent.com/developer/article/1413026)
         - `Bellman-Ford 算法` 解决了边权值为负的单源最短路径问题.
         - `A* 搜索算法` 解决了求仅一对顶点间的最短路径问题, 用经验法则来加入搜索过程.
         - `Floyd-Warshall(弗洛依德)算法` 解决了求所有顶点对之间的最短路径这一问题.
@@ -296,11 +299,143 @@
             + `1 <= d[u] < f[u] <= 2|v|`
         - 如果对同一个图再跑一遍新的深度搜索算法, 对图中每个顶点, 我们会得到如下的发现/完成
           时间.  
-          <img src="./chapter12-images/complete-time.png" style="width:50%">              
+          <img src="./chapter12-images/complete-time.png" style="width:50%"
 - **(2). 拓扑排序 -- 使用深度优先搜索**      
-       
+    + 给定下图, 假定每个顶点都是一个我们需要去执行的任务.  
+      <img src="./chapter12-images/topological-sorting-graph.png" 
+        style="width:40%">
+        - Note: 这是一个有向图, 意味着任务的执行是有顺序的. 例如, 任务 F 不能在任务 
+          A 之前执行.注意这个图没有环, 意味着这是一个无环图. 所以, 我们可以说该图是一个 
+          **有向无环图 (DAG, Directed Acyclic graph)**
+    + 当我们需要编排一些任务或步骤的执行顺序时, 这称为
+      **拓扑排序(topological sorting, 英文亦写作 topsort / toposort)**. 在日常
+      生活中, 这个问题在不同情形下都会出现. 例如, 当我们开始学习一门计算机科学课程......
+    + 拓扑排序只能应用于  DAG. 那么, 如何使用深度优先搜索来实现拓扑排序呢? 让我们在本节
+      开头的示意图上执行一下深度优先搜索.
+      ```javascript
+        graph = new Graph(true);    // - 有向图
+        myVertices = ['A', 'B', 'C', 'D', 'E', 'F'];
+        for (i= 0; i < myVertices.length; i++) {
+            graph.addVertex(myVertices[i]);
+        }
+        graph.addEdge('A', 'C');
+        graph.addEdge('A', 'D');
+        graph.addEdge('B', 'D');
+        graph.addEdge('B', 'E');
+        graph.addEdge('C', 'F');
+        graph.addEdge('F', 'E');
+
+        const result = DFS(graph);
+      ```
+      这段代码将创建图, 添加边, 执行改进版本的深度优先搜索算法那, 并将结果保存到 result
+      变量. 下图展示了深度优先搜索算法执行后, 该图的 发现时间(discovery) 和 完成时间
+      (finished).  
+      <img src="./chapter12-images/discovery-finished.png" style="width:50%">  
+      现在要做的仅仅是以倒序来排序完成时间数组, 这便得出了该图的拓扑排序, 如下所示:  
+      
+      ```javascript
+        const fTimes = result.finished;
+        s = '';
+        for (let count = 0; count < myVertices.length; count++) {
+            let max = 0;
+            let maxName = null;
+            for (i = 0; i < myVertices.length; i++) {
+                if (fTimes[myVertices[i]] > max) {
+                    max = fTies[myVertices[i]];
+                    maxName = myVertices[i];
+                }
+            }
+            s += ' - ' + maxName;
+            delete fTimes[maxName];
+        }
+        console.log(s);
+      ```
+      执行了上述代码后, 我们会得到下面的输出: `B - A - D - C - F - E`.  
+      注意上面的拓扑排序结果仅是多种可能性之一. 如果我们稍微修改一下算法, 就会有不用的
+      结果,比如下面这个结果也是众多其它可能性中的一个: `A - B - C - D - F - E`. 这也
+      是一个可以接受的结果.
 ### 12.5 最短路径算法
-#### 12.5.1 Dijkstra 算法
+- 当我们考虑从 A 到 B 的最短路径是什么时? -- 我们可以用图来解决这个问题, 相应的算法被称
+  为**最短路径算法**. 下面介绍 2 种非常著名的算法, 即 Dijkstra 算法 和 
+  Floyd-Warshall 算法.
+#### 12.5.1 Dijkstra (迪杰斯特拉) 算法
+- [单源最短路径 - Dijkstra算法](https://cloud.tencent.com/developer/article/1413026)
+- Dijkstra 算法是一种**计算从单个源到所有其他源的最短路径的贪心算法**(第 14 章有更多
+  关于贪心算法的内容), 这意味着我们可以用它来计算从图的一个顶点到其余各顶点的最短路径.
+  考虑如下这个图:  
+  <img src="./chapter12-images/Dijkstra.png" style="width: 50%;">  
+  以上图为例, 我们来求出顶点 A 和其余各顶点之间的最短路径. 但首先, 我们需要声明表示上图的
+  邻接矩阵, 如下所示:
+  ```javascript
+    // - P125: 邻接矩阵
+    let graph = [
+        [0, 2, 4, 0, 0, 0],        
+        [0, 0, 1, 4, 2, 0],        
+        [0, 0, 0, 0, 3, 0],        
+        [0, 0, 0, 0, 0, 2],        
+        [0, 0, 0, 3, 0, 2],        
+        [0, 0, 0, 0, 0, 0]        
+    ]
+
+    // - 现在, 通过下面的代码来看看 Dijkstra 算法是如何工作的.
+
+    const index = 'ABCDEF';
+    // - INF 为 js 的最大整数 Number.MAX_SAFE_INTEGER.
+    const INF = Number.MAX_SAFE_INTEGER;
+
+    function dijkstra(src) {
+        // - {2} distance: 数组存储当前 A 顶点到其他各个顶点间的距离.
+        // - {3} visited: 数组来存储 ABCDEF 顶点是否被访问过, 以免重复访问, 形成环.
+        // - {4} length 用来存储所有顶点的数量.
+
+        let dist = [];  // {2}
+        let visited = [];   // {3}
+        // let length = graph.length;  // {4}
+        // - 这种写法和上一行 {4} 是相同的, 只是使用了 ES6 的解构赋值, 在 js 内 Array
+        //   对象内默认就有属性 length 所以可这样写  
+        const {length} = graph;
+
+        // - 初始化 dist, visited 数组, 把所有顶点距离初始化为无限大 ({5}), 
+        //   所有顶点此时都是未访问, 标记为 false ({6}). 为访问把源顶点(A)到自己的距离
+        //   初始化为 0 ({7}).
+        for (let i = 0; i < length; i++) {
+            dist[i] = INF;  // {5}
+            visited[i] = false; // {6}
+        }
+        dist[src] = 0;  // {7}
+
+        // - 顶点探索
+        for (let i = 0; i < length-1; i++) {
+            // - {8}: 从尚未处理的顶点中选出距离最近的顶点, 即寻找最短路径
+            // - {9}: 把选出的顶点标记为 visited, 以免重复计算.
+            // - {10}: 如果找到了更短的路径, 则更新最短路径的值--{11}.
+            // - {12}: 处理完所有顶点后, 返回从源顶点 (src) 到图中其他顶点最短路径
+            //   的结果.
+            let u = minDistance(dist, visited); // {8}
+            visited[u] = true;  // {9}    
+            for (let v = 0; v < length; v++) {
+                if (!visited[v] && dist[u] !== INF && graph[u][v] > 0 
+                    && dist[u] + graph[u] < dist[v]) {  // {10}
+                    dist[v] = dist[u] + graph[u][v];    // {11}
+                }
+            }
+        }
+        // 
+        return dist;    // {12}
+    }
+    // - 寻找最短路径函数
+    function minDistance(dist, visited) {
+        let min = INF;
+        let minIndex = -1;
+        for (let v = 0; v < dist.length; v++) {
+            if (visited[v] === false && dist[v] <= min) {
+                min = dist[v];
+                minIndex = v;
+            }
+        }
+        return minIndex;
+    }
+  ```
 #### 12.5.2 Floyed-Warshall 算法
 
 ### 12.6 最小生成树
