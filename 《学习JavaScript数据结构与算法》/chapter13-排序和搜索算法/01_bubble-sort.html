@@ -1,0 +1,50 @@
+<script>
+    const Compare = {
+        // - less than 小于
+        LESS_THAN: -1,
+        // - bigger than 大于
+        BIGGER_THAN: 1,
+        EQUALS: 0
+    };
+    function defaultCompare(a, b) {
+        if (a === b) {
+            return Compare.EQUALS;
+        }
+        return a < b ? Compare.LESS_THAN : Compare.BIGGER_THAN;
+    }
+    function swap(array, a, b) {
+        const temp = array[a];
+        array[a] = array[b];
+        array[b] = temp;
+        // - ES6 的方式
+        // [array[a], array[b]] = [array[b], array[a]]
+    }
+
+    // - 首先，声明一个名为 length 的变量，用来存储数组的长度（行{1}）。这一步可选，
+    //   它能帮助我们在行{2}和行{3}时直接使用数组的长度。接着，外循环({2})会从数组的
+    //   第一位迭代至最后一位，它控制了在数组中经过多少轮排序（应该是数组中每项都经过一轮，
+    //   轮数和数组长度一致）。然后，内循环将从第一位迭代至倒数第二位，内循环实际上进行
+    //   当前项和下一项的比较（行{4}）。如果这两项顺序不对(当前项比下一项大), 则交换它们
+    //   (行{5})，意思是位置为 j+1 的值将会被换置到位置 j 处，反之亦然.
+    function bubbleSort(array, compareFn = defaultCompare) {
+        const {length} = array; // {1}
+        for (let i = 0; i < length; i++) {  // {2}
+            for (let j = 0; j < length-1; j++) {
+                if (compareFn(array[j], array[j + 1])
+                    === Compare.BIGGER_THAN) {  // {4}
+                    swap(array, j, j + 1);  // {5}
+                }
+            }
+        }
+        return array;
+    }
+
+
+    let array = [5, 4, 3, 2, 1];
+    // - join(): 只接受一个参数, 即用作分隔符的字符串, 然后返回包含所有数组项的字符串.
+    console.log(array.join());  // 5, 4, 3, 2, 1
+    let arr = bubbleSort(array);
+    console.log("arr: ", arr);  // arr: [1, 2, 3, 4, 5]
+
+
+</script>

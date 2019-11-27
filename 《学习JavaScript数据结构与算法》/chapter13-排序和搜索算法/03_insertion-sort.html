@@ -1,0 +1,54 @@
+<script>
+    // ### 13.1.3 插入排序 (insertion sort)
+
+    const Compare = {
+        LESS_THAN: -1,
+        BIGGER_THAN: 1,
+        EQUALS: 0
+    };
+    function defaultCompare(a, b) {
+        if (a === b) {
+            return Compare.EQUALS;
+        }
+        return a < b ? Compare.LESS_THAN : Compare.BIGGER_THAN;
+    }
+    function swap(array, a, b) {
+        const temp = array[a];
+        array[a] = array[b];
+        array[b] = temp;
+        // - ES6 的方式
+        // [array[a], array[b]] = [array[b], array[a]]
+    }
+
+    // - 照例，算法的第一行用来声明代码中使用的变量({1})。接着，迭代数组来给
+    //   第 i 项找到正确的位置(行 {2})。注意，算法是从第二个位置(索引 1)而不是索引
+    //   0 位置开始的 (我们认为第一项已排序了)。然后，用 i 的值来初始化一个辅助变量
+    //   (行 {3}) 并也将其值存储在一个临时变量中(行 {4})，便于之后将其插入到正确的
+    //   位置上。下一步是要找到正确的位置来插入项目。只要变量 j 比 0 大 (因为数组的
+    //   第一个索引是 0——没有负值的索引) 并且数组中前面的值比待比较的值大(行 {5}),
+    //   我们就把这个值移到当前位置上(行 {6})并减小 j 。最终, 能将该值插入到正确的位置上。
+    function insertionSort(array, compareFn = defaultCompare) {
+        const {length} = array;
+        let temp;   // {1}
+        for (let i = 1; i < length; i++) {  // {2}
+            let j = i;  // {3}
+            // - temp 存储 for 循环的当前项
+            temp = array[i];    // {4}
+            console.log('temp = array[i]: ', temp);
+            while (j > 0 && compareFn(array[j - 1], temp)
+                === Compare.BIGGER_THAN) {  // {5}
+                array[j] = array[j -1];     // {6}
+                j--;
+                console.log('array[j] = array[j - 1]: ', array[j]);
+                console.log('j: ', j);
+            }
+            array[j] = temp;    // {7}
+            // console.log('array[j]: ', array[j]);
+        }
+        return array;
+    }
+
+    let array = [3, 5, 1, 4, 2];
+    let arr = insertionSort(array);
+    console.log("arr: ", arr);  // arr: [1, 2, 3, 4, 5]
+</script>

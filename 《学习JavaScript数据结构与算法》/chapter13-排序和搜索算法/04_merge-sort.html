@@ -1,0 +1,57 @@
+<script>
+    // ### 13.1.4 归并排序 (merge sort)
+
+    const Compare = {
+        LESS_THAN: -1,
+        BIGGER_THAN: 1,
+        EQUALS: 0
+    };
+    function defaultCompare(a, b) {
+        if (a === b) {
+            return Compare.EQUALS;
+        }
+        return a < b ? Compare.LESS_THAN : Compare.BIGGER_THAN;
+    }
+    function swap(array, a, b) {
+        const temp = array[a];
+        array[a] = array[b];
+        array[b] = temp;
+        // - ES6 的方式
+        // [array[a], array[b]] = [array[b], array[a]]
+    }
+
+
+    function mergeSort(array, compareFn = defaultCompare) {
+        if (array.length > 1) { // {1}
+            const {length} = array;
+            // - Math.floor(): 向下舍入
+            const middle = Math.floor(length / 2);  // {2}
+            console.log('array.length: ', array.length);
+            console.log('middle: ', middle);
+            // - Array.slice(): 截取数组 (但不改变原数组)
+            const left = mergeSort(array.slice(0, middle), compareFn);  // {3}
+            console.log('left: ', left);
+            const right = mergeSort(array.slice(middle, length), compareFn); // {4}
+            console.log('right: ', right);
+            array = merge(left, right, compareFn);  // {5}
+        }
+        return array;
+    }
+
+    function merge(left, right, compareFn) {
+        let i = 0;  // {6}
+        let j = 0;
+        const result = [];
+        while (i < left.length && j < right.length) {   // {7}
+            result.push(
+                compareFn(left[i], right[j]) === Compare.LESS_THAN
+                    ? left[i++] : right[j++]
+            );  // {8}
+        }
+        return result.concat(i < left.length ? left.slice(i) : right.slice(j)); // {9}
+    }
+
+    const array = [8, 7, 6, 6, 4, 3, 2, 1];
+    const sorted = mergeSort(array);
+    console.log('sorted: ', sorted);    // [1, 2, 3, 4, 6, 6, 7, 8]
+</script>

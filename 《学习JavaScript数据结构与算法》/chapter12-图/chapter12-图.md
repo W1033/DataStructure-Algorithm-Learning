@@ -339,9 +339,9 @@
         for (let count = 0; count < myVertices.length; count++) {
             let max = 0;
             let maxName = null;
-            for (i = 0; i < myVertices.length; i++) {
+            for (let i = 0; i < myVertices.length; i++) {
                 if (fTimes[myVertices[i]] > max) {
-                    max = fTies[myVertices[i]];
+                    max = fTimes[myVertices[i]];
                     maxName = myVertices[i];
                 }
             }
@@ -375,7 +375,7 @@
         [0, 0, 0, 0, 0, 2],        
         [0, 0, 0, 3, 0, 2],        
         [0, 0, 0, 0, 0, 0]        
-    ]
+    ];
 
     // - 现在, 通过下面的代码来看看 Dijkstra 算法是如何工作的.
 
