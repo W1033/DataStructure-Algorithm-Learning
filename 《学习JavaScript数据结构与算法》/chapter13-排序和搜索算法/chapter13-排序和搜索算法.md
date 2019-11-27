@@ -25,6 +25,9 @@
     + Sometimes the insertion of one word can change the meaning of a whole
       sentence.  
       有时插入一个字可以改变全句的意义.
+- **pivot ['pɪvət] --n.枢纽, 中心点**
+    + pivot point: 枢轴点, 旋转点, 支点
+    
 
 
 ## 本章内容 (Content)
@@ -188,7 +191,7 @@
     console.log("arr: ", arr);  // arr: [1, 2, 3, 4, 5]
   ```
     + 下面的示意图展示了一个插入排序的实例.  
-        <img src="./chapter13-images/03-insertion-sort.png" style="width:90%;">
+      <img src="./chapter13-images/03-insertion-sort.png" style="width:90%;">
     + 举个例子，假定待排序数组是 [3, 5, 1, 4, 2] 。这些值将被插入排序算法按照下面
       的步骤进行排序。
         - (1) 3 已被排序，所以我们从数组第二个值 5 开始。3 比 5 小，所以 5 待在原位
@@ -206,7 +209,7 @@
     + 排序小型数组时，此算法比选择排序和冒泡排序性能要好。  
 #### 13.1.4 归并排序
 - 归并排序**是第一个可以实际使用的**排序算法. 你在本书学到的前三个排序算法性能不好, 但归并
-  排序性能不错, 其算法复杂度为 $O(n\log_{10}{n})$.
+  排序性能不错, 其算法复杂度为 $O(n\log_{10}{(n)})$.
 - Note: JavaSscirpt 的 Array 类定义了一个 sort 函数 (`Array.prototype.sort`)
   用以排序 JavaScript 数组 (我们不必自己实现这个算法). ECMAScript 没有定义用哪个
   排序算法, 所以浏览器厂商可以自行去实现算法. 例如, Mozilla Firefox 使用了归并排序
@@ -218,12 +221,99 @@
 - 归并排序是一种分而治之算法. 其思想是将原始数组切分成较小的数组, 直到每个小数组只有一个位置,
   接着将小数组归并成较大的数组, 直到最后只有一个排序完毕的大数组.
 - 由于是分治法, 归并排序也是递归(recursive, `chapter09-递归`)的. 我们要将算法分为
-  2 个函数: 第 1 个负责将一个大数组分为多个小数组并调用用来排序的辅助函数. 我们来看看在
-  这里声明的主要函数:
+  2 个函数: 第 1 个(`mergeSort`)负责将一个大数组分为多个小数组并调用用来排序的辅助函数
+  (`merge`). 我们来看看在这里声明的主要函数:
   ```javascript
+    // ### 13.1.4 归并排序 (merge sort)
     
+    const Compare = {
+        LESS_THAN: -1,
+        BIGGER_THAN: 1,
+        EQUALS: 0
+    };
+    function defaultCompare(a, b) {
+        if (a === b) {
+            return Compare.EQUALS;
+        }
+        return a < b ? Compare.LESS_THAN : Compare.BIGGER_THAN;
+    }
+
+    // - (A): Math.floor(): 向下舍入
+    // - (B): 数组的 slice() 方法: 截取数组 (但不改变原数组)
+    // - Important Reminder: 请在 Chrome 中打断点后点击 `F9` 一步一步执行后查看
+    //   执行顺序. 两个函数里的测试代码不要同时打开, 这样比较容易查看.
+    // - ~~~~~~
+    // - 归并排序将一个大数组转化为多个小数组直到其中只有一个项. 由于算法是递归的, 我们
+    //   需要一个停止条件, 在这里此条件是判断数组的长度是否为 1 ({1}). 如果是, 则直接
+    //   返回这个长度为 1 的数组, 因为它已排序了.
+    // - 如果数组长度比 1 大, 那么得将其分成小数组. 为此, 首先得找到数组的中间位({2}), 
+    //   找到后我们将数组分成 2 个小数组, 分别叫作 left({3}) 和 right({4}). left 
+    //   数组由索引 0 至中间索引的元素组成, 而 right 数组由中间索引至原始数组最后一个
+    //   位置的元素组成. 行({3}) 和 行({4}) 将会对自身调用 mergeSort 函数直到 left
+    //   数组和 right 数组的大小小于等于 1.
+    function mergeSort(array, compareFn = defaultCompare) {
+        if (array.length > 1) { // {1}
+            console.log('if inner array: ', array);
+            const {length} = array;
+            const middle = Math.floor(length / 2);  // {2} (A)
+            const left = mergeSort(array.slice(0, middle), compareFn);  // {3} (B)
+            console.log('left: ', left);
+            const right = mergeSort(array.slice(middle, length), compareFn); // {4}
+            console.log('right: ', right);
+            array = merge(left, right, compareFn);  // {5}
+        }
+        // console.log('array: ', array);
+        return array;
+    }
+  
+    // - 下面的步骤是调用 merge 函数({6}), 它负责合并和排序小数组来产生大数组, 直到
+    //   回到原始数组并已排序完成.
+    // - merge 函数接收 2 个数组作为参数, 并将它们归并至一个大数组. 排序发生在归并过
+    //   程中. 首先, 需要声明归并过程要创建的新数组以及用来迭代 2 个数组 (left 和 
+    //   right 数组) 所需的 2 个变量 ({6}). 迭代 2 个数组的过程中({7}), 我们比较
+    //   来自 left 数组的项是否比来自 right 数组的项小. 如果是, 将该项从 left 数组
+    //   添加至归并结果数组, 并递增用来迭代数组的控制变量({8}); 否则, 从 right 数组
+    //   添加项并递增用于迭代数组的控制变量.
+    // - 接下来, 将 left 数组所有剩余的项添加到归并数组中, right 数组也是一样({9}).
+    //   最后, 将归并数组作为结果返回.
+    function merge(left, right, compareFn) {
+        let i = 0;  // {6}
+        let j = 0;
+        const result = [];
+        while (i < left.length && j < right.length) {   // {7}
+            // console.log('left.slice(i): ', left.slice(i));
+            // console.log('right.slice(i): ', right.slice(i));
+            // - Tip: j++ 后置递增, 递增操作是在包含他们的语句被求值之后才执行的.
+            //   即先把 result.push(right[j++]) 执行(此时 j = 0)后, 递增才增加.
+            result.push(
+                compareFn(left[i], right[j]) === Compare.LESS_THAN
+                    ? left[i++] : right[j++]
+            );  // {8}
+            // console.log('while inside result: ', result);
+        }
+        // console.log('i: ', i);
+        // console.log('j: ', j);
+        console.log('---------');
+        return result.concat(i < left.length ? left.slice(i) : right.slice(j)); // {9}
+    }
+  
+    const array = [8, 7, 6, 5, 4, 3, 2, 1];
+    const sorted = mergeSort(array);
+    console.log('sorted: ', sorted);    // [1, 2, 3, 4, 5, 6, 7, 8]
   ```
+  如果执行 mergeSort 函数, 下图是具体的执行过程.  
+  <img src="./chapter13-images/04-merge-sort.png" style="width: 60%;">  
+  可以看到, 算法首先将原始数组分割直至只有一个元素的子数组, 然后开始归并. 归并过程也会完成
+  排序, 直至原始数组完全合并并完成排序. 
 #### 13.1.5 快速排序
+- 快速排序也许是最常用的排序算法了. 它的复杂度为 $O(n\log_{10}{(n)})$, 且性能通常比
+  其他复杂度为 $O(n\log_{10}{(n)})$ 的排序算法要好. 和归并排序一样, 快速排序也使用
+  分而治之的方法, 将原始数组分为较小的数组(但它灭有像归并排序那样将他们分割开).
+    + 快速排序比目前学过的其他排序算法要复杂一些.
+    + (1) 首先, 从数组中选择一个值作为 `主元 (pivot)`, 也就是数组中间的那个值. 
+    + (2) 
+    + (3) 
+    + (1) 
 #### 13.1.6 计数排序
 #### 13.1.7 桶排序
 #### 13.1.8 基数排序
