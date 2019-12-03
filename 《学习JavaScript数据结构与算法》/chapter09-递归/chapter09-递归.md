@@ -16,18 +16,35 @@
 - **recursive [rɪ'kɜːsɪv] --adj.递归的；循环的** 
     + recursive algorithm 递归算法
     + recursive function 递归函数
+- **iterative ['ɪt(ə)rətɪv] --adj.迭代的, 反复的**
+    + It's an iterative design and development. 这是个反复的设计和发展.
 - **iteration [ˌɪtə'reɪʃn] --n.迭代，重复，反复**
     + Let's listen to the next iteration of this theme. 我们来听下一段主题。
     + So this process takes about four or five iterations.
         这个过程需要四到五此反复。
     + Iterators are just objects with a specific interface designed for 
-        iteration. 迭代器是一种特殊对象，它具有一些专门为迭代过程设计的专有接口。    
+        iteration. 迭代器是一种特殊对象，它具有一些专门为迭代过程设计的专有接口。  
+- **memorization [ˌmɛmərɪ'zeʃən] --n.记住, 默记**
+    + It can be so much more than just memorization and retention.  
+      学习知识不应该知识透过死记硬背的方式.
+    + retention [rɪ'tenʃ(ə)n] --n.保留, 保持.  
 
 ## 本章内容 (Content)
 ### 9.1 理解递归 
 
 ### 9.2 计算一个数的阶乘
 - 9.2.1 迭代(iterator) 阶乘
+    + ```javascript
+        function factorialIterative(number) {
+            if (number < 0) {return undefined;}
+            let total = 1;
+            for (let n = number; n > 1; n--) {
+                total = total * n;
+            }
+            return total;
+        }
+        console.log(factorialIterative(5)); // 120
+      ```
 - 9.2.2 递归(recursive) 阶乘
     + 现在我们试着用递归来重写 factorialIterative 函数，但是首先使用递归的定义来
       定义所有的步骤。
@@ -54,13 +71,12 @@
         }
         console.log(factorial(5));  // 120
       ```
-    + **1. 调用栈**
+    + **1. 调用栈** (chapter04-栈(stack): 后进先出 LIFO )
         - 我们在第 4 章学习了栈数据结构。我们来看看在实际应用中用递归形式使用它的例子。
           每当一个函数被一个算法调用时，该函数会进入调用栈的顶部。`当使用递归的时候`，
           `每个函数调用都会堆叠在调用栈的顶部，这是因为每个调用都可能依赖前一个调用的结果。`
         - 我们可以用浏览器看到调用栈的行为，如下图所示。  
-          <img src="./images/factorialIterative02.png" 
-                style="width:0%; margin-left:0">       
+          <img src="./images/factorialIterative02.png" >       
         - 当 factorial(1) 返回 1 时, 调用栈会开始弹出调用, 返回结果, 直到 
           3 * factorial(2) 被计算.
         - Note: 多观察一下浏览器中的点断, 如果在 factorial(3) 上打断点, 点击 step into
@@ -70,9 +86,29 @@
             + (2) factorial(2) --(弹出)--> 2 * 1 = 2
             + (3) factorial(3) --(弹出)--> 3 * 2 = 6
             + 完毕后返回 6  
+        - Note02: 这里的调用栈也可以理解 factorial(3) 是在栈顶, 它是先被执行的.     
     + **2. Javascript 调用栈大小的限制**
         - 如果忘记加上用于停止函数递归调用的基线条件, 会发生什么呢? 递归并不会无限地执行
           下去, 浏览器会抛出错误, 也就是所谓的 **栈溢出错误(stack overflow error)**
+        - 每个函数都有自己的上限, 可用以下代码测试:
+          ```javascript
+            let i = 0;
+            function recursiveFn() {
+                i++;
+                recursiveFn();    // - 加粗
+            }
+            try {
+                recursiveFn();
+            } catch (ex) {
+                console.log('i = ' + i + ' error: ' + ex);
+            }
+          ```
+        - ECMAScript 2015有尾调用优化（tail call optimization）。如果函数内的
+          最后一个操作是调用函数（就像示例中加粗的那行），会通过“跳转指令”（jump）而不是
+          “子程序调用”（subroutine call）来控制。也就是说，在 ECMAScript 2015 中，
+          这里的代码可以一直执行下去。因此，具有停止递归的基线条件非常重要。
+            + 有关尾调用优化的更多相关信息，请访问 
+              https://www.chromestatus.com/feature/5516876633341952
 
 ### 9.3 斐波那契数列
 - **斐波那契数列**是另一个可用递归解决的问题. 它是一个由 
@@ -127,6 +163,11 @@
         // console.log(fibonacciMemorization(6));
       ```
 
-### 9.4 为什么要用递归? 它更快吗
-
+### 9.4 为什么要用递归(recursive)? 它更快吗
+- 我们运行一个检测程序来测试本章 3 种不同的 fibonacci 函数:  
+  <img src="./images/compare-run-time.png">
+- 迭代(iterative) 的版本的版本比 递归(recursive, 第 2 行) 快很多, 所以这表示递归更慢.
+  但是, 再看看 3 个不同版本的代码. 递归版本更容易理解, 需要的代码通常也更少. 另外, 对一些
+  算法来说, 迭代的解法可能不可用, 而且有了尾调用优化, 递归的多余消耗甚至可能被消除.
+- 所以, 我们经常使用递归, 因为用它来解决问题会更简单.
 ### 9.5 小结

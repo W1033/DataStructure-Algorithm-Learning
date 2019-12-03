@@ -1,0 +1,57 @@
+<script>
+    // ### 13.1.6 计数排序
+    function countingSort(array){
+        if (array.length < 2) { // {1}
+            return array;
+        }
+        const maxValue = findMaxValue(array);   // {2}
+        const counts = new Array(maxValue + 1); // {3}
+        array.forEach((element) => {
+            if (!counts[element]) { // {4}
+                counts[element] = 0;
+            }
+            counts[element]++;  // {5}
+            // console.log('counts:', counts);
+        });
+
+        // 1: 2
+        // 2: 5
+        // 3: 1
+        // 4: 2
+        // 5: 1
+        // 6: 1
+        // 7: 2
+        // 8: 2
+        // 9: 1
+        // 26: 1
+        // 624: 1
+        console.log('counts:', counts);
+
+        let sortedIndex = 0;
+        // - Tip: i(index)
+        // - Tip02: 虽然 counts 的 length = 625, 但 forEach() 会自动过滤掉
+        //   值为 empty 的项, 所以此处只执行了 11 次.
+        counts.forEach((count, i) => {
+            while (count > 0) { // {6}
+                array[sortedIndex++] = i;   // {7}
+                count--;    // {8}
+            }
+        });
+        console.log('sortedIndex:', sortedIndex);   // 19
+        return array;
+    }
+
+    function findMaxValue(array) {
+        let max = array[0];
+        for (let i = 1; i < array.length; i++) {
+            if (array[i] > max) {
+                max = array[i];
+            }
+        }
+        return max;
+    }
+
+    const arr = [2, 3, 8, 7, 1, 2, 5, 2, 7, 624, 9, 8, 2, 1, 4, 2, 4, 6, 26];
+    let sequence = countingSort(arr);
+    // console.log(sequence);
+</script>

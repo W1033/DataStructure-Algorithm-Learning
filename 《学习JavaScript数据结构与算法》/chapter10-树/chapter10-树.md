@@ -22,6 +22,7 @@
 
 
 ## 生词 (New Words)
+- **binary ['baɪnərɪ] --adj.二元的，二进制的**
 - **traverse ['trævəs] --vt.横过, 穿越. --n.横贯; 横木**
     + The railroad traverses(vt) the Continent from East to West.
       铁路东西横贯北美大陆.
