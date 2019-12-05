@@ -520,7 +520,6 @@
         //     return a > b ? Compare.BIGGER_THAN : Compare.LESS_THAN;
         // }
 
-
         // - 13.2.2 二分搜索(查找) [binary search]
         // - 开始前需要先将数组排序，我们可以选择任何一个在 13.1 节中实现的排序算法。这里
         //   我们选择了快速排序。在数组排序之后，我们设置 low（行 {2}）和 high（行 {3}）
@@ -555,7 +554,6 @@
         const result = binarySearch(ary, 2);
         console.log('result: ', result);    // 1 (即 2 的索引 1)
 
-
         // - Added -- 来源: https://zhuanlan.zhihu.com/p/64940290
         //   + 说明: 元素必须是有序的, 如果是无序的则要先进行排序操作.
     </script>
@@ -568,6 +566,90 @@
     + (2) 如果这个值是待搜索值，那么算法执行完毕（值找到了）；
     + (3) 如果待搜索值比选中值要小，则返回步骤 1 并在选中值左边的子数组中寻找（较小）；
     + (4) 如果待搜索值比选中值要大，则返回步骤 1 并在选种值右边的子数组中寻找（较大）。
+- 以下是其实现: 
+  ```js
+    const DOES_NOT_EXIST = -1;
+    const Compare = {
+        LESS_THAN: -1,
+        BIGGER_THAN: 1,
+        EQUALS: 0
+    };
+    function defaultCompare(a, b) {
+        if (a === b) {
+            return Compare.EQUALS;
+        }
+        return a > b ? Compare.BIGGER_THAN : Compare.LESS_THAN;
+    }
+
+    function lesserEquals(a, b, compareFn) {
+        const comp = compareFn(a, b);
+        return comp === Compare.LESS_THAN || comp === Compare.EQUALS;
+    }
+    function biggerEquals(a, b, compareFn) {
+        const comp = compareFn(a, b);
+        return comp === Compare.BIGGER_THAN || comp === Compare.EQUALS;
+    }
+    function defaultEquals(a, b) {
+        return a === b;
+    }
+    function defaultDiff(a, b) {
+        return Number(a) - Number(b);
+    }
+
+    // - Added -- from internet: 插值查找:
+    // - 计算方式: 折半查找(二分查找)这种查找方式, 不是自适应的(也可说是傻瓜式的).
+    //   二分查找中查找点计算如下:
+    //     + mid = (low + high) / 2, 即 mid = low + 1/2 * (high - low);
+    //       通过类比, 我们可以将查找的点改进为如下:
+    //     + mid = low + (key - arr[low]) / (arr[high] - arr[low]) * (high - low);
+    //       也就是将上述的比例参数 1/2 改进为自适应的, 根据关键字在整个有序表中所处的
+    //       位置, 让 mid 值得变化更靠近关键字 key(value), 这样也就间接地减少了比较次数.
+    // - 基本思路: 基于二分查找算法, 将查找点的选择改进为自适应选择, 可以提高查找效率.
+    //   当然, 插值查找也属于有序查找.
+    // - 注: 对于表长较大, 而关键字分布又比较均匀的查找表来说, 插值查找算法的平均性能比
+    //   二分查找要好很多. 反之, 数组中如果分布非常不均匀, 那么插值查找未必是很合适的选择.
+    // - 复杂度分析: 查找成功或者失败的时间复杂度均为 O($\log_{2}{(log_{2}{n})}$)
+
+    // - 13.2.3 内插搜索
+    function interpolationSearch(
+        array,
+        value,
+        compareFn = defaultCompare,
+        equalsFn = defaultEquals,
+        diffFn = defaultDiff
+    ) {
+        const {length} = array;
+        let low = 0;
+        let high = length - 1;
+        let position = -1;
+        let delta = -1;
+        while (
+            low <= high
+            || biggerEquals(value, array[low], compareFn)
+            || lesserEquals(value, array[low], compareFn)
+        ) {
+            // - Tip: 此处行 {1} 和 {2} 与上面 Added 中的
+            //   mid = low+(key-arr[low])/(arr[high]-arr[low])*(high-low);
+            //   是等价的.
+            delta = diffFn(value, array[low]) / diffFn(array[high], array[low]); // {1}
+            position = low + Math.floor((high - low) * delta);  // {2}
+
+            if (equalsFn(array[position], value)) { // {3}
+                return position;
+            }
+            if (compareFn(array[position], value) === Compare.LESS_THAN) { // {4}
+                low = position + 1;
+            } else {
+                high = position - 1;
+            }
+        }
+        return DOES_NOT_EXIST;
+    }
+    const arr = [2, 6, 9, 12, 13, 15, 17, 19, 20];
+    const result = interpolationSearch(arr, 9);
+    console.log('result: ', result);
+
+  ```   
 #### (4) 斐波那契查找
 - [详见](https://zhuanlan.zhihu.com/p/64940290)
 #### (5) 树表查找
