@@ -1,0 +1,18 @@
+<script type="text/javascript">
+    // - 13.3 Fisher-Yates
+    function swap(array, a, b) {
+        const temp = array[a];
+        array[a] = array[b];
+        array[b] = temp;
+    }
+    function shuffle(array) {
+        for (let i = array.length - 1; i > 0; i--) {
+            const randomIndex = Math.floor(Math.random() * (i + 1));
+            swap(array, i, randomIndex);
+        }
+        return array;
+    }
+    const arr = [1, 2, 3, 4, 5, 6, 7, 8, 9, 10, 11, 12, 13, 14, 15, 16, 17];
+    const results = shuffle(arr);
+    console.log('result: ', results);
+</script>

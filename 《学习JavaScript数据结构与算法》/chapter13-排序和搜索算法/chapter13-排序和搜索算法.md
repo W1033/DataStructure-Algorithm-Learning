@@ -39,7 +39,11 @@
     + complexity analysis 复杂度分析
     + There was lots of complexity built into his being. 有很多复杂因素构成了他这个人。
     + the complexities of family life. 家庭生活中的复杂因素。
-
+- **binary ['baɪnərɪ] --adj.二进制的，二元的。**
+    + It is stored as a binary file. 它以二进制格式文件存储。
+    + a data file in binary format. 二进制格式的数据文件。
+- **shuffle ['ʃʌf(ə)l] --v.拖拽，洗(牌)。 --n. 洗牌**
+    + You can take some cards and shuffle. 你可以拿一些牌然后洗一下。
 
 
 ## 补充内容 (From the Internet)
@@ -489,7 +493,7 @@
 #### 13.1.7 桶排序 (Bucket Sort)
 #### 13.1.8 基数排序 (Radix Sort)
 
-### 13.2 搜索算法
+### 13.2 搜索算法 (7 大查找算法)
 #### 13.2.1 顺序搜索
 #### 13.2.2 二分搜索
 - 二分搜索算法的原理和猜数字游戏类似，就是那个有人说“我正想着一个 1～100 的数”的游戏。
@@ -499,11 +503,108 @@
     + (2) 如果选中值是待搜索值，那么算法执行完毕（值找到了）。
     + (3) 如果待搜索值比选中值要小，则返回步骤 1 并在选中值左边的子数组中寻找（较小）。
     + (4) 如果待搜索值比选中值要大，则返回步骤 1 并在选种值右边的子数组中寻找（较大）。
-- 以下是其实现: `13.2.2_binary-search.html`
+- 以下是其实现: 
+  ```js
+    <script src="05_quick-sort.js"></script>
+    <script>
+        const DOES_NOT_EXIST = -1;
+        // const Compare = {
+        //     LESS_THAN: -1,
+        //     BIGGER_THAN: 1,
+        //     EQUALS: 0
+        // };
+        // function defaultCompare(a, b) {
+        //     if (a === b) {
+        //         return Compare.EQUALS;
+        //     }
+        //     return a > b ? Compare.BIGGER_THAN : Compare.LESS_THAN;
+        // }
+
+
+        // - 13.2.2 二分搜索(查找) [binary search]
+        // - 开始前需要先将数组排序，我们可以选择任何一个在 13.1 节中实现的排序算法。这里
+        //   我们选择了快速排序。在数组排序之后，我们设置 low（行 {2}）和 high（行 {3}）
+        //   指针（它们是边界）。
+        // - 当 low 比 high 小时（行 {4}），我们计算得到中间项索引并取得中间项的值，此处
+        //   如果 low比 high 大，则意味着该待搜索值不存在并返回 -1 （行 {12}）。接着，
+        //   我们比较选中项的值和搜索值（行 {7}）。如果选中的值比搜索值小，则选择数组低(右)
+        //   半边并重新开始。如果选中项的值比搜索值大，则选择数组高(左)半边并重新开始。
+        //   若两者都是不是，则意味着选中项的值和搜索值相等，因此直接返回该索引（行 {11}）
+        function binarySearch(array, value, compareFn = defaultCompare) {
+            const sortedArray = quickSort(array);   // {1}
+            let low = 0;    // {2}
+            let high = sortedArray.length - 1;  // {3}
+            while (low <= high) {  // {4}
+                const mid = Math.floor((low + high) / 2);   // {5}
+                const element = sortedArray[mid];   // {6}
+                // - 如果选中的值比搜索值小，则选择数组"右"半边并重新开始。
+                if (compareFn(element, value) === Compare.LESS_THAN) {  // {7}
+                    low = mid + 1;  // {8}
+                }
+                // - 如果选中项的值(4)比搜索值(2)大，则选择数组"左"半边并重新开始。
+                else if (compareFn(element, value) === Compare.BIGGER_THAN) { // {9}
+                    high = mid - 1; // {10}
+                }
+                else {
+                    return mid; // {11}
+                }
+            }
+            return DOES_NOT_EXIST;  // {12}
+        }
+        const ary = [1, 2, 3, 4, 5, 6, 7, 8];
+        const result = binarySearch(ary, 2);
+        console.log('result: ', result);    // 1 (即 2 的索引 1)
+
+
+        // - Added -- 来源: https://zhuanlan.zhihu.com/p/64940290
+        //   + 说明: 元素必须是有序的, 如果是无序的则要先进行排序操作.
+    </script>
+  ```
 #### 13.2.3 内插搜索
+- 内插搜索是改良版的二分搜索。二分搜索总是检查 mid 位置上的值，而内插搜索可能会根据要
+  搜索的值检查数组中的不同地方。
+- 这个算法要求被搜索的数据结构已排序。以下是该算法遵循的步骤：
+    + (1) 使用 position 公式选中一个值；
+    + (2) 如果这个值是待搜索值，那么算法执行完毕（值找到了）；
+    + (3) 如果待搜索值比选中值要小，则返回步骤 1 并在选中值左边的子数组中寻找（较小）；
+    + (4) 如果待搜索值比选中值要大，则返回步骤 1 并在选种值右边的子数组中寻找（较大）。
+#### (4) 斐波那契查找
+- [详见](https://zhuanlan.zhihu.com/p/64940290)
+#### (5) 树表查找
+- (5.1) 最简单的树表查找算法 -- 二叉树查找算法
+- (5.2) 平衡查找树之 -- 2-3 查找树 (2-3 Tree)
+- (5.3) 平衡查找树之 -- 红黑树 (Red-black Tree)
+- (5.4) B 树 和 B+ 树 (B Tree / B+ Tree)
+#### (6) 分块查找 -- 分块查找又称 "索引顺序查找", 它是顺序查找的一种改进方法.
+#### (7) 哈希查找
+
 
 ### 13.3 随机算法
-#### Fisher-Yates 随机
+- 有一种场景是需要将一个数组中的值进行随机排列. 现实中的一个常见场景是洗扑克牌.
+  下面我们学习随机数组的一种最有名的算法
+#### Fisher-Yates(费舍尔·耶茨) 随机
+- 这个算法由 Fisher 和 Yates 创造, 并由高德纳 (Donald E.Knuth) 在
+ 《计算机程序设计艺术》系列图书中推广.
+- 它的含义是迭代(iteration)数组, 从最后一位开始并将当前位置和一个随机位置进行交换. 
+  这个随机位置比当前位置小. 这样, 这个算法可以保证随机过的位置不会再被随机一次(洗扑克
+  牌的次数越多, 随机效果越差).
+- 下面的代码展示了 Fisher-Yates 随机算法
+  ```js
+    function swap(array, a, b) {
+        const temp = array[a];
+        array[a] = array[b];
+        array[b] = temp;
+        // - ES6 的写法
+        // [array[a], array[b]] = [array[b], array[a]];
+    }
+    function shuffle(array) {
+        for (let i = array.length; i > 0; i--) {
+            const randomIndex = Math.floor(Math.random() * (i + 1));
+            swap(array, i, randomIndex);
+        }
+        return array;
+    }
+  ```
 
 ### 13.4 小结    
 

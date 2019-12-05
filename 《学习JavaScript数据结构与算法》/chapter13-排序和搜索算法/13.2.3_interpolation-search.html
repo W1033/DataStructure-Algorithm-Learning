@@ -1,0 +1,96 @@
+<!doctype html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport"
+          content="width=device-width, user-scalable=no,
+            initial-scale=1.0, maximum-scale=1.0, minimum-scale=1.0">
+    <meta http-equiv="X-UA-Compatible" content="ie=edge">
+    <title>13.2.3 内插搜索</title>
+</head>
+<body>
+<script type="text/javascript">
+    const DOES_NOT_EXIST = -1;
+    const Compare = {
+        LESS_THAN: -1,
+        BIGGER_THAN: 1,
+        EQUALS: 0
+    };
+    function defaultCompare(a, b) {
+        if (a === b) {
+            return Compare.EQUALS;
+        }
+        return a > b ? Compare.BIGGER_THAN : Compare.LESS_THAN;
+    }
+
+    function lesserEquals(a, b, compareFn) {
+        const comp = compareFn(a, b);
+        return comp === Compare.LESS_THAN || comp === Compare.EQUALS;
+    }
+    function biggerEquals(a, b, compareFn) {
+        const comp = compareFn(a, b);
+        return comp === Compare.BIGGER_THAN || comp === Compare.EQUALS;
+    }
+    function defaultEquals(a, b) {
+        return a === b;
+    }
+    function defaultDiff(a, b) {
+        return Number(a) - Number(b);
+    }
+
+    // - Added -- from internet: 插值查找:
+    // - 计算方式: 折半查找(二分查找)这种查找方式, 不是自适应的(也可说是傻瓜式的).
+    //   二分查找中查找点计算如下:
+    //     + mid = (low + high) / 2, 即 mid = low + 1/2 * (high - low);
+    //       通过类比, 我们可以将查找的点改进为如下:
+    //     + mid = low + (key - arr[low]) / (arr[high] - arr[low]) * (high - low);
+    //       也就是将上述的比例参数 1/2 改进为自适应的, 根据关键字在整个有序表中所处的
+    //       位置, 让 mid 值得变化更靠近关键字 key(value), 这样也就间接地减少了比较次数.
+    // - 基本思路: 基于二分查找算法, 将查找点的选择改进为自适应选择, 可以提高查找效率.
+    //   当然, 插值查找也属于有序查找.
+    // - 注: 对于表长较大, 而关键字分布又比较均匀的查找表来说, 插值查找算法的平均性能比
+    //   二分查找要好很多. 反之, 数组中如果分布非常不均匀, 那么插值查找未必是很合适的选择.
+    // - 复杂度分析: 查找成功或者失败的时间复杂度均为 O($\log_{2}{(log_{2}{n})}$)
+
+    // - 13.2.3 内插搜索
+    function interpolationSearch(
+        array,
+        value,
+        compareFn = defaultCompare,
+        equalsFn = defaultEquals,
+        diffFn = defaultDiff
+    ) {
+        const {length} = array;
+        let low = 0;
+        let high = length - 1;
+        let position = -1;
+        let delta = -1;
+        while (
+            low <= high
+            || biggerEquals(value, array[low], compareFn)
+            || lesserEquals(value, array[low], compareFn)
+        ) {
+            // - Tip: 此处行 {1} 和 {2} 与上面 Added 中的
+            //   mid = low+(key-arr[low])/(arr[high]-arr[low])*(high-low);
+            //   是等价的.
+            delta = diffFn(value, array[low]) / diffFn(array[high], array[low]); // {1}
+            position = low + Math.floor((high - low) * delta);  // {2}
+
+            if (equalsFn(array[position], value)) { // {3}
+                return position;
+            }
+            if (compareFn(array[position], value) === Compare.LESS_THAN) { // {4}
+                low = position + 1;
+            } else {
+                high = position - 1;
+            }
+        }
+        return DOES_NOT_EXIST;
+    }
+    const arr = [2, 6, 9, 12, 13, 15, 17, 19, 20];
+    const result = interpolationSearch(arr, 9);
+    console.log('result: ', result);
+
+</script>
+</body>
+</html>
