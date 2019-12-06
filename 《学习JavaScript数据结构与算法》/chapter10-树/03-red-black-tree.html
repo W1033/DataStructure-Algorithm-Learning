@@ -134,9 +134,8 @@
         }
 
         // - 红黑树 "右旋" (Left left case: rotate right)
-        // - Note: 请参考同级目录 images 下的 `red-black.png`, 实际上红黑树的旋转
-        //   和 AVL 树是一样的, 只是红黑树不会形成 AVL 树中的 LR 和 RL 的旋转情形,
-        //   原因可能是红黑树在旋转之前已经经过多步操作了.
+        // - Note: 请参考同级目录 images 下的 `red-black.png`, 红黑树的旋转
+        //   和 AVL 树是一样的.
         rotationLL(node) {
             const tmp = node.left;
             node.left = tmp.right;
