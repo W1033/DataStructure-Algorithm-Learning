@@ -299,7 +299,7 @@
             + `1 <= d[u] < f[u] <= 2|v|`
         - 如果对同一个图再跑一遍新的深度搜索算法, 对图中每个顶点, 我们会得到如下的发现/完成
           时间.  
-          <img src="./chapter12-images/complete-time.png" style="width:50%"
+          <img src="./chapter12-images/complete-time.png" style="width:50%">
 - **(2). 拓扑排序 -- 使用深度优先搜索**      
     + 给定下图, 假定每个顶点都是一个我们需要去执行的任务.  
       <img src="./chapter12-images/topological-sorting-graph.png" 
@@ -436,7 +436,10 @@
         return minIndex;
     }
   ```
-#### 12.5.2 Floyed-Warshall 算法
+#### 12.5.2 Floyed-Warshall () 算法
+- Floyd-Warshall算法（Floyd-Warshall algorithm），是一种利用动态规划的思想寻找
+  给定的加权图中多源点之间最短路径的算法，与Dijkstra算法类似。该算法名称以创始人之一、1978年图灵奖获得者、斯坦福大学计算机科学系教授罗伯特·弗洛伊德命名。
+
 
 ### 12.6 最小生成树
 #### 12.6.1 Prim 算法

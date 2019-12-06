@@ -26,20 +26,22 @@
             this.heap = [];
         }
 
-        // - 给定位置 index 的节点的左侧子节点
+        // - 给定父节点 index 的位置, 求左侧子节点 index 位置
         getLeftIndex(index) {
             return (2 * index) + 1;
         }
-        // - 给定位置 index 的节点的右侧子节点
+        // - 给定父节点 index 的位置, 求右侧子节点 index 位置
         getRightIndex(index){
             return (2 * index) + 2;
         }
-        // - 给定位置 index 的节点的父节点
-        getParentIndex(index) {
-            if (index === 0) {
+        // - 给定子节点(childIndex) 的位置, 求父节点的 index
+        // - Tip: 正确求父节点 index 位置: Math.floor((childIndex - 1) / 2).
+        //   所以这里的 index 应该为子节点的位置
+        getParentIndex(childIndex) {
+            if (childIndex === 0) {
                 return undefined;
             }
-            return Math.floor((index - 1) / 2);
+            return Math.floor((childIndex - 1) / 2);
         }
 
         // - 向堆中插入一个新的值。如果插入成功，它返回 true, 否则返回 false.
