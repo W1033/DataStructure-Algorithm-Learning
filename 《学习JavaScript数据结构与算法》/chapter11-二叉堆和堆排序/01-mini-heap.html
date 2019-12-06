@@ -55,12 +55,40 @@
         // - 上移操作: siftUp 方法接受插入值的位置作为参数.
         siftUp(index) {
             let parent = this.getParentIndex(index);
-            while (index > 0
+            while (
+                index > 0
                 && this.compareFn(this.heap[parent], this.heap[index])
-                === Compare.BIGGER_THAN) {
+                === Compare.BIGGER_THAN
+            ) {
                 swap(this.heap, parent, index);
                 index = parent;
                 parent = this.getParentIndex(index);
+            }
+        }
+
+        // - 下移操作 (堆化)
+        siftDown(index) {
+            let element = index;
+            const left = this.getLeftIndex(index);
+            const right = this.getRightIndex(index);
+            const size = this.size();
+            if (
+                left < size
+                && this.compareFn(this.heap[element], this.heap[left])
+                === Compare.BIGGER_THAN
+            ) {
+                element = left;
+            }
+            if (
+                right < size
+                && this.compareFn(this.heap[element], this.heap[right])
+                === Compare.BIGGER_THAN
+            ) {
+                element = right;
+            }
+            if (index !== element) {
+                swap(this.heap, index, element);
+                this.siftDown(element);
             }
         }
 
@@ -84,19 +112,6 @@
             return removedValue;
         }
 
-        // - 下移操作 (堆化)
-        siftDown(index) {
-            let element = index;
-            const left = this.getLeftIndex(index);
-            const right = this.getRightIndex(index);
-            const size = this.size();
-            if (left < size
-                && this.compareFn(this.heap[element], this.heap[left])
-                === Compare.BIGGER_THAN) {
-
-            }
-        }
-
         size() {
             return this.heap.length;
         }
@@ -112,7 +127,16 @@
 
         // - 此方法是堆排序中用到的下移操作, 和上面的 siftDown 方法有相同的代码.
         //   不同之处是我们会将堆本身, 堆的大小和要使用的比较函数传入作为参数. --P210
-        heapify() {}
+        heapify(array) {
+            if (array) {
+                this.heap = array;
+            }
+            const maxIndex = Math.floor(this.size() / 2) - 1;
+            for (let i = 0; i < maxIndex; i++) {
+                this.siftDown(i);
+            }
+            return this.heap;
+        }
 
     }
 

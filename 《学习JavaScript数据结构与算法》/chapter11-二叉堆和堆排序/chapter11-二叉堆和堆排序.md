@@ -57,7 +57,176 @@
           堆顶是整个堆中的最小元素.
     + 二叉堆虽然是一颗完全二叉树, 但它的存储方式并不是链式存储, 而是顺序存储. 换句话说, 
       二叉堆的**所有节点都存储在数组当中.**   
-- 我们先来创建 `MinMap` 类, 见同级目录 `01-mini-heap.html`
+- 我们先来创建 `MinMap` (最小堆)类, 下面是源码:
+  ```javascript
+    const Compare = {
+        LESS_THAN: -1,
+        BIGGER_THAN: 1,
+        EQUALS: 0
+    };
+    function defaultCompare(a, b) {
+        return a === b;
+    }
+    function reverseCompare(compareFn) {
+        return (a, b) => compareFn(b, a);
+    }
+    function swap(array, a, b) {
+        // - temporary
+        const temp = array[a];
+        array[a] = array[b];
+        array[b] = temp;
+        // - https://bugzilla.mozilla.org/show_bug.cgi?id=1177319
+        // [array[a], array[b]] = [array[b], array[a]];
+    }
+
+    // - 创建最小堆类 Minimum Heap
+    class MinHeap {
+        constructor(compareFn = defaultCompare) {
+            this.compareFn = compareFn;
+            this.heap = [];
+        }
+
+        // - 给定位置 index 的节点的左侧子节点
+        getLeftIndex(index) {
+            return (2 * index) + 1;
+        }
+        // - 给定位置 index 的节点的右侧子节点
+        getRightIndex(index){
+            return (2 * index) + 2;
+        }
+        // - 给定位置 index 的节点的父节点
+        getParentIndex(index) {
+            if (index === 0) {
+                return undefined;
+            }
+            return Math.floor((index - 1) / 2);
+        }
+
+        // - 向堆中插入一个新的值。如果插入成功，它返回 true, 否则返回 false.
+        insert(value) {
+            if (value != null) {
+                const index = this.heap.length;
+                this.heap.push(value);
+                this.siftUp(index);
+                return true;
+            }
+            return false;
+        }
+        // - 上移操作: siftUp 方法接受插入值的位置作为参数.
+        siftUp(index) {
+            let parent = this.getParentIndex(index);
+            while (
+                index > 0
+                && this.compareFn(this.heap[parent], this.heap[index])
+                === Compare.BIGGER_THAN
+            ) {
+                swap(this.heap, parent, index);
+                index = parent;
+                parent = this.getParentIndex(index);
+            }
+        }
+
+        // - 下移操作 (堆化)
+        siftDown(index) {
+            let element = index;
+            const left = this.getLeftIndex(index);
+            const right = this.getRightIndex(index);
+            const size = this.size();
+            if (
+                left < size
+                && this.compareFn(this.heap[element], this.heap[left])
+                === Compare.BIGGER_THAN
+            ) {
+                element = left;
+            }
+            if (
+                right < size
+                && this.compareFn(this.heap[element], this.heap[right])
+                === Compare.BIGGER_THAN
+            ) {
+                element = right;
+            }
+            if (index !== element) {
+                swap(this.heap, index, element);
+                this.siftDown(element);
+            }
+        }
+
+        // - 返回最小值(最小堆) 或 最大值(最大堆) 且不会移除这个值.
+        findMinimum() {
+            return this.isEmpty() ? undefined : this.heap[0];
+        }
+
+        // - 移除最小值(最小堆) 或 最大值(最大堆), 并返回这个值.
+        extract() {
+            if (this.isEmpty()) {
+                return undefined;
+            }
+            if (this.size() === 1) {
+                return this.heap.shift();
+            }
+            const removedValue = this.heap[0];
+            // - pop() 方法移除数组的最后一项
+            this.heap[0] = this.heap.pop();
+            this.siftDown(0);
+            return removedValue;
+        }
+
+        size() {
+            return this.heap.length;
+        }
+        isEmpty() {
+            return this.size() <= 0;
+        }
+        clear() {
+            this.heap = [];
+        }
+        getAsArray() {
+            return this.heap;
+        }
+
+        // - 此方法是堆排序中用到的下移操作, 和上面的 siftDown 方法有相同的代码.
+        //   不同之处是我们会将堆本身, 堆的大小和要使用的比较函数传入作为参数. --P210
+        heapify(array) {
+            if (array) {
+                this.heap = array;
+            }
+            const maxIndex = Math.floor(this.size() / 2) - 1;
+            for (let i = 0; i < maxIndex; i++) {
+                this.siftDown(i);
+            }
+            return this.heap;
+        }
+
+    }
+
+    // var heap = new MinHeap();
+    // heap.insert(2);
+    // heap.insert(3);
+    // heap.insert(4);
+    // heap.insert(5);
+    // heap.insert(1);
+    //
+    // console.log(heap.getAsArray());
+    //
+    // console.log('Heap size: ', heap.size()); // 5
+    // console.log('Heap is empty: ', heap.isEmpty()); // false
+    // console.log('Heap min value: ', heap.findMinimum()); // 1
+
+    const heap = new MinHeap();
+    for (let i = 1; i < 10; i++) {
+        // if (i === 6) {
+        //     continue;
+        // }
+        heap.insert(i);
+    }
+
+    console.log(heap.getAsArray());
+
+    console.log('Extract minimum: ', heap.extract()); // 1
+    // heap.insert(6);
+    console.log(heap.getAsArray()); // [2, 4, 3, 8, 5, 6, 7, 9]
+  ```
 - **1. 二叉树的数组表示**
     + 二叉树有两种表示方式。第一种是使用一个动态的表示方式，也就是指针（用节点表示），在
       上一章使用过。第二种是使用一个数组，通过索引值检索父节点、左侧和右侧子节点的值。
@@ -75,6 +244,22 @@
 - **4. 导出堆中的最小值或最大值**
     + 下移操作 (堆化: heapify)    
 #### 11.1.2 创建最大堆类
+- MaxHeap 类的算法和 MinHeap 类的算法一模一样, 不同之处在于我们要把所有 > (大于) 的
+  比较换成 < (小于) 的比较.
+- MaxHeap 类的代码如下:
+  ```javascript
+    function reverseCompare(compareFn) {
+        return (a, b) => compareFn(b,a )
+    }
+    class MaxHeap extends MinHeap {
+        constructor(compareFn = defaultCompare) {
+          super(compareFn);
+          // this.compareFn = compareFn;
+          this.compareFn = reverseCompare(compareFn);
+        }
+    }
+  ```  
+   
 
 ### 11.2 堆排序算法
 - 我们可以使用二叉堆数据结构来帮助我们创建一个非常著名的排序算法：`堆排序算法`。
