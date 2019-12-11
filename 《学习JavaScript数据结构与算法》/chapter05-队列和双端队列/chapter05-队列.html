@@ -58,7 +58,6 @@
                     if (this.isEmpty()) {
                         return "";
                     }
-                    // - 模板插值太强了, 可以自动拼接
                     let objString = `${this.items[this.lowestCount]}`;
                     for (let i = this.lowestCount + 1; i < this.count; i++) {
                         console.log("before ojbString: ", `${objString}`);
@@ -69,17 +68,51 @@
                 }
             }
 
-            const queue = new Queue();
-            console.log(queue.isEmpty());
-            queue.enqueue("John");
-            queue.enqueue("Jack");
-            queue.enqueue("Lynch");
-            queue.enqueue("Dannel");
-            queue.dequeue();
-            queue.dequeue();
-            queue.size();
-            console.log(queue.toString());
-        })();// @ts-check
+            // const queue = new Queue();
+            // console.log(queue.isEmpty());
+            // queue.enqueue("John");
+            // queue.enqueue("Jack");
+            // queue.enqueue("Lynch");
+            // queue.enqueue("Dannel");
+            // queue.dequeue();
+            // queue.dequeue();
+            // queue.size();
+            // console.log(queue.toString());
+
+            // - 5.3.1  循环队列 -- 击鼓传花游戏
+            // - 实现一个模拟的击鼓传花游戏，要用到本章开头实现的 Queue 类（行{1}）。
+            //   我们会得到一份名单，把里面的名字全都加入队列（行{2}）。给定一个数字，
+            //   然后迭代队列。从队列开头移除一项，再将其添加到队列末尾（行{3}），模拟
+            //   击鼓传花（如果你把花传给了旁边的人，你被淘汰的威胁就立刻解除了）。一旦
+            //   达到给定的传递次数，拿着花的那个人就被淘汰了（从队列中移除——行{4}）。
+            //   最后只剩下一个人的时候，这个人就是胜者（行{5}）。
+            function hotPotato(elements, num) {
+                const queue = new Queue(); // {1}
+                const eliminatedList = [];
+                for (let i = 0; i < elements.length; i++) {
+                    queue.enqueue(elements[i]); // {2}
+                }
+                while (queue.size() > 1) {
+                    for (let i = 0; i < num; i++) {
+                        // - `dequeue()` -- 移除队列的第一项并返回被移除的项.
+                        queue.enqueue(queue.dequeue())  // {3}
+                    }
+                    eliminatedList.push(queue.dequeue());   // {4}
+                }
+                return {
+                    eliminated: eliminatedList,
+                    winner: queue.dequeue()    // {5}
+                }
+            }
+            // - 调用
+            const names = ['John', 'Jack', 'Camila', 'Ingrid', 'Carl'];
+            const result = hotPotato(names, 7);
+            result.eliminated.forEach(name => {
+                console.log(`${name} 在击鼓传花游戏中被淘汰.`);
+            });
+            console.log(`胜利者: ${result.winner}`);
+
+        })();
 
 
         (function() {
@@ -95,6 +128,7 @@
                         this.addBack(element);
                     } else if (this.lowestCount > 0) {
                         this.lowestCount--;
+                        console.log('addFront lowestCount: ', this.lowestCount);
                         this.items[this.lowestCount] = element;
                     } else {
                         for (let i = this.count; i > 0; i--) {
@@ -117,6 +151,7 @@
                     const result = this.items[this.lowestCount];
                     delete this.items[this.lowestCount];
                     this.lowestCount++;
+                    console.log('removeFront lowestCount: ', this.lowestCount);
                     return result;
                 }
 
@@ -169,6 +204,25 @@
                     return objString;
                 }
             }
+
+            const deque = new Deque();
+            deque.addBack('John');
+            deque.addBack('Jack');
+            deque.addFront('Camila');
+            deque.addFront('Reed');
+            deque.addBack('Zak');
+            deque.addFront('Isaak');
+            console.log(deque.toString());
+
+            deque.removeFront();
+            deque.removeFront();
+            deque.removeFront();
+            deque.removeFront();
+
+            deque.addFront('Kele');
+            deque.addFront('Payne');
+
+            console.log(deque.lowestCount);
         })();
     </script>
 </body>
