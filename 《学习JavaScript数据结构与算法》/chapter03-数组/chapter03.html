@@ -1,7 +1,7 @@
 <script>
     // #### 2.2 创建和初始化数组
-    // - 求斐波那契数列的前 20 个数字. 已知斐波那契数列中第一个数字是 1, 第二个是 2,
-    //   从第三项开始, 每一项都等于前两项之和.
+    // - 求斐波那契数列的前 20 个数. 已知斐波那契数列中前 2 项是 1, 从第三项开始, 
+    //   每一项都等于前两项之和.
     let fibonacci = [];
     // - 数组的索引是从 0 开始的, 这里略过了第一项.
     fibonacci[1] = 1;
@@ -13,6 +13,43 @@
     for (var i = 1; i < fibonacci.length; i++) {
         console.log(fibonacci[i]);
     }
+    
+
+    const friends = [
+        { name: 'John', age: 30 },
+        { name: 'Ana', age: 20 },
+        { name: 'Chris', age: 25 }, // ES2017 允许存在尾逗号
+    ];
+    function comparePerson(a, b) {
+        if (a.age < b.age) {
+            return -1;
+        }
+        if (a.age > b.age) {
+            return 1;
+        }
+        return 0;
+    }
+    console.log(friends.sort(comparePerson));
+
+
+
+    const names = ['Ana', 'ana', 'john', 'John'];
+    //  ["Ana", "ana", "john", "John"]
+    console.log(names.sort((a, b) => {
+        if (a.toLowerCase() < b.toLowerCase()) {
+            return -1;
+        }
+        if (a.toLowerCase() > b.toLowerCase()) {
+            return 1;
+        }
+        return 0;
+    }));
+    // - 如果希望小写字母排在前面, 需要使用 localCompare 方法.
+    names.sort((a, b) => a.localeCompare(b));
+    // ["ana", "Ana", "john", "John"]
+    console.log('names: ', names);
+
+
 
     // - 求 n 项斐波那契数列的和
 

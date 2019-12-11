@@ -1,4 +1,4 @@
-# 第 3 章: 数组 
+## 第 3 章: 数组 
 
 ## 本章目录 (Catalog)
 - 3.1 为什么用数组 
@@ -40,19 +40,30 @@
 ### 3.1 为什么用数组 
 
 ### 3.2 创建和初始化数组
+- 常用创建数组的方式: 
+  ```javascript
+    // - 1st method
+    let daysOfWeek01 = [];
+
+    // - 2nd method
+    var daysOfWeek = ["Monday", "Tuesday", "Wednesday", "Thursday", "Friday", 
+    "Saturday", "Sunday"];
+  ```
 - 访问和迭代数组
   ```javascript
-    var daysOfWeek = ["Monday", "Tuesday", "Wednesday", "Thursday", "Friday", 
-    "Saturday", "Sunday"]
-
-    // - 求斐波那契数列的前 20 个数字. 已知斐波那契数列中第一个数字是 1, 第二个是 2,
-    //   从第三项开始, 每一项都等于前两项之和.
+    // - 我们来看一个例子: 
+    // - 求斐波那契数列的前 20 个数. 已知斐波那契数列中前 2 项是 1, 从第三项开始, 
+    //   每一项都等于前两项之和.
+    // - 行 {2} 和 行{3},  在 js 中, 数组的索引是从 0 开始的,因为斐波那契数列中
+    //   不存在 0, 这里略过了第一项, 从第二项开始分别保存斐波那契数列中对应位置的元素.
+    // - 我们需要做的就是想办法得到斐波那契数列中第三到第二十个位置上的数（前两个值我们
+    //   已经初始化过了）。我们可以用循环来处理，把数组中前两位上的元素相加，结果赋给
+    //   当前位置上的元素（行{4}——从数组中的索引 3 到索引 19）。
     let fibonacci = [];
-    // - 数组的索引是从 0 开始的, 这里略过了第一项.
-    fibonacci[1] = 1;
-    fibonacci[2] = 2;
+    fibonacci[1] = 1;   // {2}
+    fibonacci[2] = 2;   // {3}
     for (let i = 3; i < 20; i++) {
-        fibonacci[i] = fibonacci[i-1] + fibonacci[i-2];
+        fibonacci[i] = fibonacci[i-1] + fibonacci[i-2]; // {4}
     }
     console.log("fibonacci: ", fibonacci);
     for (var i = 1; i < fibonacci.length; i++) {
@@ -95,7 +106,8 @@
         }
       ```
 ### 3.3 添加元素
-- 3.3.1 在数组末尾插入元素
+- 3.3.1 在数组末尾插入元素 `push()`
+    
     + (1) 如果想给数组添加一个元素 (e.g.: 10), 只要赋值给数组中最后一个空位上的元素即可.
         - ```javascript
             let numbers = [0, 1, 2, 3, 4, 5, 6, 7, 8, 9];
@@ -111,12 +123,14 @@
             console.log(nums);  // [1,2,3,4,5,6]
           ```
 - 3.3.2 在数组开头插入元素 `unshift()`
+     
      + `unshift()`: 方法,可以将元素添加在数组的开头.
+        
         - ```javascript
             var nums = [2, 3, 4, 5];
-            nums.unshift(1);
-            console.log(nums);      // [1,2,3,4,5]
-
+       nums.unshift(1);
+         console.log(nums);      // [1,2,3,4,5]
+        
             let nums2 = [4, 6, 9];
             const newNum = 2;
             nums2.unshift(newNum, 1, 7);
@@ -192,7 +206,7 @@
             for (const n of numbers) {
                 console.log( n % 2 === 0 ? "even": "odd");
             }
-          ```  
+          ```
     2. 使用 `@@iterator` 对象
         + ES2015 为 Array 类增加了一个 `@@iterator` 属性, 需要通过 
           `Symbol.iterator` 来访问。代码如下。
@@ -225,7 +239,7 @@
         + 还可以传入一个用来过滤值的函数. 例如:
           ```javascript
             let evens = Array.from(numbers, x => {x % 2 == 0})
-          ``` 
+          ```
     5. 使用 `Array.of()` 方法 
         + Array.of 方法根据传入的参数创建一个新数组。以下面的代码为例。
           ```javascript
@@ -239,14 +253,69 @@
           ```
     6. 使用 `fill()` 方法
     7. 使用 `copyWithin()` 方法      
-- 3.7.4 排序元素
+- 3.7.4 排序元素: 
+    + `reverse()`
+    + `sort()`: sort 方法在对数组做排序时, 把元素默认成字符串进行相互比较.
+      ```js
+        const numbers = [1, 2, 4, 5, 6, 7, 9, 12];
+        function compare(a, b) {
+            if (a < b) {
+                return -1;
+            }
+            if (a > b) {
+                return 1;
+            }
+            // - a === b
+            return 0;
+        }
+        numbers.sort(compare);
+      ```
+    + 自定义排序
+      ```js
+        const friends = [
+            { name: 'John', age: 30 },
+            { name: 'Ana', age: 20 },
+            { name: 'Chris', age: 25 }, // ES2017 允许存在尾逗号
+        ];
+        function comparePerson(a, b) {
+            if (a.age < b.age) {
+                return -1;
+            }
+            if (a.age > b.age) {
+                return 1;
+            }
+            return 0;
+        }
+        console.log(friends.sort(comparePerson));
+      ```
+    + 字符串排序
+      ```js
+        const names = ['Ana', 'ana', 'john', 'John'];
+        //  ["Ana", "ana", "john", "John"]
+        console.log(names.sort((a, b) => {
+            if (a.toLowerCase() < b.toLowerCase()) {
+                return -1;
+            }
+            if (a.toLowerCase() > b.toLowerCase()) {
+                return 1;
+            }
+            return 0;
+        }));
+        // - 如果希望小写字母排在前面, 需要使用 localeCompare 方法.
+        names.sort((a, b) => a.localeCompare(b));
+        // ["ana", "Ana", "john", "John"]
+        console.log('names: ', names);
+      ```
 - 3.7.5 搜索
-    
+  
     + 在数组中查找元素: `JS--方法总结\20190920_indexOf_includes_的区别.html`
-- 3.7.6 输出数组为字符串
+- 3.7.6 输出数组为字符串:  `toString()` 和 `join()`
     + 有 2 个方法可以把数组转换为字符串: `join()` 和 `toString()`
         - `join()` 方法只接收一个参数，即用作分隔符的字符串，然后返回包含所有数组项的
           字符串. --《js高程》
+    + Tip: 细想上面的 join() 方法只接受一个参数..... 这些, 倒不如直接就记: 
+      **join 输出数组为字符串**, 即快又方便.      
+
 
 ### 3.8 类型数组 (使用类数组处理二进制数据)
 - 与 C 和 Java 等其他语言不同, JavaScript数组不是强类型的, 因此它可以存储任意类型的数据.
