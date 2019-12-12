@@ -27,11 +27,16 @@
 - **dequeue [di'kju:] --vi.出列, 出队**
     + Packets are enqueued for transmission and dequeued by the device driver.
       数据包是由设备驱动进行入队传输和出队.
- - **eliminate [ɪ'lɪmɪneɪt] --vt.消除，消灭，清除，淘汰**
-     + eliminate unnecessary words from an essay. 从论文中删去不必要的字.
-     + You have been eliminated from the race. 你已经被淘汰了.
-     + eliminate the false and retain the true. 去伪存真
-     + Eliminate render-blocking resources 消除渲染阻塞资源
+- **eliminate [ɪ'lɪmɪneɪt] --vt.消除，消灭，清除，淘汰**
+    + eliminate unnecessary words from an essay. 从论文中删去不必要的字.
+    + You have been eliminated from the race. 你已经被淘汰了.
+    + eliminate the false and retain the true. 去伪存真
+    + Eliminate render-blocking resources 消除渲染阻塞资源
+- **palindrome ['pælɪndrəʊm] --n.回文**
+    + palindrome checker. 回文检查器
+    + The words 'deed' and 'level' are palindromes.  
+     'deed' 和 'level' 两个词是回文. 
+
 
 ## 本章内容 (Content)
 ### 5.1 队列数据结构

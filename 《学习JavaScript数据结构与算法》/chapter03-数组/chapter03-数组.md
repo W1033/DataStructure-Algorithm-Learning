@@ -107,7 +107,7 @@
       ```
 ### 3.3 添加元素
 - 3.3.1 在数组末尾插入元素 `push()`
-    
+  
     + (1) 如果想给数组添加一个元素 (e.g.: 10), 只要赋值给数组中最后一个空位上的元素即可.
         - ```javascript
             let numbers = [0, 1, 2, 3, 4, 5, 6, 7, 8, 9];
@@ -123,9 +123,9 @@
             console.log(nums);  // [1,2,3,4,5,6]
           ```
 - 3.3.2 在数组开头插入元素 `unshift()`
-     
+  
      + `unshift()`: 方法,可以将元素添加在数组的开头.
-        
+       
         - ```javascript
             var nums = [2, 3, 4, 5];
        nums.unshift(1);
@@ -135,7 +135,7 @@
             const newNum = 2;
             nums2.unshift(newNum, 1, 7);
             console.log(nums2);     // [2, 1, 7, 4, 6, 9]
-          ```
+         ```
 
 ### 3.4 删除元素
 - 3.4.1 从数组末尾删除元素 
@@ -291,7 +291,7 @@
     + 字符串排序
       ```js
         const names = ['Ana', 'ana', 'john', 'John'];
-        //  ["Ana", "ana", "john", "John"]
+        //  ["Ana", "ana", "john", "John"]
         console.log(names.sort((a, b) => {
             if (a.toLowerCase() < b.toLowerCase()) {
                 return -1;
@@ -354,7 +354,7 @@
 ------
 
 - 2.2.3 由字符串生成数组
-    + 调用字符串对象的 `split()` 方法可以生成数组.
+    + 调用字符串对象的 `split()` 方法可以生成数组. (**str.split(): 字符串转换成数组**)
         - 《js高程》: `split()`方法是基于指定的分隔符将一个字符串分割成多个子字符串, 
           并将结果放在一个数组中.
 - 2.2.4 对数组的整体性操作

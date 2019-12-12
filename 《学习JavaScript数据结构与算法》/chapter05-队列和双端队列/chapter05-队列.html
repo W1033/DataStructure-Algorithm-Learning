@@ -122,13 +122,12 @@
                     this.lowestCount = 0;
                     this.items = {};
                 }
-
                 addFront(element) {
                     if (this.isEmpty()) {
                         this.addBack(element);
                     } else if (this.lowestCount > 0) {
                         this.lowestCount--;
-                        console.log('addFront lowestCount: ', this.lowestCount);
+                        // console.log('addFront lowestCount: ', this.lowestCount);
                         this.items[this.lowestCount] = element;
                     } else {
                         for (let i = this.count; i > 0; i--) {
@@ -138,12 +137,10 @@
                         this.items[0] = element;
                     }
                 }
-
                 addBack(element) {
                     this.items[this.count] = element;
                     this.count++;
                 }
-
                 removeFront() {
                     if (this.isEmpty()) {
                         return undefined;
@@ -151,10 +148,9 @@
                     const result = this.items[this.lowestCount];
                     delete this.items[this.lowestCount];
                     this.lowestCount++;
-                    console.log('removeFront lowestCount: ', this.lowestCount);
+                    // console.log('removeFront lowestCount: ', this.lowestCount);
                     return result;
                 }
-
                 removeBack() {
                     if (this.isEmpty()) {
                         return undefined;
@@ -164,35 +160,29 @@
                     delete this.items[this.count];
                     return result;
                 }
-
                 peekFront() {
                     if (this.isEmpty()) {
                         return undefined;
                     }
                     return this.items[this.lowestCount];
                 }
-
                 peekBack() {
                     if (this.isEmpty()) {
                         return undefined;
                     }
                     return this.items[this.count - 1];
                 }
-
                 isEmpty() {
                     return this.size() === 0;
                 }
-
                 clear() {
                     this.items = {};
                     this.count = 0;
                     this.lowestCount = 0;
                 }
-
                 size() {
                     return this.count - this.lowestCount;
                 }
-
                 toString() {
                     if (this.isEmpty()) {
                         return '';
@@ -205,24 +195,59 @@
                 }
             }
 
-            const deque = new Deque();
-            deque.addBack('John');
-            deque.addBack('Jack');
-            deque.addFront('Camila');
-            deque.addFront('Reed');
-            deque.addBack('Zak');
-            deque.addFront('Isaak');
-            console.log(deque.toString());
+            // const deque = new Deque();
+            // deque.addBack('John');
+            // deque.addBack('Jack');
+            // deque.addFront('Camila');
+            // deque.addFront('Reed');
+            // deque.addBack('Zak');
+            // deque.addFront('Isaak');
+            // console.log(deque.toString());
+            //
+            // deque.removeFront();
+            // deque.removeFront();
+            // deque.removeFront();
+            // deque.removeFront();
+            //
+            // deque.addFront('Kele');
+            // deque.addFront('Payne');
+            //
+            // console.log(deque.lowestCount);
 
-            deque.removeFront();
-            deque.removeFront();
-            deque.removeFront();
-            deque.removeFront();
 
-            deque.addFront('Kele');
-            deque.addFront('Payne');
+            // - 5.3.2 回文检查器
+            // - palindrome ['pælɪndrəʊm] --n.回文
+            function palindromeChecker(str) {
+                if (str === undefined || str === null || str.length === 0) { // {1}
+                    return false;
+                }
+                const deque = new Deque();  // {2}
+                // - str.split(): 字符串转换成数组
+                // - arr.join(): 数组转为字符串
+                const lowerString = str.toLocaleLowerCase().split(' ').join(''); // {3}
+                let isEqual = true;
+                let firstChar, lastChar;
+                for (let i = 0; i < lowerString.length; i++) {
+                    deque.addBack(lowerString.charAt(i));
+                }
+                while (deque.size() > 1 && isEqual) {   // {5}
+                    firstChar = deque.removeFront();    // {6}
+                    lastChar = deque.removeBack();  // {7}
+                    if (firstChar !== lastChar) {
+                        isEqual = false;    // {8}
+                    }
+                }
+                return isEqual;
+            }
 
-            console.log(deque.lowestCount);
+            // - 测试代码
+            console.log('a:', palindromeChecker('a'));
+            console.log('aa:', palindromeChecker('aa'));
+            console.log('kayak:', palindromeChecker('kayak'));
+            console.log('level:', palindromeChecker('level'));
+            console.log('Was it a car or a cat I saw: ',
+                palindromeChecker('Was it a car or a cat I saw'));
+            console.log('Step on no pets: ', palindromeChecker('Step on no pets'));
         })();
     </script>
 </body>
