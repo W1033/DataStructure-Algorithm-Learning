@@ -15,11 +15,15 @@
 
 
 ## 生词 (New Words)
-
+- **doubly ['dʌblɪ] --adv.双重地; 双倍地**
+    + doubly linked list 双向链表
+    + You must be doubly careful. 你必须加倍小心.
+    + He is doubly troubled, by illness and poverty.  
+      他受着疾病和贫穷的双重困扰.
 
 
 ## Added 
-> 线性表-维基百科
+> [线性表-维基百科](https://zh.wikipedia.org/zh-cn/%E7%BA%BF%E6%80%A7%E8%A1%A8)
 - `线性表(Linear List)` 
     + 是由 n(n≥0) 个数据元素(结点) `a[0], a[1], a[2]..., a[n-1]`组成的有限序列. 
       其中: 
@@ -306,8 +310,13 @@
     // console.log(list.toString());
   ```
 ### 6.2 双向链表
-- 6.2.1 在任意位置插入新元素
-- 6.2.2 从任意位置移除元素
+- 一种更复杂的链表是"双向链表" 或 "双面链表". 在单向链表中,一个节点只有链向下一个节点的
+  链接; 而在双向链表中, 每个节点都有 2 个链接: 一个链接指向前一个节点 (链表中第一个节点
+  指向的前一个节点为空值{undefined}), 而另一个链接指向下一个节点 (链表中最后一个节点
+  指向下的下一个节点为空值{undefined}).  如下图所示。  
+  <img src="./img/dobly-linked-list.jpg">
+- **6.2.1 在任意位置插入新元素**
+- **6.2.2 从任意位置移除元素**
 - ```javascript
     import { defaultEquals } from '../util';
     import LinkedList from './linked-list';
@@ -450,13 +459,90 @@
 
   ```
 ### 6.3 循环链表 
+- 循环链表可以像链表一样只有单向引用, 也可以像双向链表一样有双向引. 循环链表和链表之间
+  唯一的区别在于, 最后一个元素指向下一个元素的指针 (tail.next) 不是引用 undefined,
+  而是指向第一个元素 (head), 
+- **`单向循环链表 (one-way circular linked list)`** 如下图所示.   
+  <img src="./img/one-way-circular-linked-list.jpg" style="width:90%">
+- **`双向循环链表 (doubly circular linked list)`** : 有指向 head 元素的 
+  tail.next 和 指向 tail 元素的 head.prev.  
+  <img src="./img/dobly-circular-linked-list.jpg" style="width:90%">
 - 6.3.1 在任意位置插入新元素
 - 6.3.2 从任意位置移除元素
 
 ### 6.4 有序链表
+- 有序链表: 有序链表是指保持元素有序的链表结构. 除了使用排序算法之外, 我们还可以将元素
+  插入到正确的位置来保证链表的有序性.
+#### 6.4.1 有序插入元素
+- 我们会用下面的代码来覆盖 insert 方法: 
+  ```html
+     <script src="01-linked-list.js"></script>
+     <script>
+        const Compare = {
+            LESS_THAN: -1,
+            BIGGER_THAN: 1,
+        };
+        function defaultCompare(a, b) {
+            if (a === b) {
+                return 0;
+            }
+            return a < b ? Compare.LESS_THAN : Compare.BIGGER_THAN;
+        }
+        class SortedLinkedList extends LinkedList {
+            constructor(equalsFn = defaultEquals, compareFn = defaultCompare) {
+                super(equalsFn);
+                this.compareFn = compareFn;
+            }
+            // ### 6.4.1 有序插入元素 -- 我们会用下面的代码来覆盖 insert 方法
+            // - 由于我们不想允许在任何位置插入元素，我们要给 index 参数设置一个默认值
+            //  （行 {1} ），以便直接调用 list.insert(myElement) 而无须传入 index
+            //  参数。如果 index 参数传给了方法，它的值会被忽略，因为插入元素的位置是
+            //  内部控制的。我们这么做的原因是不想重写整个 LinkedList 类的方法，我们只
+            //  需要覆盖 insert 方法的行为。如果愿意，也可以从头创建 SortedLinkedList
+            //  类，把 LinkedList 类中的代码复制过来。但是这样会使代码维护变得困难，
+            //  因为后面要修改代码的话，就需要修改两处而非一处。
+            // - 如果有序链表为空，我们可以直接调用 LinkedList 的 insert 方法并传入
+            //   0 作为 index（行 {2} ）。如果有序链表不为空，我们会知道插入元素的
+            //   正确位置（行 {3} ）并调用 LinkedList 的 insert 方法，传入该位置来
+            //   保证链表有序（行 {4} ）。
+            // - 要获得插入元素的正确位置，我们需要创建一个叫作 
+            //   getIndexNextSortedElement 的方法。在该方法里，我们需要迭代整个
+            //   有序链表直至找到需要插入元素的位置，或是迭代完所有的元素。在后者的场景中
+            //   , 返回的 index (行 {7})将是有序链表的长度 (元素将被插入在链表的末尾
+            //   ）。我们将使用 compareFn (行 {5}) 来比较传入构造函数的元素。当我们
+            //   要插入有序链表的元素小于 current 的元素时，我们就找到了插入元素的位置
+            //   (行 {6}).
+            // - 就是这样了！我们可以在内部复用 LinkedList 的 insert 方法。其他方法
+            //   例如 remove 、indexOf 和 on 都和 LinkedList 是一样的.
+            insert(element, index = 0) {
+                if (this.isEmpty()) {   // {1}
+                    return super.insert(element, 0);    // {2}
+                }
+                const pos = this.getIndexNextSortedElement(element); // {3}
+                return super.insert(element, pos);  // {4}
+            }
+            getIndexNextSortedElement(element) {
+                let current = this.head;
+                let i = 0;
+                for (; i < this.size() && current; i++) {
+                    const comp = this.compareFn(element, current.element); // {5}
+                    if (comp === Compare.LESS_THAN) {   // {6}
+                        return i;
+                    }
+                    current = current.next;
+                }
+                return i;   // {7}
+            }
+        }
+    </script>
+  ```
+  
 
 ### 6.5 创建 `StackLinkedList` 类
 
 ### 6.6 小结
-
+- 本章介绍了链表这种数据结构，以及其变体：双向链表、循环链表和有序链表。你学习了如
+  何在任意位置添加和移除元素，以及如何循环访问链表。你还学习了链表相比数组最重要的优点，
+  那就是无须移动链表中的元素，就能轻松地添加和移除元素。因此，**当你需要添加和移除很多元**
+  **素时，最好的选择就是链表，而非数组。**
 

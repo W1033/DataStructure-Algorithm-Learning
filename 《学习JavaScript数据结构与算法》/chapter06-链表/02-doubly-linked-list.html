@@ -19,7 +19,7 @@
         }
 
         push(element) {
-            const node = new Node(element);  // ①
+            const node = new Node(element);  // {1}
             // - 如果要推入的元素是第一项. (即: 链表为空)
             if (this.head == null) {
                 this.head = node;
@@ -29,9 +29,9 @@
             }
             // - 如果要推入的元素不是第一项
             else {
-                // - 经过当前函数内的步骤 ①, 此时 node 已经是第 2 次调用传入的值
+                // - 经过当前函数内的步骤 {1}, 此时 node 已经是第 2 次调用传入的值
                 //   (Node {element: 4, next: undefined, prev: undefined}),
-                //   this.tail 保存的是上一次执行调用后链表中最后一个值得引用.
+                //   this.tail 保存的是上一次执行调用后链表中最后一个值的引用.
                 //   后续执行同理.
                 this.tail.next = node;
                 // - 把 this.tail 赋值给当前传入节点(node) 的 prev 属性

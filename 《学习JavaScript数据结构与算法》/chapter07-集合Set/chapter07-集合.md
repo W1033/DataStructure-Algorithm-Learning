@@ -27,6 +27,7 @@
 
 
 ## 本章内容 (Contents)
+- **集合是一种不允许存在重复值的顺序数据结构.**
 ### 7.1 构建数据集合
 ### 7.2 创建集合类
 - 7.2.1 -- `has(element)` 方法
@@ -36,7 +37,7 @@
 - 7.2.5 -- `values` 方法
     + P122: 要实现 values 方法, 我们同样使用 Object 类内置的 `values` 方法.
       ```javascript
-        values() {
+        values(); {
             return Object.values(this.items);
         }
       ```
@@ -44,7 +45,7 @@
       ES2017 中被添加进来的, 目前只有在现在浏览器中可用.
     + 如果想让代码在任何浏览器中都能执行，可以用与之前代码等价的下面这段代码。
       ```javascript
-        valuesLegacy() {
+        valuesLegacy(); {
             let values = [];
             for (let key in this.items) {   // {1}
                 if (this.items.hasOwnProperty(key)) {

@@ -1,0 +1,78 @@
+<!doctype html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport"
+          content="width=device-width, user-scalable=no,
+            initial-scale=1.0, maximum-scale=1.0, minimum-scale=1.0">
+    <meta http-equiv="X-UA-Compatible" content="ie=edge">
+    <title>6.4 -- 有序链表</title>
+</head>
+<body>
+<script src="01-linked-list.js"></script>
+<script>
+    // - 6.4 有序链表: 有序链表是指保持元素有序的链表结构. 除了使用排序算法之外,
+    //   我们还可以将元素插入到正确的位置来保证链表的有序性.
+    const Compare = {
+        LESS_THAN: -1,
+        BIGGER_THAN: 1,
+    };
+
+    function defaultCompare(a, b) {
+        if (a === b) {
+            return 0;
+        }
+        return a < b ? Compare.LESS_THAN : Compare.BIGGER_THAN;
+    }
+
+    class SortedLinkedList extends LinkedList {
+        constructor(equalsFn = defaultEquals, compareFn = defaultCompare) {
+            super(equalsFn);
+            this.compareFn = compareFn;
+        }
+
+        // ### 6.4.1 有序插入元素 -- 我们会用下面的代码来覆盖 insert 方法
+        // - 由于我们不想允许在任何位置插入元素，我们要给 index 参数设置一个默认值
+        //  （行 {1} ），以便直接调用 list.insert(myElement) 而无须传入 index
+        //  参数。如果 index 参数传给了方法，它的值会被忽略，因为插入元素的位置是
+        //  内部控制的。我们这么做的原因是不想重写整个 LinkedList 类的方法，我们只
+        //  需要覆盖 insert 方法的行为。如果愿意，也可以从头创建 SortedLinkedList
+        //  类，把 LinkedList 类中的代码复制过来。但是这样会使代码维护变得困难，
+        //  因为后面要修改代码的话，就需要修改两处而非一处。
+        // - 如果有序链表为空，我们可以直接调用 LinkedList 的 insert 方法并传入
+        //   0 作为 index（行 {2} ）。如果有序链表不为空，我们会知道插入元素的
+        //   正确位置（行 {3} ）并调用 LinkedList 的 insert 方法，传入该位置来
+        //   保证链表有序（行 {4} ）。
+        // - 要获得插入元素的正确位置，我们需要创建一个叫作
+        //   getIndexNextSortedElement 的方法。在该方法里，我们需要迭代整个
+        //   有序链表直至找到需要插入元素的位置，或是迭代完所有的元素。在后者的场景中
+        //   , 返回的 index (行 {7})将是有序链表的长度 (元素将被插入在链表的末尾
+        //   ）。我们将使用 compareFn (行 {5}) 来比较传入构造函数的元素。当我们
+        //   要插入有序链表的元素小于 current 的元素时，我们就找到了插入元素的位置
+        //   (行 {6}).
+        // - 就是这样了！我们可以在内部复用 LinkedList 的 insert 方法。其他方法
+        //   例如 remove 、indexOf 和 on 都和 LinkedList 是一样的.
+        insert(element, index = 0) {
+            if (this.isEmpty()) {   // {1}
+                return super.insert(element, 0);    // {2}
+            }
+            const pos = this.getIndexNextSortedElement(element); // {3}
+            return super.insert(element, pos);  // {4}
+        }
+
+        getIndexNextSortedElement(element) {
+            let current = this.head;
+            let i = 0;
+            for (; i < this.size() && current; i++) {
+                const comp = this.compareFn(element, current.element); // {5}
+                if (comp === Compare.LESS_THAN) {   // {6}
+                    return i;
+                }
+                current = current.next;
+            }
+            return i;   // {7}
+        }
+    }
+</script>
+</body>
+</html>
