@@ -17,6 +17,7 @@
             this.key = key;
             this.value = value;
         }
+
         toString() {
             return `[#${this.key}: ${this.value}]`;
         }
@@ -29,7 +30,9 @@
         }
 
         loseloseHashCode(key) {
-            if (typeof key === 'number') { return key; }
+            if (typeof key === 'number') {
+                return key;
+            }
             const tableKey = this.toStrFn(key);
             let hash = 0;
             for (let i = 0; i < tableKey.length; i++) {
@@ -58,10 +61,10 @@
 
         get(key) {
             const valuePair = this.table[this.hashCode(key)];
-            return valuePair == null ? undefined: ValuePair.value;
+            return valuePair == null ? undefined : ValuePair.value;
         }
 
-        remove(key){
+        remove(key) {
             const hash = this.hashCode(key);
             const valuePair = this.table[hash];
             if (valuePair != null) {
@@ -71,15 +74,23 @@
             return false;
         }
 
-        getTable() { return this.table; }
+        getTable() {
+            return this.table;
+        }
 
-        isEmpty() {return this.size() === 0;}
+        isEmpty() {
+            return this.size() === 0;
+        }
 
-        size() {return Object.keys(this.table).length;}
+        size() {
+            return Object.keys(this.table).length;
+        }
 
-        clear(){this.table = {};}
+        clear() {
+            this.table = {};
+        }
 
-        toString(){
+        toString() {
             if (this.isEmpty()) {
                 return '';
             }

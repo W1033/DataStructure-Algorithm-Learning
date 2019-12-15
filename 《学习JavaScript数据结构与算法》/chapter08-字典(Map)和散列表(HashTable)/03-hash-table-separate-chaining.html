@@ -3,6 +3,7 @@
     function defaultEquals(a, b) {
         return a === b;
     }
+
     class Node {
         constructor(element, next) {
             this.element = element;
@@ -51,8 +52,7 @@
                 if (index === 0) {
                     node.next = this.head;
                     this.head = node;
-                }
-                else {
+                } else {
                     const previous = this.getElementAt(index - 1);
                     node.next = previous.next;
                     previous.next = node;
@@ -62,6 +62,7 @@
             }
             return false;
         }
+
         removeAt(index) {
             if (index >= 0 && index < this.count) {
                 let current = this.head;
@@ -99,12 +100,15 @@
         isEmpty() {
             return this.size() === 0;
         }
+
         size() {
             return this.count;
         }
+
         getHead() {
             return this.head;
         }
+
         clear() {
             this.head = undefined;
             this.count = 0;
@@ -124,11 +128,13 @@
         }
         return item.toString();
     }
+
     class ValuePair {
         constructor(key, value) {
             this.key = key;
             this.value = value;
         }
+
         toString() {
             return `[#${this.key}: ${this.value}]`;
         }
@@ -142,7 +148,9 @@
         }
 
         loseloseHashCode(key) {
-            if (typeof key === 'number') {return key;}
+            if (typeof key === 'number') {
+                return key;
+            }
             const tableKey = this.toStrFn(key);
             let hash = 0;
             for (let i = 0; i < tableKey.length; i++) {
@@ -156,19 +164,19 @@
         }
 
         put(key, value) {
-           if (key != null && value != null) {
-               const position = this.hashCode(key);
-               // - 当第一次调用 this.table[position] 时为空, 所以把 new LinkedList()
-               //   实例赋值给它
-               if (this.table[position] == null) {
-                   this.table[position] = new LinkedList();
-               }
-               // - push() 为 LinkedList 链表方法
-               this.table[position].push(new ValuePair(key, value));
-               console.log(this.table);
-               return true;
-           }
-           return false;
+            if (key != null && value != null) {
+                const position = this.hashCode(key);
+                // - 当第一次调用 this.table[position] 时为空, 所以把 new LinkedList()
+                //   实例赋值给它
+                if (this.table[position] == null) {
+                    this.table[position] = new LinkedList();
+                }
+                // - push() 为 LinkedList 链表方法
+                this.table[position].push(new ValuePair(key, value));
+                console.log(this.table);
+                return true;
+            }
+            return false;
         }
 
         get(key) {
