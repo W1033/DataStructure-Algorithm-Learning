@@ -7,24 +7,31 @@
         if (item === undefined) {
             return 'UNDEFINED';
         }
+        // - 如果 item(项) 变量是一个对象的话, 需要实现 toString 方法, 否则会
+        //   导致出现异常的输出结果, 如 [object Object]. 这对用户是不友好的. 
         if (typeof item === 'string' || item instanceof String) {
             return `${item}`;
         }
+        // - 如果 item 是一个字符串, 那么我们直接返回他, 否则要调用 item 的
+        //   toString 方法.
         return item.toString(); // {1}
     }
 
     // import { ValuePair } from './models/value-pair';
+    // - ValuePair(键值对) 类中设置 键 和 值.
     class ValuePair {
         constructor(key, value) {
             this.key = key;
             this.value = value;
         }
-
         toString() {
             return `[#${this.key}: ${this.value}]`;
         }
     }
 
+    // - 与 Set 类类似, 我们将在一个 Object 的实例而不是数组中存储字典中的元素 
+    //   (table 属性 -- 行 {2}). 我们会将 [键, 值] 对保存为 table[key] = 
+    //   {key, value}.
     class Dictionary {
         constructor(toStrFn = defaultToString) {
             this.toStrFn = toStrFn;
@@ -53,12 +60,23 @@
             return false;
         }
 
+        // - get(key): 从字典中检索一个值
         get(key) {
             const valuePair = this.table[this.toStrFn(key)];
             return valuePair == null ? undefined : valuePair.value;
+
+            // - 下面这种方式需要获取 2 次 key 的字符串和访问 2 次 table 对象: 
+            //   第一次是在 haskey 方法中, 第二次是在 if 语句中. 这是个小细节,
+            //   不过上面的方式消耗更少.
+            // if (this.hasKey(key)) {
+            //     return this.table[this.toStrFn(key)];
+            // } 
+            // return undefined;
         }
 
         hasKey(key) {
+            // - js 只允许使用字符串作为对象的键名或属性名. 如果传入一个复杂对象作为键,
+            //   需要将它转化为一个字符串. 因此我们需要调用 toStrFn 函数.
             return this.table[this.toStrFn(key)] != null;
         }
 
@@ -129,7 +147,7 @@
 
     // - 输出结果为
     // - Dictionary
-    //   + table:{Gandalf: ValuePair, John: ValuePair, Tyrion: ValuePair}
+    //   + table: {Gandalf: ValuePair, John: ValuePair, Tyrion: ValuePair}
     //      - table 值展开为:
     //          + Gandalf: ValuePair {key: "Gandalf", value: "gandalf@email.com"}
     //          + John: ValuePair {key: "John", value: "johnsnow@email.com"}

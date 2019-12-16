@@ -107,7 +107,6 @@
                 if (this.isEmpty()) {
                     return "";
                 }
-                // - 模板插值太强了, 可以自动拼接
                 let objString = `${this.items[this.lowestCount]}`;
                 for (let i = this.lowestCount + 1; i < this.count; i++) {
                     objString = `${objString}, ${this.items[i]}`;
