@@ -122,7 +122,8 @@
             let objString =
                 `{${keys[0]} => ${this.table[keys[0]].toString()}} \n`;
             for (let i = 1; i < keys.length; i++) {
-                // - Note: 模板插值会
+                // - Note: 模板插值自动拼接了 objString 上次保存的值, 这里不是特别
+                //  明白, 需要查一下资料?
                 objString = 
                 `${objString}{${keys[i]} => ${this.table[keys[i]].toString()}} \n`;
             }
@@ -174,12 +175,17 @@
     console.log(hash.hashCode('Sargeras'),  ' - Sargeras');
 
     // - 我们调用 toString 方法来看一下输出结果
-
+    // - 下面为输出: 
     // {4 => [#Ygritte: ygritte@email.com]} 
     // {5 => [#Aethelwulf: aethelwulf@email.com]} 
     // {7 => [#Athelstan: athelstan@email.com]} 
     // {8 => [#Jasmine: jasmine@email.com]} 
     // {9 => [#Jake: jake@email.com]} 
     // {10 => [#Sargeras: sargeras@email.com]} 
+
+    // - Jonathan、 Jamie、 Sue 和 Aethelwulf 有相同的散列值，也就是 5。由于
+    //   Aethelwulf 是最后一个被添加的，它将是在 HashTable 实例中占据位置 5 的元素。
+    //   首先 Jonathan 会占据这个位置，然后 Jamie 会覆盖它， Sue 会再次覆盖，最后
+    //   Aethelwulf 会再覆盖一次。这对于其他发生冲突的元素来说也是一样的。
     console.log(hash.toString());
 </script>

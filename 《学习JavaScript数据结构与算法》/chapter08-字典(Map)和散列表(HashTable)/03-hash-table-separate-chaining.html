@@ -3,14 +3,13 @@
     function defaultEquals(a, b) {
         return a === b;
     }
-
     class Node {
         constructor(element, next) {
             this.element = element;
             this.next = next;
         }
     }
-
+    // - 链表 (Linked list) 书上完整源码
     class LinkedList {
         constructor(equalsFn = defaultEquals) {
             this.equalsFn = equalsFn;
@@ -18,22 +17,24 @@
             this.head = undefined;
         }
 
+        // - push(element): 向链表尾部添加一个新元素.
         push(element) {
             const node = new Node(element); // {1}
             let current;    // {2}
             if (this.head == null) {    // {3}
                 this.head = node;
             } else {
-                current = this.head;
-                while (current.next != null) {
+                current = this.head; // {4}
+                while (current.next != null) {  // {5} 获得最后一项
                     current = current.next;
                 }
-                current.next = node;
-                // console.log(current);
+                current.next = node;    // {6}
             }
-            this.count++;
+            this.count++;   // {7}
         }
 
+        // - getElementAt(index): 返回链表中特定位置的元素. 如果链表中不存在这样的
+        //   元素, 则返回 undefined.
         getElementAt(index) {
             if (index >= 0 && index <= this.count) {
                 let node = this.head;
@@ -44,29 +45,10 @@
             }
             return undefined;
         }
-
-        // - insert(element, index): 向链表的特定位置插入一个新元素.
-        insert(element, index) {
-            if (index >= 0 && index <= this.count) {
-                const node = new Node(element);
-                if (index === 0) {
-                    node.next = this.head;
-                    this.head = node;
-                } else {
-                    const previous = this.getElementAt(index - 1);
-                    node.next = previous.next;
-                    previous.next = node;
-                }
-                this.count++;
-                return true;
-            }
-            return false;
-        }
-
         removeAt(index) {
-            if (index >= 0 && index < this.count) {
-                let current = this.head;
-                if (index === 0) {
+            if (index >= 0 && index < this.count) { // {1}
+                let current = this.head;    // {2}
+                if (index === 0) {  // {3}
                     this.head = current.next;
                 } else {
                     const previous = this.getElementAt(index - 1);
@@ -85,6 +67,28 @@
             return this.removeAt(index);
         }
 
+        // - insert(element, index): 向链表的特定位置插入一个新元素.
+        insert(element, index) {
+            if (index >= 0 && index <= this.count) {
+                const node = new Node(element);
+                // - 第 1 种场景是需要在链表的起点添加一个元素, 也就是第一个位置.
+                if (index === 0) {
+                    node.next = this.head;
+                    this.head = node;
+                }
+                // - 第 2 种场景在链表中间或尾部添加一个元素.
+                else {
+                    // - (index-1) 表示需要添加新节点位置的前一个位置.
+                    const previous = this.getElementAt(index - 1);
+                    node.next = previous.next;
+                    previous.next = node;
+                }
+                this.count++;
+                return true;
+            }
+            return false;
+        }
+
         // - indexOf(element): 返回元素在链表中的索引. 如果链表中没有该元素则返回 -1.
         indexOf(element) {
             let current = this.head;
@@ -96,25 +100,28 @@
             }
             return -1;
         }
-
-        isEmpty() {
-            return this.size() === 0;
-        }
-
-        size() {
-            return this.count;
-        }
-
-        getHead() {
-            return this.head;
-        }
-
+        isEmpty() {return this.size() === 0;}
+        size() {return this.count;}
+        getHead() {return this.head;}
         clear() {
             this.head = undefined;
             this.count = 0;
         }
-    }
 
+        // - (8) toString 方法会把 LinkedList 对象转换成一个字符串.
+        toString() {
+            if (this.head == null) {
+                return '';
+            }
+            let objString = `${this.head.element}`;
+            let current = this.head.next;
+            for (let i = 1; i < this.size() && current != null; i++) {
+                objString = `${objString},${current.element}`;
+                current = current.next;
+            }
+            return objString;
+        }
+    }
 
     function defaultToString(item) {
         if (item === null) {
@@ -128,25 +135,21 @@
         }
         return item.toString();
     }
-
     class ValuePair {
         constructor(key, value) {
             this.key = key;
             this.value = value;
         }
-
         toString() {
             return `[#${this.key}: ${this.value}]`;
         }
     }
-
 
     class HashTableSeparateChaining {
         constructor(toStrFn = defaultToString) {
             this.toStrFn = toStrFn;
             this.table = {};
         }
-
         loseloseHashCode(key) {
             if (typeof key === 'number') {
                 return key;
@@ -158,27 +161,26 @@
             }
             return hash % 37;
         }
-
         hashCode(key) {
             return this.loseloseHashCode(key);
         }
-
+        // - (1) put 方法, 向散列表中推入键和值
         put(key, value) {
             if (key != null && value != null) {
                 const position = this.hashCode(key);
-                // - 当第一次调用 this.table[position] 时为空, 所以把 new LinkedList()
-                //   实例赋值给它
+                // - 当第一次调用 this.table[position] 时为空, 把 new LinkedList()
+                //   的实例赋值给它
                 if (this.table[position] == null) {
                     this.table[position] = new LinkedList();
                 }
                 // - push() 为 LinkedList 链表方法
                 this.table[position].push(new ValuePair(key, value));
-                console.log(this.table);
+                // console.log(this.table);
                 return true;
             }
             return false;
         }
-
+        // - (2) get 方法, 用来获取给定键的值
         get(key) {
             const position = this.hashCode(key);
             const linkedList = this.table[position];
@@ -193,7 +195,7 @@
             }
             return undefined;
         }
-
+        // - (3) remove 方法, 从链表中移除元素
         remove(key) {
             const position = this.hashCode(key);
             const linkedList = this.table[position];
@@ -227,4 +229,17 @@
     hash.put('Aethelwulf', 'aethelwulf@email.com');
     hash.put('Sargeras', 'sargeras@email.com');
     console.log(hash.table);
+    console.log(hash.get('Sue'));
+    for (let key in hash.table) {
+        console.log(`key: ${key}`);
+        if (hash.table[key]['head'] instanceof Object) {
+            let objStr = `${hash.table[key]['head']['element'].toString()} \n`;
+            let current = hash.table[key]['head']['next'];
+            for (let i = 1; i < hash.table[key].size() && current != null; i++) {
+                objStr = `${objStr}${current.element} \n`;
+                current = current.next
+            }
+            console.log(objStr);
+        }
+    }
 </script>
