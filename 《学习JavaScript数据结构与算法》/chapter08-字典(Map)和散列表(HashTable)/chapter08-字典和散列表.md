@@ -79,8 +79,8 @@
     + 在实现上面 3 个方法之前, 我们要实现的第一个方法是散列函数, 它的代码如下:
         ```js
         // - 讲解和代码见 `02-散列表-HashTable.html`
-        loseloseHashCode(key) {}
-        hashCode(key) {}
+        loseloseHashCode(key); {}
+        hashCode(key); {}
         ```
 - (2) 将键和值加入到散列表: `put(key, value)`
   
@@ -150,7 +150,7 @@
     + 例如，我们在之前的测试代码中使用分离链接并用图表示的话，输出结果将会是如下这样
         (为了简化，图表中的值被省略了).  
         <img src="./images/hash-table-separate-chaining.png" 
-        style="width: 76%;">
+        style="width: 96%;">
     + 在位置 5 上有包含 4 个元素的 LinkedList 实例; 位置 7 和 10 上，包含 
         2 个元素的 LinkedList 实例；在位置 4、 8 和 9 上只包含单个元素的
         LinkedList 实例。
