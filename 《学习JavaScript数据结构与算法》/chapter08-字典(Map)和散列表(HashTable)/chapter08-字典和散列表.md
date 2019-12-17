@@ -175,8 +175,11 @@
       已经包含一些元素的散列表，我们想要添加一个新的键和值。我们计算这个新键的 hash，
       并检查散列表中对应的位置是否被占据。如果没有，我们就将该值添加到正确的位置。如果
       被占据了，我们就迭代散列表，直到找到一个空闲的位置。
-    + 下图展示了这个过程: (Tip: 图中的键值对省略了 值(value))
-      <img src="./images/linear-probing.png" style="width: 76%;">  
+    + 下图 `linear-probing.png` 展示了这个过程: 
+        + *Tip01*: 图中的键值对省略了 值(value). 
+        + *Tip02*: 注意 索引值(index) 的**起始值**是根据要 推入(put) 的 键(key) 调用
+          loseloseHashCode 方法后生成的 hashCode 值来确定的, 并不是从 0 开始的.  
+        + <img src="./images/linear-probing.png" style="width: 76%;">  
     + 当我们从散列表中移除一个键值对的时候，仅将本章之前的数据结构所实现位置的元素移除
       是不够的。如果我们只是移除了元素，就可能在查找有相同 hash（位置）的其他元素时
       找到一个空的位置，这会导致算法出现问题。
@@ -190,13 +193,53 @@
             style="width: 76%;"> 
         - `第二种方法需要检查是否有必要将一个或多个元素移动到之前的位置.` 当搜索
           一个键的时候，这种方法可以避免找到一个空位置。如果移动元素是必要的，我们就
-          需要在散列表中挪动键值对。下图展现了这个过程。
+          需要在散列表中挪动键值对。下图`linear-probing-moving-element.png`
+          展现了这个过程。
           <img src="./images/linear-probing-moving-element.png" 
             style="width: 46%;"> 
         - 两种方法都有各自的优缺点。本章会实现第二种方法 (移动一个或多个元素到之前的位置)
           即 `hash-table-linear-probing`类 
-请参考本书源代码。    
+        - 第二种方法的完整实现源码见: **`04-hash-table-linear-probing.html`**
 #### 8.2.5 创建更好的散列函数
+- 我们实现的 lose lose 散列函数并不是一个表现良好的散列函数，因为它会产生太多的冲突。
+  一个表现良好的散列函数是由几个方面构成的：**插入和检索元素的时间(即性能)**, 
+  **以及较低的冲突可能性**。我们可以在网上找到一些不同的实现方法，也可以实现自己的
+  散列函数。
+- 另一个可以实现的、比 lose lose 更好的散列函数是 `djb2`.
+  ```js
+    djb2HashCoe(key) {
+        const tableKey = this.toStrFn(key); // {1}
+        let hash = 5381;    // {2}
+        for (let i = 0; i < tableKey.length; i++) { // {3}
+            hash = (hash * 33) + tableKey.charCodeAt(i); // {4}
+        }
+        return hash % 1013; // {5}
+    }
+    // - 在将键转化为字符串之后(行{1}), djb2HashCode 方法包括初始化一个 hash 
+    //   变量并赋值为一个质数（行{2}——大多数实现都使用 5381），然后迭代参数 key
+    //  （行{3}），将 hash 与 33 相乘（用作一个幻数①），并和当前迭代到的字符的 ASCII 
+    //   码值相加（行{4}）。 (① 幻数在编程中指直接使用的常数. -- 编者注)
+    // - 最后，我们将使用相加的和与另一个随机质数相除的余数（行{5}），比我们认为的
+    //   散列表大小要大。在本例中，我们认为散列表的大小为 1000。
+  ```  
+- 如果再次执行 8.2.4节中插入数据的代码，这将是使用 djb2HashCode 代替 loseloseHashCode
+  的最终结果。
+    + 807 - Ygritte
+    + 288 - Jonathan
+    + 962 - Jamie
+    + 619 - Jack
+    + 275 - Jasmine
+    + 877 - Jake
+    + 223 - Nathan
+    + 925 - Athelstan
+    + 502 - Sue
+    + 149 - Aethelwulf
+    + 711 - Sargeras
+- 没有冲突! 这并不是最好的散列函数, 但这是最受社区推崇的散列函数之一.
+- 也有一些为数字键值准备的散列函数，你可以在 http://t.cn/Eqg1yb0 找到一系列的实现。
 ### 8.3 ES2015 Map 类
+- 更详细讲解见仓库:  `JS-book-learning/《深入理解ES6》/chapter07-set集合与map集合/`
+  `chapter07-Set集合和Map集合.md`
 ### 8.4 ES2015 WeakMap 类 和 WeakSet 类
+- 同上
 ### 8.5 小结

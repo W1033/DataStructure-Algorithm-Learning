@@ -4,10 +4,10 @@
 - 7.1 构建数据集合
 - 7.2 创建集合类
     + 7.2.1 -- `has(element)` 方法
-    + 7.2.2 -- `add` 方法
-    + 7.2.3 -- `delete` 和 `clear` 方法
-    + 7.2.4 -- `size` 方法
-    + 7.2.5 -- `values` 方法
+    + 7.2.2 -- `add(element)` 方法
+    + 7.2.3 -- `delete(element)` 和 `clear()` 方法
+    + 7.2.4 -- `size()` 方法
+    + 7.2.5 -- `values()` 方法
     + 7.2.6 -- 使用 `Set` 类
 - 7.3 集合运算
     + 7.3.1 -- 并集 (`union`)
@@ -31,10 +31,10 @@
 ### 7.1 构建数据集合
 ### 7.2 创建集合类
 - 7.2.1 -- `has(element)` 方法
-- 7.2.2 -- `add` 方法
-- 7.2.3 -- `delete` 和 `clear` 方法
-- 7.2.4 -- `size` 方法
-- 7.2.5 -- `values` 方法
+- 7.2.2 -- `add(element)` 方法
+- 7.2.3 -- `delete(element)` 和 `clear()` 方法
+- 7.2.4 -- `size()` 方法
+- 7.2.5 -- `values()` 方法
     + P122: 要实现 values 方法, 我们同样使用 Object 类内置的 `values` 方法.
       ```javascript
         values(); {

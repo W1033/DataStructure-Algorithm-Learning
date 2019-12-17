@@ -1,4 +1,3 @@
-<!--suppress ALL -->
 <script type="text/javascript">
     function defaultToString(item) {
         if (item === null) {
@@ -43,45 +42,76 @@
         hashCode(key) {
             return this.loseloseHashCode(key);
         }
+
+        // - 和之前一样，先获得由散列函数生成的位置，然后验证这个位置是否有元素存在(行{1})
+        //   ,如果没有元素存在（这是最简单的场景），就在这个位置添加新元素（行{2}——一个
+        //   ValuePair 的实例）。
+        // - 如果该位置已经被占据了，需要找到下一个没有被占据的位置（ position 的值是
+        //   undefined 或 null），因此我们声明一个 index 变量并赋值为 position+1
+        //   (行{3}). 然后验证该位置是否被占据（行{4}），如果被占据了，继续将 index
+        //   递增（行{5}），直到找到一个没有被占据的位置。然后我们要做的，就是将值分配到
+        //   该位置（行{6}）.
+        // - 让我们来模拟一下散列表中的插入操作. 加下面的实例调用
         put(key, value) {
             if (key != null && value != null) {
                 const position = this.hashCode(key);
-                if (this.table[position] == null) {
-                    this.table[position] = new ValuePair(key, value);
+                if (this.table[position] == null) { // {1}
+                    this.table[position] = new ValuePair(key, value); // {2}
                 }
                 else {
-                    let index = position + 1;
-                    while (this.table[index] != null) {
-                        index++;
+                    let index = position + 1; // {3}
+                    while (this.table[index] != null) { // {4}
+                        index++;    // {5}
                     }
-                    this.table[index] = new ValuePair(key, value);
+                    this.table[index] = new ValuePair(key, value);  // {6}
                 }
                 return true;
             }
             return false;
         }
+
+        // - get 方法: 获取键对应的值.
+        // - 要获得一个键对应的值，先要确定这个键存在（行{1}）。如果这个键不存在，说明
+        //   要查找的值不在散列表中，因此可以返回 undefined (行{8}). 如果这个键存在，
+        //   需要检查我们要找的值是否就是原始位置上的值(行{2}). 如果是，就返回这个值
+        //   (行{3}).
+        // - 如果不是，就在 HashTableLinearProbing 的下一个位置继续查找（行{4}），
+        //   我们会按位置递增的顺序查找散列表上的元素直到找到我们要找的元素，或者找到一个
+        //   空位置（行{5}）。当从 while 循环跳出的时候，我们要验证元素的键是否是我们
+        //   要找的键（行{6}），如果是，就返回它的值（行{7}）。如果迭代完整个散列表并且
+        //   index 的位置上是 undefined 或 null 的话，说明要找的键不存在，返回 
+        //   undefined（行{8}）。
         get(key) {
             const position = this.hashCode(key);
-            if (this.table[position] != null) {
-                if (this.table[position].key === key) {
-                    return this.table[position].value;
+            if (this.table[position] != null) {         // {1}
+                if (this.table[position].key === key) { // {2}
+                    return this.table[position].value;  // {3}
                 }
-                let index = position + 1;
-                while (this.table[index] != null && this.table[index].key !== key) {
+                let index = position + 1;   // {4}
+                while (this.table[index] != null && this.table[index].key !== key) { // {5}
                     index++;
                 }
-                if (this.table[index] != null && this.table[index].key === key) {
-                    return this.table[position].value;
+                if (this.table[index] != null && this.table[index].key === key) { // {6}
+                    return this.table[position].value;  // {7}
                 }
             }
-            return undefined;
+            return undefined;   // {8}
         }
+
+        // - remove 方法: 根据键删除元素
+        // - 在 get 方法中，当我们找到了要找的 key 后，返回它的值。在 remove 方法中，
+        //   我们会从散列表中删除元素。可以直接从原始 hash 位置找到元素（行{1}），如果
+        //   有冲突并被处理了，我们可以在另一个位置找到元素（行{3}）。由于我们不知道在
+        //   散列表的不同位置上是否存在具有相同 hash 的元素，需要验证删除操作是否有副作用
+        //   。如果有，就需要将冲突的元素移动至一个之前的位置，这样就不会产生空位置
+        //  （行{2}和行{4}）。要完成这项工作，我们将会创建一个工具方法: 
+        //   verifyRemoveSideEffect(), 声明见下一个方法。
         remove(key) {
             const position = this.hashCode(key);
             if (this.table[position] != null) {
                 if (this.table[position].key === key) {
-                    delete this.table[position];
-                    this.verifyRemoveSideEffect(key, position);
+                    delete this.table[position];                // {1}
+                    this.verifyRemoveSideEffect(key, position); // {2}
                     return true;
                 }
                 let index = position + 1;
@@ -89,31 +119,132 @@
                     index++;
                 }
                 if (this.table[index] != null && this.table[index].key === key) {
-                    delete this.table[index];
-                    this.verifyRemoveSideEffect(key, index);
+                    delete this.table[index];                   // {3}
+                    this.verifyRemoveSideEffect(key, index);    // {4}
                     return true;
                 }
             }
             return false;
         }
-        verifyRemoveSideEffect(key, removedPosition) {
 
+        // - verify remove side effect 验证移除副作用
+        // - verifyRemoveSideEffect 方法接收两个参数：被删除的 key 和该 key 被删除
+        //   的位置。首先，我们要获取被删除的 key 的 hash 值（行{1}——也可以将该值作为
+        //   一个参数传入这个方法）。然后，我们会从下一个位置开始迭代散列表（行{2}）直到
+        //   找到一个空位置（行{3}）。当空位置被找到后，表示元素都在合适的位置上，不需要
+        //   进行移动（或更多的移动）。当迭代随后的元素时，我们需要计算当前位置上元素的
+        //   hash 值（行{4}）。如果当前元素的 hash 值小于或等于原始的 hash 值（行{5}）
+        //   或者当前元素的 hash 值小于或等于 removedPosition（也就是上一个被移除
+        //   key 的 hash 值），表示我们需要将当前元素移动至 removedPosition 的位置
+        //   (行{6}).移动完成后，我们可以删除当前的元素（因为它已经被复制到
+        //   removedPosition 的位置了）。我们还需要将 removedPosition 更新为当前的
+        //   index，然后重复这个过程。
+        verifyRemoveSideEffect(key, removedPosition) {
+            const hash = this.hashCode(key);                          // {1}
+            let index = removedPosition + 1;                          // {2}
+            while (this.table[index] != null) {                       // {3}
+                const posHash = this.hashCode(this.table[index].key); // {4}
+                if (posHash <= hash || posHash <= removedPosition) {  // {5}
+                    this.table[removedPosition] = this.table[index];  // {6}
+                    delete this.table[index];
+                    removedPosition = index;
+                }
+                index++;
+            }
         }
         isEmpty() {
+            return this.size() === 0;
         }
         size() {
-
+            return Object.keys(this.table).length;
         }
         clear() {
-
+            this.table = {};
         }
         getTable() {
-
+            return  this.table;
         }
         toString() {
-
+            if (this.isEmpty()) {
+                return '';
+            }
+            const keys = Object.keys(this.table);
+            let objStr = `{${keys[0]} => ${this.table[keys[0]].toString()}} \n`;
+            for (let i = 1; i < keys.length; i++) {
+                objStr =
+                    `${objStr}{${keys[i]} => ${this.table[keys[i]].toString()}} \n`;
+            }
+            return objStr;
         }
-
     }
+
+    let hash = new HashTableLinearProbing();
+    // - Tip: 注意, 索引值(index) 的 起始值 是根据要 推入(put) 的 键(key) 调用
+    //   loseloseHashCode 方法后生成的 hashCode 值来确定的, 并不是从 0 开始的.  
+    // - 让我们来模拟一下散列表中的插入操作。
+    //   + (1) 试着插入 Ygritte。它的散列值是 4，由于散列表刚刚被创建，位置 4 还是空的,
+    //     可以在这里插入数据。
+    //   + (2) 试着在位置 5 插入 Jonathan。它也是空的，所以可以插入这个姓名。
+    //   + (3) 试着在位置 5 插入 Jamie，因为它的散列值也是 5。位置 5 已经被 Jonathan
+    //     占据了，所以需要检查索引值为 position+1 的位置（ 5+1），位置 6 是空的, 
+    //     所以可以在位置 6 插入 Jamie。
+    //   + (4) 试着在位置 7 插入 Jack。它是空的，所以可以插入这个姓名，不会有冲突。
+    //   + (5) 试着在位置 8 插入 Jasmine。它是空的，所以可以插入这个姓名，不会有冲突。
+    //   + (6) 试着在位置 9 插入 Jake。它是空的，所以可以插入这个姓名，不会有冲突。
+    //   + (7) 试着在位置 10 插入 Nathan。它是空的，所以可以插入这个姓名，不会有冲突。
+    //   + (8) 试着在位置 7 插入 Athelstan。位置 7 已经被 Jack 占据了，所以需要检查
+    //     索引值为 position+1 的位置（7+1）。位置 8 也被占据了，所以迭代到下一个
+    //     空位置，也就是位置 11，并插入 Athelstan。
+    //   + (9) 试着在位置 5 插入 Sue，位置 5 到 11 都被占据了，所以我们在位置 12 
+    //     插入 Sue。
+    //   + (10) 试着在位置 5 插入 Aethelwulf，位置 5 到 12 都被占据了，所以我们在
+    //     位置 13 插入 Aethelwulf。
+    //   + (11) 试着在位置 10 插入 Sargeras，位置 10 到 13 都被占据了，所以我们在
+    //     位置 14 插入 Sargeras。
+    hash.put('Ygritte', 'ygritte@email.com');
+    hash.put('Jonathan', 'jonathan@email.com');
+    hash.put('Jamie', 'jamie@email.com');
+    hash.put('Jack', 'jack@email.com');
+    hash.put('Jasmine', 'jasmine@email.com');
+    hash.put('Jake', 'jake@email.com');
+    hash.put('Nathan', 'nathan@email.com');
+    hash.put('Athelstan', 'athelstan@email.com');
+    hash.put('Sue', 'sue@email.com');
+    hash.put('Aethelwulf', 'aethelwulf@email.com');
+    hash.put('Sargeras', 'sargeras@email.com');
+    console.log(hash.toString());
+
+    hash.get('Jake');
+
+    // - 我们来考虑演示 put 方法所创建的散列表. 假设我们想要从散列表中移除 Jonathan
+    //   元素. 下面来模拟一下删除的过程. 
+    // - Tip: 图片参考 `8.2.4-2: 线性探查下 linear-probing-moving-element.png`
+    // - (1) 我们可以在位置 5 找到并删除 Jonathan。位置 5 现在空闲了。我们将验证一下
+    //   是否有副作用。
+    // - (2) 我们来到存储 Jamie 的位置 6，现在的散列值为 5，它的散列值 5 小于等于散列值 5,
+    //   所以要将 Jamie 复制到位置 5 并删除 Jamie。位置 6 现在空闲了，我们来验证下一个位置.
+    // - (3) 我们来到位置 7，这里保存了 Jack，散列值为 7。它的散列值 7 大于散列值 5，并且
+    //   散列值 7 大于 removedPosition 的值 6，所以我们不需要移动它。下一个位置也被占据了
+    //   ，那么我们来验证下一个位置。
+    // - (4) 我们来到位置 8，此处保存了 Jasmine，散列值为 8。散列值 8 大于 Jamie 的
+    //   散列值 5，并且散列值 8 大于 removedPosition 的值 6，因此不需要移动它。
+    //   下一个位置也被占了，那么我们来验证下一个位置。
+    // - (5) 我们来到位置 9，这里保存了 Jake，它的散列值是 9。散列值 9 大于散列值 5，并且
+    //   散列值 9 大于 removedPosition 的值 6，所以不需要移动它。下一个位置也被占了，那么
+    //   我们来验证下一个位置。
+    // - (6) 我们重复相同的过程，直到位置 12。
+    // - (7) 我们来到位置 12，此处保存了 Sue，它的散列值为 5。散列值 5 小于等于散列值 5，
+    //   并且散列值 5 小于等于 removedPosition 的值 6，因此我们将 Sue 复制到位置 6，
+    //   并删除位置 12的 Sue。位置 12 现在空闲了。下一个位置也被占据了，那么我们来验证
+    //   下一个位置。
+    // - (8) 我们来到位置 13，此处保存了 Aethelwulf，它的散列值为 5。散列值 5 小于等于
+    //   散列值 5，并且散列值 5 小于等于 removedPosition 的值 12，因此我们需要将
+    //   Aethelwulf 复制到位置 12 并删除位置 13 的值。位置 13 现在空闲了。下一个位置
+    //   也被占据了，那么我们来验证下一个位置。
+    // - (9) 我们来到位置 14，此处保存了 Sargeras，散列值为 10。散列值 10 大于
+    //   Aethelwulf 的散列值 5，但是散列值 10 小于等于 removedPosition 的值 13，
+    //   因此我们要将 Sargeras 复制到位置 13 并删除位置 14 的值。位置 14 现在空闲了。
+    //   下一个位置也是空闲的，那么本次执行完成了。
+    hash.remove('Jonathan');
 
 </script>
