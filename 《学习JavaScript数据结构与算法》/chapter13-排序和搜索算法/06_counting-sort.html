@@ -1,5 +1,17 @@
 <script>
     // ### 13.1.6 计数排序
+    // - 如果待排序的数组为空或只有一个元素（行{1}），则不需要运行排序算法。
+    // - 对于计数排序算法，我们需要创建计数数组，从索引 0 开始直到最大值索引 value + 1
+    //  （行{3}）。因此，我们还需要找到数组中的最大值（行{2}）。要找到数组中的最大值，
+    //   我们只需要迭代并找到值最大的一项即可.
+    // - 然后，我们迭代数组中的每个位置并在 counts 数组中增加元素计数值（行{5}）。为了
+    //   确保递增操作成功，如果 counts 数组中用来计数某个元素的位置一开始没有用 0 初始化
+    //   的话，我们将其赋值为 0（行{4}）。
+    // - 所有元素都计数后，我们要迭代 counts 数组并构建排序后的结果数组。由于可能有多个
+    //   元素有相同的值，我们要将元素按照在原始数组中的出现次数进行相加。我们要减少计数值
+    //  （行{8}）直到它的值为零（行{6}），将值（ i）加入结果数组。因此，还需要一个辅助
+    //   索引 (sortedIndex) 帮助我们将值赋值到结果数组中的正确位置.
+    
     function countingSort(array){
         if (array.length < 2) { // {1}
             return array;
@@ -7,6 +19,9 @@
         const maxValue = findMaxValue(array);   // {2}
         const counts = new Array(maxValue + 1); // {3}
         array.forEach((element) => {
+            // - Tip: 如果 counts 数组中不存在当前 element (例如: 第一个元素 2,
+            //   counts[2] 第一次执行时 counts 数组中不存在子项 2), 我们取反(!)后
+            //   为 true, if 内把 counts[element] 初始化为 0.
             if (!counts[element]) { // {4}
                 counts[element] = 0;
             }
@@ -14,6 +29,13 @@
             // console.log('counts:', counts);
         });
 
+        // - Note: 根据下面 counts 数组中的子项可以看出, counts 中保存的子项是
+        //   数组 array 中每个子项重复出现的次数 (e.g.: 2 重复出现了 5 次), 
+        //   counts 数组的 index 保存的才是 array 中不重复的子项值. 特别提醒一点
+        //   是 counts 的 index 还执行了自动排序, 因为 array 参数第一项是 2, 
+        //   正常推入到 counts 中 2 应该为第一个索引, 但是上面 array.forEach() 
+        //   执行完毕之后, counts 中的 index却是按照从小到大排列的.
+        // counts: (625) [empty, 2, 5, 1, 2, 1, 1, 2, 2, 1, empty × 16, 1, empty × 597, 1]
         // 1: 2
         // 2: 5
         // 3: 1
@@ -25,7 +47,7 @@
         // 9: 1
         // 26: 1
         // 624: 1
-        console.log('counts:', counts);
+        // console.log('counts:', counts);
 
         let sortedIndex = 0;
         // - Tip: i(index)

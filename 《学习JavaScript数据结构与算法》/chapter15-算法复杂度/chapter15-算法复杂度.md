@@ -9,7 +9,11 @@
 - 15.3 小结
 
 ## 生词 (New words)
-
+- **polynomial [ˌpɒlɪ'nəʊmɪəl] --adj.多项式的。--n.多项式**
+    + a polynomial expression 多项式
+    + quadratic polynomial 二次多项式
+- **deterministic [dɪ,tɝmɪn'ɪstɪk] --adj.确定性的** 
+    + nondeterministic polynomial 非确定性多项式    
 
 ## 内容 (Contents)
 ### 15.1 大 O 表示法
