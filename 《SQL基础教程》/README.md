@@ -5,11 +5,11 @@
     + It is truly a privilege to be here. 能来此处真是莫大的荣幸.
     + the privileged classes. 特权阶级.
 - **schema ['skiːmə]  --n.概要，议程，图解，模式**
-    + --> database schema 数据库模式
-    + --> schema theory. 图式理论
-    + --> a schema of scientific reasoning. 科学推理的图示。
-    + --> Did you overwrite the data schema? 你重写了整个数据模式吗？
-    + --> Yeah, your algorithm is solid. It's a really good schema.
+    + database schema 数据库模式
+    + schema theory. 图式理论
+    + a schema of scientific reasoning. 科学推理的图示。
+    + Did you overwrite the data schema? 你重写了整个数据模式吗？
+    + Yeah, your algorithm is solid. It's a really good schema.
       你的算法很不错，架构相当完美。
 ---
 
