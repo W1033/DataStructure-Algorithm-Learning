@@ -65,9 +65,7 @@
         <p id="result"></p>
     </div>
 
-
     <script>
-
         // 给数字添加空格函数
         var theNum = "78945669457811234561389";
         function addBlock(num){
@@ -87,8 +85,6 @@
         // output: 7894 5669 4578 1123 4561 389
         console.log("addBlock(theNum): ", addBlock(theNum));
 
-
-
         // 给表单中实时输入的数字，以 4 位为一体添加空格
         const t = document.getElementById("test");
         t.onkeydown=change;
@@ -98,7 +94,7 @@
         function change(){
             // - `(\d{4})`: 匹配4位数字，并放到一个分组中()
             // - `\s`: 匹配一个空白字符
-            // - `(?=)`: 正向前瞻型 (肯定表达式), 表示反向匹配，即为从后向前匹配
+            // - `(?=)`: 正向前瞻型分组 (肯定表达式), 表示反向匹配，即为从后向前匹配
             // - `(?=[^\s])`: 表示从后向前匹配除空白字符之外的字符
             // - `$1`: 匹配第一个分组，然后在分组后添加一个空格
             this.value=this.value.replace(/(\d{4})(?=[^\s])/,'$1 ');
