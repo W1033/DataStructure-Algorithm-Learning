@@ -150,13 +150,12 @@
             var nums = [2, 3, 4, 5];
             nums.unshift(1);
             console.log(nums);      // [1,2,3,4,5]
-        
+            
             let nums2 = [4, 6, 9];
             const newNum = 2;
             nums2.unshift(newNum, 1, 7);
             console.log(nums2);     // [2, 1, 7, 4, 6, 9]
          ```
-
 ### 3.4 删除元素
 - 3.4.1 从数组末尾删除元素 
     + `pop()`方法: 可以删除数组末尾的元素:
@@ -172,7 +171,6 @@
         nums.shift();
         console.log(nums);  // [1,2,3,4,5]
       ```
-
 ### 3.5 在任意位置添加或删除元素
 - `splice()` 方法:
     + 使用见: `《JavaScript高级程序设计》/Chapter05-引用类型/chapter05-引用类型.md`
