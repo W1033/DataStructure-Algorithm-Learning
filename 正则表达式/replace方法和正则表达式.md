@@ -57,7 +57,7 @@
     }
     let newString = "abc12345#$*%".replace(/([^\d]*)(\d*)([^\w]*)/, replacer);
     console.log("newString: ", newString);  // abc - 12345 - #$*%
-  ```  
+  ```
 - 示例(2): 颠倒字符串的顺序
   ```js
     // - `\w`: 匹配字母、数字、下划线.
@@ -108,7 +108,7 @@
 - 示例(1): 实现字符串的 trim 函数，去除字符串两边的空格
   ```js
     String.prototype.trim = function(){
-        //方式一：将匹配到的每一个结果都用""替换
+        //方式一：将匹配到的每一个结果(即: 一到多个空格)都用 "" 替换
         /*return this.replace(/(^\s+)|(\s+$)/g,function(){
             return "";
         });*/
@@ -121,9 +121,9 @@
   ```js
     function getUrlParamObj(){
         var obj = {};
-        //获取url的参数部分
+        // - 获取url的参数部分
         var params = window.location.search.substr(1);
-        //[^&=]+ 表示不含&或=的连续字符，加上()就是提取对应字符串
+        // - [^&=]+ 表示不含 & 或 = 的连续字符，加上 () 就是提取对应字符串
         params.replace(/([^&=]+)=([^&=]*)/gi,function(rs,$1,$2){
             obj[$1] = $2;
         });
@@ -132,12 +132,16 @@
   ```
 - 示例(3): 在字符串指定位置插入新字符串
   ```js
+    // - 参数: (1) `str`: 要插入的字符串; (2): `offset`: 要插入的索引位置(index)
     String.prototype.insetAt = function(str,offset){
-        //使用RegExp()构造函数创建正则表达式
-        var regx = new RegExp("(.{"+offset+"})");
+        // - 使用 RegExp() 构造函数 创建正则表达式
+        var regx = new RegExp("(.{" + offset + "})");
+
         return this.replace(regx, "$1" + str);
     };
-    "abcd".insetAt('xyz',2); //在b和c之间插入xyz
+    
+    // - 在 b 和 c 之间插入 xyz
+    console.log("abcd".insetAt('xyz',2));   // "abxyzcd"
   ```
 - 示例(4): 将手机号 12988886666 转化成 129 8888 6666
   ```js

@@ -27,19 +27,37 @@
 
 
 ## 生词 (New Words)
+- **recursive [rɪ'kɜːsɪv] --adj.递归的；循环的** 
+    + recursive algorithm 递归算法
+    + recursive function 递归函数
+- **iterative ['ɪt(ə)rətɪv] --adj.迭代的, 反复的**
+    + It's an iterative design and development. 这是个反复的设计和发展. 
+- **iterate ['ɪtəreɪt] -- vt.重复，迭代**
+    + iterate elements of array 迭代数组的元素 
+    + We then iterate through a set of changes to improve this implementation.
+        然后我们通过一系列更改的迭代来改进这一实现。
+- **iterator [ɪtə'reɪtə] --n.迭代器**
+    + Iterators are objects that allow one to iterate over a collection in 
+        sequence. 迭代器是允许按顺序迭代集合的对象。
+- **iteration [ˌɪtə'reɪʃn] --n.迭代，重复，反复**
+    + Let's listen to the next iteration of this theme. 我们来听下一段主题。
+    + So this process takes about four or five iterations.
+        这个过程需要四到五此反复。
+    + Iterators are just objects with a specific interface designed for 
+        iteration. 迭代器是一种特殊对象，它具有一些专门为迭代过程设计的专有接口。
 - **memorization [ˌmɛmərɪ'zeʃən] --n.记住; 默记**
     + --> Memorization master. 记忆大师
     + --> lexis memorization. 词汇记忆
 
-
-- join() 数组转换为字符串.
-- split() 字符串转换为数组.
 
 
 ## 本章内容 (Contents)
 - *几乎所有的编程语言都原生支持数组类型, 因为 **数组** 是最简单的内存数据结构. 数组存储*
   *一系列同一种数据类型的值. 虽然在 JavaScript 里, 也可以在数组中保存不同类型的值,*
   *但我们还是遵守最佳实践, 避免这么做 (大多语言都没有这个能力).*
+- `join()` 将数组转换为字符串.
+- `split()` 将字符串转换为数组.
+
 ### 3.1 为什么用数组 
 
 ### 3.2 创建和初始化数组
@@ -75,7 +93,7 @@
   ```
     + 求斐波那契(fibonacci)数列前 n 个数:
       ```javascript
-        // - 递归(recursive)斐波那契数: 后一项为前两项的和
+        // - 方法1: 递归(recursive)斐波那契数: 后一项为前两项的和
         export function fibonacci(n) {
             if (n < 1) {
                 return 0;
@@ -85,7 +103,7 @@
             }
             return fibonacci(n-1) + fibonacci(n-2)
         }
-        // - 迭代求出前 n 个斐波那契数
+        // - 方法2: 迭代(iterative)求出前 n 个斐波那契数
         export function fibonacciIterative(n) {
             if (n < 1) {return 0;}
             let fibMinus2 = 0;
@@ -98,6 +116,7 @@
             }
             return fib;
         }
+        // - 方法3 : 迭代加入缓存
         export function fibonacciMemorization(n) {
             if (n < 1) {return 0;}
             const memo = [0, 1];
@@ -108,9 +127,9 @@
             }
         }
       ```
+      
 ### 3.3 添加元素
 - 3.3.1 在数组末尾插入元素 `push()`
-  
     + (1) 如果想给数组添加一个元素 (e.g.: 10), 只要赋值给数组中最后一个空位上的元素即可.
         - ```javascript
             let numbers = [0, 1, 2, 3, 4, 5, 6, 7, 8, 9];
@@ -120,19 +139,17 @@
           在 C 和 Java 等其他语言里, 我们要决定数组的大小, 想添加元素就要创建一个
           全新的数组, 不能简单地往其中添加所需的元素.
     + (2) 使用 `push()`: 方法, 把元素添加到数组的末尾.
-        - ```javascript
+        - ```js
             var nums = [1, 2, 3, 4, 5];
             nums.push(6);
             console.log(nums);  // [1,2,3,4,5,6]
           ```
 - 3.3.2 在数组开头插入元素 `unshift()`
-  
      + `unshift()`: 方法,可以将元素添加在数组的开头.
-       
-        - ```javascript
+        - ```js
             var nums = [2, 3, 4, 5];
-       nums.unshift(1);
-         console.log(nums);      // [1,2,3,4,5]
+            nums.unshift(1);
+            console.log(nums);      // [1,2,3,4,5]
         
             let nums2 = [4, 6, 9];
             const newNum = 2;
@@ -143,14 +160,14 @@
 ### 3.4 删除元素
 - 3.4.1 从数组末尾删除元素 
     + `pop()`方法: 可以删除数组末尾的元素:
-      ```javascript
+      ```js
         let numbers = [1,2,3,4,5,9];
         numbers.pop();
         console.log(numbers);   // [1,2,3,4,5]
       ```
 - 3.4.2 从数组开头删除元素
     + `shift()`方法: 可以删除数组的第一个元素.
-      ```javascript
+      ```js
         var nums = [9,1,2,3,4,5];
         nums.shift();
         console.log(nums);  // [1,2,3,4,5]
@@ -180,7 +197,7 @@
     2. 生成新数组的迭代器方法
         + (1) `map()`: map() 返回一个新的数组, 该数组的元素是对原有元素应用某个函数
           得到的结果。下面给出一个例子：
-          ```javascript
+          ```js
             function first(word) {
                 return word[0];
             } 
@@ -205,7 +222,7 @@
       |of|根据传入的参数创建一个新数组|
       |values|返回包含数组中所有值的 @@iterator|
     1. 使用 for...of 循环迭代
-        + ```javascript
+        + ```js
             for (const n of numbers) {
                 console.log( n % 2 === 0 ? "even": "odd");
             }
@@ -213,7 +230,7 @@
     2. 使用 `@@iterator` 对象
         + ES2015 为 Array 类增加了一个 `@@iterator` 属性, 需要通过 
           `Symbol.iterator` 来访问。代码如下。
-          ```javascript
+          ```js
             let iterator = numbers[Symbol.iterator]();
             console.log(iterator.next().value); // 1
             console.log(iterator.next().value); // 2
@@ -224,7 +241,7 @@
           然后，不断调用迭代器的 next 方法，就能依次得到数组中的值。 numbers 数组
           中有 15 个值，因此需要调用 15 次 iterator.next().value。 <br/>
           我们可以用下面的代码来输出 numbers 数组中的 15 个值。
-          ```javascript
+          ```js
             iterator = numbers[Symbol.iterator]();
             for (const n of iterator) {
                 console.log(n);
@@ -310,7 +327,6 @@
         console.log('names: ', names);
       ```
 - 3.7.5 搜索
-  
     + 在数组中查找元素: `JS--方法总结\20190920_indexOf_includes_的区别.html`
 - 3.7.6 输出数组为字符串:  `toString()` 和 `join()`
     + 有 2 个方法可以把数组转换为字符串: `join()` 和 `toString()`
@@ -318,7 +334,6 @@
           字符串. --《js高程》
     + Tip: 细想上面的 join() 方法只接受一个参数..... 这些, 倒不如直接就记: 
       **join 输出数组为字符串**, 即快又方便.      
-
 
 ### 3.8 类型数组 (使用类数组处理二进制数据)
 - 与 C 和 Java 等其他语言不同, JavaScript数组不是强类型的, 因此它可以存储任意类型的数据.
@@ -337,7 +352,7 @@
   |`Float64Array`| 64 位 IEEE 浮点数|
 - 使用 WebGL API, 进行位操作, 处理文件和图像时, 类数组都可以大展拳脚.
   它用起来和普通数组毫无二致, 文章所学的数组方法和功能都可以用于类型数组.
-- ```javascript
+- ```js
     let length = 5;
     let int16 = new Int16Array(length);
     let array16 = [];
@@ -362,7 +377,7 @@
           并将结果放在一个数组中.
 - 2.2.4 对数组的整体性操作
     + 将一个数组中的每个元素复制一份到新数组中.(深复制):
-      ```javascript
+      ```js
         function copy(arr1, arr2) {
             for (var i=0; i < arr1.length; i++) {
                 arr2[i] = arr[i]
