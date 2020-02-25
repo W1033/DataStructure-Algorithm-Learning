@@ -131,31 +131,31 @@
 ### 3.3 添加元素
 - 3.3.1 在数组末尾插入元素 `push()`
     + (1) 如果想给数组添加一个元素 (e.g.: 10), 只要赋值给数组中最后一个空位上的元素即可.
-        - ```javascript
-            let numbers = [0, 1, 2, 3, 4, 5, 6, 7, 8, 9];
-            numbers[numbers.length] = 10;
-          ```
-        - Note: 在 js 中, 数组是一个可以修改的对象. 如果添加元素, 它就会自动增长. 
-          在 C 和 Java 等其他语言里, 我们要决定数组的大小, 想添加元素就要创建一个
-          全新的数组, 不能简单地往其中添加所需的元素.
+      ```javascript
+        let numbers = [0, 1, 2, 3, 4, 5, 6, 7, 8, 9];
+        numbers[numbers.length] = 10;
+      ```
+      Note: 在 js 中, 数组是一个可以修改的对象. 如果添加元素, 它就会自动增长. 
+      在 C 和 Java 等其他语言里, 我们要决定数组的大小, 想添加元素就要创建一个全新的数组,
+      不能简单地往其中添加所需的元素.
     + (2) 使用 `push()`: 方法, 把元素添加到数组的末尾.
-        - ```js
-            var nums = [1, 2, 3, 4, 5];
-            nums.push(6);
-            console.log(nums);  // [1,2,3,4,5,6]
-          ```
+      ```js
+        var nums = [1, 2, 3, 4, 5];
+        nums.push(6);
+        console.log(nums);  // [1,2,3,4,5,6]
+      ```
 - 3.3.2 在数组开头插入元素 `unshift()`
-     + `unshift()`: 方法,可以将元素添加在数组的开头.
-        - ```js
-            var nums = [2, 3, 4, 5];
-            nums.unshift(1);
-            console.log(nums);      // [1,2,3,4,5]
-            
-            let nums2 = [4, 6, 9];
-            const newNum = 2;
-            nums2.unshift(newNum, 1, 7);
-            console.log(nums2);     // [2, 1, 7, 4, 6, 9]
-         ```
+    + `unshift()`: 方法,可以将元素添加在数组的开头.
+      ```js
+        var nums = [2, 3, 4, 5];
+        nums.unshift(1);
+        console.log(nums);      // [1,2,3,4,5]
+
+        let nums2 = [4, 6, 9];
+        const newNum = 2;
+        nums2.unshift(newNum, 1, 7);
+        console.log(nums2);     // [2, 1, 7, 4, 6, 9]
+      ```
 ### 3.4 删除元素
 - 3.4.1 从数组末尾删除元素 
     + `pop()`方法: 可以删除数组末尾的元素:
