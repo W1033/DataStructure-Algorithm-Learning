@@ -43,6 +43,7 @@
 - *队列和栈非常类似, 但是使用了不同的原则, 而非后进先出(Last-in-First-out, LIFO)*
 - 队列是遵循 `FIFO (First-in-First-out) 先进先出` 也称为 "先来先服务" 原则的一组有序
   的项.队列在尾部添加新元素, 并从顶部移除元素. 最新添加的元素必须排在队列的末尾.
+  
   + Tip: 队列末尾(栈顶)/栈底 --> 见 `chapter03-栈.md`
 - 在现实中, 最常见的队列的例子就是排队.  
 - **5.1.1 创建队列**
@@ -55,7 +56,7 @@
     + (7) 清空队列: `clear()`
     + 下面给出 Queue 队列的实现方法:
       ```javascript
-        // - Queue 类和上一张的 Stack 类非常相似, 只是添加和移除元素的原则不同.
+        // - Queue 类和上一章的 Stack 类非常相似, 只是添加和移除元素的原则不同.
         export default class Queue {
             constructor() {
                 this.count = 0;     // - 作为 items 对象的索引

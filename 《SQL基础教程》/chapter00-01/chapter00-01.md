@@ -1,6 +1,6 @@
 # SQL 基础教程 -- 第 2 版
 - 本书的示例程序从下面网站下载:
-    + http://www.ituring.com.cn/book/1880 (网也右侧的 "随书下载")
+    + http://www.ituring.com.cn/book/1880 (网页右侧的 "随书下载")
 
 > 目录 (Table of Content)
 - 第 0 章 -- 绪论--搭建 SQL 的学习环境
