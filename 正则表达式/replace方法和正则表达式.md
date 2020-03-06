@@ -53,10 +53,10 @@
 - 示例(1): 给字符串添加横线
   ```js
     function replacer(match, p1, p2, p3, offset, string) {
-        return [p1, p2, p3].join(" - ");
+        return [p1, p2, p3].join("-");
     }
     let newString = "abc12345#$*%".replace(/([^\d]*)(\d*)([^\w]*)/, replacer);
-    console.log("newString: ", newString);  // abc - 12345 - #$*%
+    console.log("newString: ", newString);  // abc-12345-#$*%
   ```
 - 示例(2): 颠倒字符串的顺序
   ```js
