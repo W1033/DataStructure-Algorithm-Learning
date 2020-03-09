@@ -27,12 +27,12 @@
     //   当前项和下一项的比较（行{4}）。如果这两项顺序不对(当前项比下一项大), 则交换它们
     //   (行{5})，意思是位置为 j+1 的值将会被换置到位置 j 处，反之亦然.
     function bubbleSort(array, compareFn = defaultCompare) {
-        const {length} = array; // {1}
-        for (let i = 0; i < length; i++) {  // {2}
-            for (let j = 0; j < length-1; j++) {
+        const {length} = array;                         // {1}
+        for (let i = 0; i < length; i++) {              // {2}
+            for (let j = 0; j < length-1; j++) {        // {3}
                 if (compareFn(array[j], array[j + 1])
-                    === Compare.BIGGER_THAN) {  // {4}
-                    swap(array, j, j + 1);  // {5}
+                    === Compare.BIGGER_THAN) {          // {4}
+                    swap(array, j, j + 1);              // {5}
                 }
             }
         }

@@ -29,18 +29,18 @@
     function selectionSort(array, compareFn = defaultCompare) {
         const {length} = array; 
         // - indexMin 用来保存最小值得索引
-        let indexMin;   // {1}
+        let indexMin;                               // {1}
         // - Tip: 为什么这里是 `length -1`?: 因为内部的 for 语句执行第一次循环后,
         //   数组中的最大值便已经放到数组的末尾, 所以我们无需对最后一项做操作.
-        for (let i = 0; i < length - 1; i++) {  // {2}
-            indexMin = i;   // {3}
-            for (let j = i; j < length; j++) {  // {4}
+        for (let i = 0; i < length - 1; i++) {      // {2}
+            indexMin = i;                           // {3}
+            for (let j = i; j < length; j++) {      // {4}
                 if (compareFn(array[indexMin], array[j]) 
-                    === Compare.BIGGER_THAN) {  // {5}
-                    indexMin = j;   // {6}
+                    === Compare.BIGGER_THAN) {      // {5}
+                    indexMin = j;                   // {6}
                 }
             }
-            if (i !== indexMin) {   // {7}
+            if (i !== indexMin) {                   // {7}
                 swap(array, i, indexMin);
             }
         }
