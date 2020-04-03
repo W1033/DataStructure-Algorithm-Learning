@@ -1,2 +1,0 @@
---SQL Server, PostgreSQL, MySQL
-SELECT CURRENT_TIMESTAMP;

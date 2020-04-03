@@ -1,2 +1,0 @@
---PostgreSQL, MySQL
-SELECT CURRENT_TIME;
