@@ -133,7 +133,7 @@
         - (4) 第 4 个为我们自定义的 `defaultCompare` 函数的指针.
     3. 现在我们看 `行{1}`, 此处定义了一个变量 `index`,
        这个变量的作用是帮助我们将子数组分离为较小值数组和较大值数组.
-       这样就能再次递归地调用 `quick` 函数了. 不明白不要着急, 下面还会讲到.
+       这样就能再次递归地调用 `quick` 函数了. 不明白? 先别着急, 下面还会讲到.
     4. `行{2}` 判断要排序的数组长度必须大于 1; 接着看 `行{3}`, 调用
        `partition()` 函数, 把返回值赋值给 `index`, 现在进入到 `partition`
        函数内部, 去看一下代码的逻辑;
@@ -241,11 +241,11 @@
             f(3) = 
             \begin{cases}
                 6 > 3, & \text{左指针无移动原地等待..., leftIndex 等于 1} \\[2ex]
-                5 > 3, & \text{因为 5 不小于 3, 行12 判断条件为 true. 执行 行13, 所以 rightIndex = 4 - 1 = 3}
+                5 > 3, & \text{R 项大于主元, 行12 判断条件为 true. 执行 行13, rightIndex = 4 - 1 = 3}
             \end{cases}
           $
 
-          `行{13}` 执行完 `4 - 1 = 3` 后, 我们先把右指针向前移动一项, 接着执行此
+          `行{13}` 执行后 `rightIndex = 3`, 我们先把右指针向前移动一项, 接着执行此
           `while` 语句, 数组指针为:
           ```base
                 L    P/R
@@ -268,11 +268,11 @@
 
           执行 `行{17}` `rightIndex - 1 = 2`, 然后向前移动右指针(即向左).
           此时数组和指针都变更为:
-          
           ```base
                 P L/R
             [2, 3, 4, 6, 5, 7, 9]
           ```
+          此时, 代码执行到 `行{18}`, 返回 `leftIndex = 2`.
           
         - (3.) `行{9}` 第 3 论循环: `leftIndex = 2` <= `rightIndex = 2` 为
           `true`:
@@ -295,50 +295,116 @@
         - (4.) 执行完第 (3.) 步后, 代码又回到 `行{9}`, 现在 `leftIndex = 2`,
           `rightIndex = 1`, 判断条件为 `false`, 所以退出 `while` 循环,
           至此整个 `partition` 函数执行完毕, 返回数字 `2` 给 `行{3}` 的 `index`.
+    7. 经过第 6 步后, `行{3}` 的 `index` 值为 `2`, 而且调整后的数组为:
+       ```base
+        [2, 3, 4, 6, 5, 7, 9]        
+       ```
+       现在我们接第 4 步的逻辑, 回到 `quick()` 函数内, 接着看 `行{4}` 和
+       `行{5}`:
+       ```js
+        if (left < index - 1) {                             // {4}
+            quick(array, left, index - 1, compareFn);       // {5}
+        }
+       ```
+       `left = 0`, `index - 1 = 2 - 1 = 1`. 判断条件为 `true`,
+       进入 `行{5}` 调用 `quick` 函数自身, 传入参数为
+       `(array, 0, 1, compareFn)`.  接下来执行 `行{1}` --> `行{2}` -->
+       `行{3}`, 再次调用 `partition(array, 0, 1, compareFn);`,
+       因再次调用 `partition` 函数的执行流程和上面的 第 6 步是一样的,
+       这里直接给出执行流程,不再叙述:
+        - (1.) `行{9}` 第一轮循环: `leftIndex(0)` <= `rightIndex(1)` 为 `true`:
+          ```base
+            L/P R
+            [2, 3, 4, 6, 5, 7, 9]
+          ```
 
+          $
+            f(1) = 
+            \begin{cases}
+                2 = 2, & \text{L 项等于主元, 行10 判断条件为 false. leftIndex 仍等于 0} \\[2ex]
+                3 > 2, & \text{R 项大于主元, 行12 判断条件为 true. 执行 行13, rightIndex = 1 - 1 = 0}
+            \end{cases}
+          $
 
+          `行{13}` 执行完毕 `rightIndex(0)`, 我们先把右指针向前移动一项,
+          接着仍执行此 `while` 语句, 目前数组的指针更新为:
+          ```base
+           L/P/R
+            [2, 3, 4, 6, 5, 7, 9]
+          ```
+          接着比较,
 
+          $
+            f(2) = 
+            \begin{cases}
+                2 = 2, & \text{左指针无移动原地等待... leftIndex 仍等于 0} \\[2ex]
+                2 = 2, & \text{R 项不大于主元, 行12 判断条件为 false. rightIndex 等于 0}
+            \end{cases}
+          $
+          
+          现在 `leftIndex(0)` = `rightIndex(0)`, 所以 `行{14} 的判断条件为
+          `true`, 执行 `行{15}`, 交换 `2` 和 `2`, 接着
+          
+          执行 `行{16}` `leftIndex + 1 = 1`, 然后向前移动左指针(即向右);
 
+          执行 `行{17}` `rightIndex - 1 = -1`, 然后向前移动右指针(即向左).
+          此时数组和指针都变更为:
+          ```base
+             P  L
+            [2, 3, 4, 6, 5, 7, 9]
+          ```
+          来到 `行{18}` 返回 `leftIndex`(即: `1`).
+        - (2.) 到此, `行{4}` 和 `行{5}` 执行完毕, 我们接着往下看 `行{6}` 和 `行{7}`.
+    8. 先来看一下 `行{6}` 和 `行{7}` 的代码: 
+       ```js
+        if (index < right) {                                // {6}
+            quick(array, index, right, compareFn);          // {7}
+        }
+       ```
+       `index = 2`, `right = 6`, 所以 `行{6}` 判断为 `true`, 执行 `行{7}`
+       `quick` 函数再次调用自身 `quick(array, 2, 6, compareFn)`;
+       
+       再次执行 `行{1}` --> `行{2}` --> `行{3}`;
+    
+       再次调用 `partition(array, 2, 6, compareFn);` 执行流程和第 7 步一模一样;
+       
+       `pivot: array[Math.floor((2 + 6) / 2)] = array[4] = 5`;
 
-
-
-
-
-  ```base
-    pivot:  3
-    while rightIndex-- 4
-    while rightIndex-- 3
-    while rightIndex-- 1
-    leftIndex:  2
-    rightIndex:  1
-
-    pivot:  2
-    while rightIndex-- 0
-    leftIndex:  1
-    rightIndex:  -1
-
-    pivot:  5
-    while leftIndex++ 3
-    while rightIndex-- 5
-    while rightIndex-- 4
-    leftIndex:  4
-    rightIndex:  3
-
-    pivot:  4
-    while rightIndex-- 2
-    leftIndex:  3
-    rightIndex:  1
-
-    pivot:  7
-    while leftIndex++ 5
-    while rightIndex-- 5
-    leftIndex:  6
-    rightIndex:  4
-
-    pivot:  6
-    while rightIndex-- 4
-    leftIndex:  5
-    rightIndex:  3
-
-    arr: Array(7)
-  ```
+       至此快速排序的整体执行流程算是完全分析完了, 后续的代码执行就省略所有的执行步骤,
+       只给出代码中的 `console` 输出:
+       ```base
+        pivot:  5
+        while leftIndex++ 3
+        while rightIndex-- 5
+        while rightIndex-- 4
+        leftIndex:  4
+        rightIndex:  3
+        array:  (7) [2, 3, 4, 5, 6, 7, 9]
+       ```
+    9. 步骤 9
+       ```base
+        pivot:  4
+        while rightIndex-- 2
+        leftIndex:  3
+        rightIndex:  1
+        array:  (7) [2, 3, 4, 5, 6, 7, 9]
+       ```
+    10. 步骤 10 
+        ```base
+        array:  (7) [2, 3, 4, 5, 6, 7, 9]
+        pivot:  7
+        while leftIndex++ 5
+        while rightIndex-- 5
+        leftIndex:  6
+        rightIndex:  4
+        array:  (7) [2, 3, 4, 5, 6, 7, 9]
+        ```
+    11. 步骤 11 
+        ```base
+        pivot:  6
+        while rightIndex-- 2
+        leftIndex:  5
+        rightIndex:  3
+        array:  (7) [2, 3, 4, 5, 6, 7, 9]
+        ```
+       
