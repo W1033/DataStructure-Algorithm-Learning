@@ -6,7 +6,7 @@
 
 
 
-## 生词(New Wrods)
+## 生词(New Words)
 - **swap [swɔp] --n.交换. --vt&vi.交换**
     + Will you swap(vt) places with me? 你愿意和我换位置吗?
     + do [make] a swap(n). 交换.
