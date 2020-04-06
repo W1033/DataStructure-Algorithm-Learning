@@ -1,0 +1,83 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <meta http-equiv="X-UA-Compatible" content="ie=edge">
+    <title>Document</title>
+</head>
+<body>
+    <h2>快速排序</h2>
+    <script>
+        // - 定义两个数值比较结果的常量
+        const Compare = {
+            LESS: -1,
+            BIGGER: 1,
+            EQUALS: 0
+        };
+        // - 辅助函数: 比较两个数的大小.
+        function defaultCompare(a, b) {
+            if (a === b) {
+                return Compare.EQUALS;
+            }
+            return a < b ? Compare.LESS : Compare.BIGGER;
+        }
+
+        // - swap 交换数组中的 2 个子项(值交换).
+        function swap(array, a, b) {
+            const temp = array[a];
+            array[a] = array[b];
+            array[b] = temp;
+            // - ES6 的方式
+            // [array[a], array[b]] = [array[b], array[a]]
+        }
+
+        function quick(array, left, right, compareFn) {
+            let index;                                              // {1}
+            if (array.length > 1) {                                 // {2}
+                index = partition(array, left, right, compareFn);   // {3}
+                console.log('array: ', array);
+                console.log('\n');
+                if (left < index - 1) {                             // {4}
+                    quick(array, left, index - 1, compareFn);       // {5}
+                }
+                if (index < right) {                                // {6}
+                    quick(array, index, right, compareFn);          // {7}
+                }
+            }
+            return array;
+        }
+        // - partition 划分操作
+        function partition(array, leftIndex, rightIndex, compareFn) {
+            const pivot = array[Math.floor((leftIndex + rightIndex) / 2)]; // {8}
+            console.log('pivot: ', pivot);
+            while (leftIndex <= rightIndex) {                              // {9}
+                while (compareFn(array[leftIndex], pivot) === Compare.LESS) { // {10}
+                    leftIndex++;                                           // {11} 
+                    console.log('while leftIndex++', leftIndex);
+                }
+                while (compareFn(array[rightIndex], pivot) === Compare.BIGGER) { // {12}
+                    rightIndex--;                                          // {13}
+                    console.log('while rightIndex--', rightIndex);
+                }
+                if (leftIndex <= rightIndex) {                             // {14}
+                    swap(array, leftIndex, rightIndex);                    // {15}
+                    leftIndex++;                                           // {16}
+                    rightIndex--;                                          // {17}
+                }
+            }
+            console.log('leftIndex: ', leftIndex);
+            console.log('rightIndex: ', rightIndex);
+            return leftIndex;                                             // {18}
+        }
+
+        function quickSort(array, compareFn = defaultCompare) {
+            return quick(array, 0, array.length - 1, compareFn);
+        }
+
+        const array = [9, 6, 4, 3, 5, 7, 2];
+        const arr = quickSort(array);
+        // console.log('arr:', arr);  // arr: [2, 3, 4, 5, 6, 7, 9]
+    </script>
+</body>
+</html>
