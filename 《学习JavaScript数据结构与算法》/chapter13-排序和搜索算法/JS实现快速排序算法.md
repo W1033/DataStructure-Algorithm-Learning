@@ -1,4 +1,4 @@
-# 详解 JavaScript 实现快速排序(Quick Sort)算法
+# JavaScript 实现快速排序(Quick Sort)算法
 
 ## 目录(Catalog)
 1. 快速排序介绍
