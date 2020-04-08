@@ -183,7 +183,7 @@
             [2, 6, 4, 3, 5, 7, 9]
           ```
           此时, 代码执行到 `行{18}`, 返回 `leftIndex = 1`.
-        - (2.) `行{9}` 第 2 论循环: `leftIndex = 1` <= `rightIndex = 5`
+        - (2.) `行{9}` 第 2 轮循环: `leftIndex = 1` <= `rightIndex = 5`
           为 `true`:
           ```base
                 L     P     R  
@@ -242,7 +242,7 @@
           ```
           此时, 代码执行到 `行{18}`, 返回 `leftIndex = 2`.
           
-        - (3.) `行{9}` 第 3 论循环: `leftIndex = 2` <= `rightIndex = 2` 为
+        - (3.) `行{9}` 第 3 轮循环: `leftIndex = 2` <= `rightIndex = 2` 为
           `true`:
           ```base
                 P L/R
