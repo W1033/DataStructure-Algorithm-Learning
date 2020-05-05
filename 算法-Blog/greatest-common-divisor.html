@@ -1,0 +1,116 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <meta http-equiv="X-UA-Compatible" content="ie=edge">
+    <title>Document</title>
+</head>
+<body>
+    <script>
+
+        (function(){
+            // - 最笨方法求两数的最大公约数
+            function normalGCD(a, b) {
+                const bigger = a > b ? a : b;
+                const smaller = a < b ? a : b;
+                if (bigger % smaller === 0) {
+                    return smaller;
+                }
+                let divisor = 1;
+                let i = 2;
+                let length = smaller / 2;
+                for (; i <= length; i++) {
+                    if (a % i === 0 && b % i === 0) {
+                        divisor = i;
+                    }
+                }
+                return divisor;
+            }
+            // console.log('normalGCD(18, 30):', normalGCD(18, 30));   // 6
+            // console.log('normalGCD(8251, 6105):', normalGCD(8251, 6105)); // 37
+        })();
+
+
+        (function() {
+            // - 辗转相除法
+            // - 给出 (8251, 6105) 辗转相除法的步骤作为下面代码的参考: 
+            //   8251 = 6105 x 1 + 2146.
+            //   6105 = 2146 x 2 + 1813.
+            //   2146 = 1813 x 1 + 33 
+            //   1813 = 333 x 5 + 148
+            //   333 = 148 x 2 + 37  
+            //   148 = 37 x 4.
+            function gcd (a, b) {
+                let result = 1;             // {2-1}
+                if (a > b) {                // {2-2}
+                    result = divide(a, b)   // {2-3}
+                }
+                else {
+                    result = divide(b, a)   // {2-4}
+                }
+                return result;
+            }
+            function divide(a, b) {         // {2-5}
+                if (a % b === 0) {          // {2-6}
+                    return b;               // {2-7}
+                }
+                else {
+                    return gcd(b, a%b)      // {2-8}
+                }
+            }
+            console.log('gcd(8251, 6105):', gcd(8251, 6105)); // 37
+        })();
+
+
+        (function() {
+            // - 最大公约数 greatest common divisor
+            var i = 0;
+            function gcd(a, b) {
+                console.log(i++);
+                if (a === b) {
+                    return a;
+                }
+                if (a < b) {
+                    return gcd(b - a, a);
+                }
+                else {
+                    return gcd(a - b, b);
+                }
+            }
+            // console.log(gcd(98, 63));
+            // console.log(gcd(10001, 1));
+
+            // - 在 JS 中可以使用 `按位与(&)`. 判断一个数字是奇数还是偶数
+            // - `按位与(&)`: 按位与操作只在两个数值的对应位都是 1 时才返回 1,
+            //   任何一位是 0, 结果都是 0.
+            function isEven(num) {
+                console.log('num & 1:', num & 1);
+                // - 如果传入的 num 为偶数, 执行 num & 1 === 0, 你可能会好奇,
+                //   为什么这里不直接写 `if (num & 1 === 0) {return true}`,
+                //   实际上我确实试了, 但是被 JS 的隐式转换坑了. if 语句的判断条件
+                //   (即 condition), 可以是任意表达式,
+                //   如果对这个表达式求值的结果不是布尔值, ES 会自动调用 Boolean()
+                //   转换函数将这个表达式的结果转换成布尔值. Boolean(0) = false.
+                if (num & 1 === 1) {
+                    return false;
+                }
+                return true;
+            }
+            // console.log(isEven(6));     // true
+            // console.log(isEven(7));     // false
+            // console.log("Boolean(0):", Boolean(0));     // false
+
+
+            function isEven2(num) {
+                if (num % 2 === 0) {
+                    return true
+                }
+                return false;
+            }
+            // console.log(isEven2(6));     // true
+            // console.log(isEven2(7));     // false
+        })();
+    </script>
+</body>
+</html>
