@@ -28,6 +28,7 @@
                 return divisor;
             }
             // console.log('normalGCD(18, 30):', normalGCD(18, 30));   // 6
+            // console.log('normalGCD(64, 8):', normalGCD(64, 8));   // 8
             // console.log('normalGCD(8251, 6105):', normalGCD(8251, 6105)); // 37
         })();
 
@@ -59,46 +60,25 @@
                     return gcd(b, a%b)      // {2-8}
                 }
             }
-            console.log('gcd(8251, 6105):', gcd(8251, 6105)); // 37
+            // console.log('gcd(8251, 6105):', gcd(8251, 6105)); // 37
         })();
 
 
         (function() {
-            // - 最大公约数 greatest common divisor
-            var i = 0;
-            function gcd(a, b) {
-                console.log(i++);
-                if (a === b) {
-                    return a;
-                }
-                if (a < b) {
-                    return gcd(b - a, a);
-                }
-                else {
-                    return gcd(a - b, b);
-                }
-            }
-            // console.log(gcd(98, 63));
-            // console.log(gcd(10001, 1));
+            // - 更相减损术
 
             // - 在 JS 中可以使用 `按位与(&)`. 判断一个数字是奇数还是偶数
             // - `按位与(&)`: 按位与操作只在两个数值的对应位都是 1 时才返回 1,
             //   任何一位是 0, 结果都是 0.
             function isEven(num) {
-                console.log('num & 1:', num & 1);
-                // - 如果传入的 num 为偶数, 执行 num & 1 === 0, 你可能会好奇,
-                //   为什么这里不直接写 `if (num & 1 === 0) {return true}`,
-                //   实际上我确实试了, 但是被 JS 的隐式转换坑了. if 语句的判断条件
-                //   (即 condition), 可以是任意表达式,
-                //   如果对这个表达式求值的结果不是布尔值, ES 会自动调用 Boolean()
-                //   转换函数将这个表达式的结果转换成布尔值. Boolean(0) = false.
-                if (num & 1 === 1) {
-                    return false;
+                // - 请一定记得在 (num & 1) 外围加括号!!!
+                if ((num & 1) === 0) {
+                    return true;
                 }
-                return true;
+                return false;
             }
-            // console.log(isEven(6));     // true
-            // console.log(isEven(7));     // false
+            // console.log("isEven(6): ", isEven(6));     // true
+            // console.log("isEven(7)", isEven(7));     // false
             // console.log("Boolean(0):", Boolean(0));     // false
 
 
@@ -110,6 +90,106 @@
             }
             // console.log(isEven2(6));     // true
             // console.log(isEven2(7));     // false
+
+            let num64 = 64;
+            // - 左移(`<<`): 这个操作符会将数值的所有位向左移动指定的位数.
+            //   例如: 如果将数值 2 (二进制码为 10) 向左移动 5 位,
+            //   结果就是 64 (二进制码为 1000000).
+            // - 有符号右移(`>>`): 这个操作符会将数值向右移动,
+            //   但保留符号位(即正负号标记). 有符号的右移操作与左移操作恰好相反,
+            //   即如果将 64 向右移动 5 位，结果将变回 2.
+            // console.log(num64 >> 1);    // 32
+            // console.log(32 >> 1);       // 16
+            // console.log(32 << 1);       // 64
+            // console.log(num64 << 1);    // 128
+
+            var i = 0;
+            function gcd(a, b) {
+                let twice = 1;
+                // - (1) 如果 2 数相等, 就返回其一 
+                if (a === b) {
+                    return a;
+                }
+
+                // - (2) 如果较大的数除以较小的数等于 0, 就返回较小的数.
+                if (a > b && (a % b) === 0) {
+                    return b;
+                } 
+                if (b > a && (b % a) === 0){
+                    return a;
+                }
+
+                // - (3) 如果较大数和较小数都是偶数, 就同时除 2
+                if ((a & 1) === 0 && (b & 1) === 0) {
+                    a = a >> 1;
+                    b = b >> 1;
+                    if (a < b) {
+                        twice = gcd(b - a, a);
+                    }
+                    else {
+                        twice = gcd(a - b, b);
+                    }
+                    return twice * 2;
+                }
+                // console.log('i++: ', i++);
+
+                if (a < b) {
+                    return gcd(b - a, a);
+                }
+                else {
+                    return gcd(a - b, b);
+                }
+            }
+            // console.log('更相减损术 gcd(8251, 6105):', gcd(8251, 6105)); // 37
+            // console.log("gcd(64, 8)", gcd(64, 8));  // 8 
+            // console.log("更相减损术 gcd(64, 6)", gcd(64, 6))   // 2
+            // console.log(gcd(10001, 1));  //
+        })();
+
+
+        // - 组合使用 `辗转相除法` 和 `更相减损术`
+        (function() {
+            function gcd(a, b) {
+                // - (1) 如果 2 数相等, 就返回其一 
+                if (a === b) {
+                    return a;
+                }
+
+                // - (2) 如果较大的数除以较小的数等于 0, 就返回较小的数.
+                if (a > b && (a % b) === 0) {
+                    return b;
+                } 
+                if (b > a && (b % a) === 0){
+                    return a;
+                }
+
+                // - (3)
+                if (a < b) {
+                    return gcd(b, a);
+                }
+                else {
+                    // - (a) 如果两数都为偶数
+                    if ((a & 1) === 0  && (b & 1) === 0){
+                        return gcd(a >> 1, b >> 1) << 1;
+                    }
+                    // - (b) 如果较大数为偶数, 向右有符号位移 1 位
+                    else if ((a & 1) === 0 && (b & 1) === 1) {
+                        return gcd(a >> 1, b);
+                    }
+                    // - (c) 如果较小数为偶数, 向右有符号位移 1 位
+                    else if ((a & 1) === 1 && (b & 1) === 0) {
+                        return gcd(a, b >> 1)
+                    }
+                    // - (d) 如果两数都为奇数, 调用一次 `更相减损术`(即:自身)
+                    else {
+                        return gcd(a - b, b);
+                    }
+                    
+                }
+            }
+            console.log("gcd(64, 8)", gcd(64, 8));  // 8 
+            console.log("gcd(64, 6)", gcd(64, 6))   // 2
+            console.log('gcd(8251, 6105)', gcd(8251, 6105));    // 37
         })();
     </script>
 </body>
