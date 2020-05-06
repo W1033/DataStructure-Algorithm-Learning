@@ -1,0 +1,49 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <meta http-equiv="X-UA-Compatible" content="ie=edge">
+    <title>一维多项式算法</title>
+</head>
+<body>
+    <div>
+        一维多项式算法
+    </div>
+
+    <script type="text/javascript">
+        // - 一维多项式算法
+        (function() {
+            function onePolynomial (obj) {
+                const {n, x, ary} = obj;
+
+                // - f(x) = a_{5}x^5 + a_{4}x^4 + a_{3}x^3 - a_{2}x^2 + a_{1}x - 0.8
+                // - 为什么 `i = n - 2` 请参考上面 `秦九韶算法` 的红色部分, 配合
+                //   `例(1)` 便可明白, 此处的 i= 4, 对应 上面的 `v_1`.
+                let i = n - 2;
+
+                // - result 即算法讲解中的 `v_0`
+                let result = ary[n - 1];
+                console.log('result: ', result);
+                for (; i >= 0; i--) {
+                    result = result * x + ary[i]
+                }
+                return result;
+            }
+            
+            // - E.g: 以 5 次多项式
+            //   f(x) = 4x^5 + 2x^4 + 3.5x^3 - 2.6x^2 + 1.7x - 0.8 为例. 
+            // - obj 对象有 3 个属性: 
+            //     + (1) n: 一维多项式的项数(即: 多项式由多少项组成, 上面的 f(x) 有 6 项)
+            //     + (2) x: 指定的自变量的值(即: 一般为 x 的值)
+            //     + (3) ary: 存放 n - 1 次多项式的 n 个系数的数组
+            const obj = {
+                n: 6,
+                x: 5,
+                ary: [-0.8, 1.7, -2.6, 3.5, 2, 4]
+            };
+            console.log(onePolynomial(obj));
+        })();
+    </script>
+</body>
+</html>
