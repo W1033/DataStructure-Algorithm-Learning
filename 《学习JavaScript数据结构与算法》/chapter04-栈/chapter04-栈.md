@@ -28,6 +28,9 @@
 
 
 ## 生词 (New Words)
+- **popup ['pɔpʌp] --n.弹出; 发射; 弹出层.**
+    + Popup menus. 弹出式菜单.
+    + Popup dialogs. 弹出对话框
 - **binary ['baɪnərɪ] --adj.二进制的，二元的**
 - **octal ['ɒkt(ə)l] --adj.八进制的**
 - **decimal ['desɪm(ə)l] --adj.十进位的，小数的， n.小数**
