@@ -122,7 +122,7 @@
     function defaultEquals(a, b) {
         return a === b;
     }
-    // - 要表示链表中的第一个以及其他元素，我们需要一个助手类，叫作 Node. Node 类表示
+    // - (1) 要表示链表中的第一个以及其他元素，我们需要一个助手类，叫作 Node. Node 类表示
     //   我们想要添加到链表中的项。它包含一个 element 属性，该属性表示要加入链表元素
     //   的值；以及一个 next 属性，该属性是指向链表中下一个元素的指针。 
     class Node {
@@ -133,6 +133,7 @@
     }
 
     // - 链表 (Linked list) 完整源码
+    // - (2) LinkedList 类提供节点插入, 删除和查找. 
     class LinkedList {
         constructor(equalsFn = defaultEquals) {
             this.equalsFn = equalsFn;
@@ -142,12 +143,12 @@
 
         // - push(element): 向链表尾部添加一个新元素.
         push(element) {
-            const node = new Node(element); // {1}
+            const newNode = new Node(element); // {1}
             // - current: 指向链表中 current (当前) 项的变量.
             let current;    // {2}
             if (this.head == null) {    // {3}
-                // - 把要添加的 node (节点实例) 赋值给 head.
-                this.head = node;
+                // - 把要添加的 newNode (新节点实例) 赋值给 head.
+                this.head = newNode;
             }
             else {
                 // - 要向链表的尾部添加一个元素, 首先需要找到最后一个元素. 记住, 我们
@@ -161,7 +162,7 @@
                 while (current.next != null) {  // {5} 获得最后一项
                     current = current.next;
                 }
-                current.next = node;    // {6}
+                current.next = newNode;    // {6}
 
                 // - 测试执行完后输出结果为:
                 // - Node {element: 15, next: Node}
