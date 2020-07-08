@@ -190,8 +190,7 @@
             + (1) 1st 方法是: `forEach()`
             + (2) 2nd 方法是: `every()`
             + (3) 3rd 方法是: `some()`  
-            + (4) 4th 方法是: `reduce()`: 详细使用见
-              `《深入理解ES6》/00-ES6 其他语法/Array.reduce().html`
+            + (4) 4th 方法是: `reduce()`: 详细使用见: `JS-book-learning/《JavaScript高级程序设计》/Chapter05-引用类型/chapter05-引用类型.md`  5.2.9 归并方法
     2. 生成新数组的迭代器方法
         + (1) `map()`: map() 返回一个新的数组, 该数组的元素是对原有元素应用某个函数
           得到的结果。下面给出一个例子：
@@ -272,61 +271,16 @@
     6. 使用 `fill()` 方法
     7. 使用 `copyWithin()` 方法      
 - 3.7.4 排序元素: 
-    + `reverse()`
+    + `reverse()`: 反转数组项的顺序.
     + `sort()`: sort 方法在对数组做排序时, 把元素默认成字符串进行相互比较.
-      ```js
-        const numbers = [1, 2, 4, 5, 6, 7, 9, 12];
-        function compare(a, b) {
-            if (a < b) {
-                return -1;
-            }
-            if (a > b) {
-                return 1;
-            }
-            // - a === b
-            return 0;
-        }
-        numbers.sort(compare);
-      ```
-    + 自定义排序
-      ```js
-        const friends = [
-            { name: 'John', age: 30 },
-            { name: 'Ana', age: 20 },
-            { name: 'Chris', age: 25 }, // ES2017 允许存在尾逗号
-        ];
-        function comparePerson(a, b) {
-            if (a.age < b.age) {
-                return -1;
-            }
-            if (a.age > b.age) {
-                return 1;
-            }
-            return 0;
-        }
-        console.log(friends.sort(comparePerson));
-      ```
-    + 字符串排序
-      ```js
-        const names = ['Ana', 'ana', 'john', 'John'];
-        //  ["Ana", "ana", "john", "John"]
-        console.log(names.sort((a, b) => {
-            if (a.toLowerCase() < b.toLowerCase()) {
-                return -1;
-            }
-            if (a.toLowerCase() > b.toLowerCase()) {
-                return 1;
-            }
-            return 0;
-        }));
-        // - 如果希望小写字母排在前面, 需要使用 localeCompare 方法.
-        names.sort((a, b) => a.localeCompare(b));
-        // ["ana", "Ana", "john", "John"]
-        console.log('names: ', names);
-      ```
+      
+      详细示例见: `/JS-book-learning/《JavaScript高级程序设计》/Chapter05-引用类型/chapter05-引用类型.md`
+    
 - 3.7.5 搜索
+  
     + 在数组中查找元素: `JS--方法总结\20190920_indexOf_includes_的区别.html`
 - 3.7.6 输出数组为字符串:  `toString()` 和 `join()`
+  
     + 有 2 个方法可以把数组转换为字符串: `join()` 和 `toString()`
         - `join()` 方法只接收一个参数，即用作分隔符的字符串，然后返回包含所有数组项的
           字符串. --《js高程》
