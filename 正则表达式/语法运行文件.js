@@ -27,3 +27,7 @@ String.prototype.insetAt = function(str,offset){
 };
 // - 在 b 和 c 之间插入 xyz
 console.log("abcd".insetAt('xyz',2));   // "abxyzcd"
+
+
+
+console.log('--- --- ---');
