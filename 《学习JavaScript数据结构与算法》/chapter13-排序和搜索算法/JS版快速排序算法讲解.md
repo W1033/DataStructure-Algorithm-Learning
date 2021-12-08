@@ -39,6 +39,7 @@
       以及较主元大的项组成的子数组) 重复之前的 2 个步骤, 直至数组完全排序.
 
 ### 2. 快速排序源码及讲解
+
 - **实现代码来自《学习JavaScript数据结构与算法》:**
   ```js
     // - 定义两个数值比较结果的常量
@@ -54,7 +55,7 @@
         }
         return a < b ? Compare.LESS : Compare.BIGGER;
     }
-
+  
     // - swap 交换数组中的 2 个子项(值交换).
     function swap(array, a, b) {
         const temp = array[a];
@@ -63,7 +64,7 @@
         // - ES6 的方式
         // [array[a], array[b]] = [array[b], array[a]]
     }
-
+  
     function quick(array, left, right, compareFn) {
         let index;                                              // {1}
         if (array.length > 1) {                                 // {2}
@@ -102,11 +103,11 @@
         console.log('rightIndex: ', rightIndex);
         return leftIndex;                                             // {18}
     }
-
+  
     function quickSort(array, compareFn = defaultCompare) {
         return quick(array, 0, array.length - 1, compareFn);
     }
-
+  
     const array = [9, 6, 4, 3, 5, 7, 2];
     const arr = quickSort(array);
     // console.log('arr:', arr);  // arr: [2, 3, 4, 5, 6, 7, 9]
@@ -376,4 +377,3 @@
         rightIndex:  3
         array:  (7) [2, 3, 4, 5, 6, 7, 9]
         ```
-    
