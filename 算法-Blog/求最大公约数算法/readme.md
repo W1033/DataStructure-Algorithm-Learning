@@ -27,7 +27,7 @@
 
 在小学, 我们学过求 *两个正整数的最大公约数* 的方法: 先用两个数公有的质因数连续去除, 一直除到所得的商是互质数为止, 例如:
 
-<img src="./images-algorithm-blog/1.3-1.png" style="margin-left: 0; border-radius: 4px; width: 26%; box-shadow: 1px 1px 3px 2px #e5e5e5">
+<img src="./readme.assets/1.3-1.png" style="margin-left: 0; border-radius: 4px; width: 20%; box-shadow: 1px 1px 3px 2px #e5e5e5">
   
 但是, 当两个数公有的质因数较大时(如 8251 与 6105), 使用上述方法求最大公约数就比较困难. 下面介绍 2 种古老而有效的算法.
 
