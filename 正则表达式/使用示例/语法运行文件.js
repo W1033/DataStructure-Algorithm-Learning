@@ -31,3 +31,10 @@ console.log("abcd".insetAt('xyz',2));   // "abxyzcd"
 
 
 console.log('--- --- ---');
+
+
+const noonday = "HelloCodeSheep";
+const reg = /Code\B/;
+console.log(reg.test(noonday));
+console.log(1111);
+
