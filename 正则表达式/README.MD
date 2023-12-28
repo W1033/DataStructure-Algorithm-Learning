@@ -8,16 +8,6 @@ Hint: 之前自己整理的笔记不完整， 2022.07.17 根据 code sheep 的�
 
 
 
-### ChatGPT 账号
-
-登录邮箱：xiaofei20231228@gmail.com
-
-用户名：xiaofei1228
-
-密码：F#1227x66Chen
-
-
-
 
 
 ## ▲ 基础正则表达式速查表 (特殊字符)
