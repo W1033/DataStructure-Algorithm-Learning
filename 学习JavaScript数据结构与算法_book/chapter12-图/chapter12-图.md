@@ -243,7 +243,7 @@
             const vertices = graph.getVertices();
             const adjList = graph.getAdjList();
             const color = initializeColor(vertices);
-
+      
             for (let i = 0; i < vertices.length; i++) { // {2}
                 if (color[vertices[i]] === Colors.WHITE) {  // {3}
                     depthFirstSearchVisit(vertices[i], color, adjList,
@@ -251,7 +251,7 @@
                 }
             }
         };
-
+      
         function depthFirstSearchVisit(u, color, adjList, callback) {
             color[u] = Colors.GREY; // {5}
             if (callback) { // {6}
@@ -324,7 +324,7 @@
         graph.addEdge('B', 'E');
         graph.addEdge('C', 'F');
         graph.addEdge('F', 'E');
-
+      
         const result = DFS(graph);
       ```
       这段代码将创建图, 添加边, 执行改进版本的深度优先搜索算法那, 并将结果保存到 result
@@ -376,25 +376,25 @@
         [0, 0, 0, 3, 0, 2],        
         [0, 0, 0, 0, 0, 0]        
     ];
-
+  
     // - 现在, 通过下面的代码来看看 Dijkstra 算法是如何工作的.
-
+  
     const index = 'ABCDEF';
     // - INF 为 js 的最大整数 Number.MAX_SAFE_INTEGER.
     const INF = Number.MAX_SAFE_INTEGER;
-
+  
     function dijkstra(src) {
         // - {2} distance: 数组存储当前 A 顶点到其他各个顶点间的距离.
         // - {3} visited: 数组来存储 ABCDEF 顶点是否被访问过, 以免重复访问, 形成环.
         // - {4} length 用来存储所有顶点的数量.
-
+  
         let dist = [];  // {2}
         let visited = [];   // {3}
         // let length = graph.length;  // {4}
         // - 这种写法和上一行 {4} 是相同的, 只是使用了 ES6 的解构赋值, 在 js 内 Array
         //   对象内默认就有属性 length 所以可这样写  
         const {length} = graph;
-
+  
         // - 初始化 dist, visited 数组, 把所有顶点距离初始化为无限大 ({5}), 
         //   所有顶点此时都是未访问, 标记为 false ({6}). 为访问把源顶点(A)到自己的距离
         //   初始化为 0 ({7}).
@@ -403,7 +403,7 @@
             visited[i] = false; // {6}
         }
         dist[src] = 0;  // {7}
-
+  
         // - 顶点探索
         for (let i = 0; i < length-1; i++) {
             // - {8}: 从尚未处理的顶点中选出距离最近的顶点, 即寻找最短路径
