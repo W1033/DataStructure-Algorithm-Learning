@@ -231,42 +231,6 @@ VS Code 的搜索栏完全兼容上述逻辑（底层均基于 Electron / Chromi
 
 
 
-
-
-## ▲ VSCode 中使用正则表达式给 markdown 文档中内添加空格
-
-### (1) 给中文和英文中间添加空格
-
-![image-20220602120237714](./README.assets/ME.assets/image-20220602120237714.png)
-
-### (2) 在数字前添加空格
-
-![image-20220828163140573](./README.assets/image-20220828163140573.png)
-
-### (3) 给数字和英文字母前添加空格
-
-![image-20220602120237714](./README.assets/image-20220602120237714.png)
-
-正则表达式的讲解见：`Github-clone/DataStructure-Algorithm-Learning/正则表达式/正则表达式-特殊字符.md`
-
-### (4) 给一些特定格式的文字添加统一后缀
-
-![image-20221108093239148](./README.assets/image-20221108093239148.png)
-
-### (5) 把中文后面的空格替换为逗号
-
-![image-20230601205318185](./README.assets/image-20230601205318185.png)
-
-
-
-
-
-
-
-
-
-
-
 ## ▲ 常用正则表达式示例
 
 ### 数字校验
