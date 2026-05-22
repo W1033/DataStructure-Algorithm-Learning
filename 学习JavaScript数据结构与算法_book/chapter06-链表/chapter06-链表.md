@@ -131,7 +131,7 @@
             this.next = next;
         }
     }
-
+  
     // - 链表 (Linked list) 完整源码
     // - (2) LinkedList 类提供节点插入, 删除和查找. 
     class LinkedList {
@@ -140,7 +140,7 @@
             this.count = 0;
             this.head = undefined;
         }
-
+  
         // - push(element): 向链表尾部添加一个新元素.
         push(element) {
             const newNode = new Node(element); // {1}
@@ -155,7 +155,7 @@
                 //   只有第一个元素的引用 (行{4}), 因此需要循环访问列表, 直到找到最后
                 //   一项. 为此, 我们需要一个指向链表中 current 项的变量(行{2}).
                 current = this.head; // {4}
-
+  
                 // - 在循环访问链表的过程中，当 current.next 元素为 undefined 或
                 //   null 时，我们就知道已经到达链表尾部了(行{5})。然后要做的就是让当前
                 //   (也就是最后一个)元素的 next 指针指向想要添加到链表的节点(行{6}).
@@ -163,7 +163,7 @@
                     current = current.next;
                 }
                 current.next = newNode;    // {6}
-
+  
                 // - 测试执行完后输出结果为:
                 // - Node {element: 15, next: Node}
                 //   + element: 15
@@ -186,7 +186,7 @@
             this.count++;   // {7}
             // console.log('this.count:', this.count);
         }
-
+  
         // - getElementAt(index): 返回链表中特定位置的元素. 如果链表中不存在这样的
         //   元素, 则返回 undefined.
         getElementAt(index) {
@@ -202,7 +202,7 @@
             }
             return undefined;
         }
-
+  
         // - (2) 从链表中移除元素
         // - 现在，让我们看看如何从 LinkedList 对象中移除元素。我们要实现两种 remove
         //   方法：第一种是从特定位置移除一个元素(removeAt)，第二种是根据元素的值移除
@@ -218,10 +218,10 @@
                 else {
                     // - Tip: `index - 1` 是因为我们取得的是 previous 上一项
                     const previous = this.getElementAt(index - 1);
-
+  
                     // previous.element:  15
                     console.log('previous.element: ', previous.element);
-
+  
                     current = previous.next;
                     // - 把当前项的下一项(current.next), 赋值给上一项的下一项
                     //   (previous.next) 也即是赋值给当前项(current), 那么当前项
@@ -233,13 +233,13 @@
             }
             return undefined;
         }
-
+  
         // - remove(element): 从链表中移除一个元素
         remove(element) {
             const index = this.indexOf(element);
             return this.removeAt(index);
         }
-
+  
         // - insert(element, index): 向链表的特定位置插入一个新元素.
         insert(element, index) {
             if (index >= 0 && index <= this.count) {
@@ -261,7 +261,7 @@
             }
             return false;
         }
-
+  
         // - indexOf(element): 返回元素在链表中的索引. 如果链表中没有该元素则返回 -1.
         indexOf(element) {
             let current = this.head;
@@ -294,18 +294,18 @@
             return objString;
         }
     }
-
+  
     const list = new LinkedList();
     list.push(15);
     list.push(10);
     list.push(5);
     list.push(6);
     list.push(9);
-
+  
     // console.log(list.removeAt(0));  // 15
     console.log(list.removeAt(1));  // 10
     // console.log(list.removeAt(3));
-
+  
     // console.log("list:");
     // console.log(list);
     // console.log(list.toString());
@@ -457,7 +457,7 @@
         return objString;
       }
     }
-
+  
   ```
 ### 6.3 循环链表 
 - 循环链表可以像链表一样只有单向引用, 也可以像双向链表一样有双向引. 循环链表和链表之间
